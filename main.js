@@ -67,13 +67,23 @@ create:
                 myarray[i][j] = 0;
             }
         }
-
+        //player 1
         red = this.add.sprite(455, 455, 'red');
         red_object =  new Unit('red',10,5,5,0,'redTeam',false,7,7);           // create objs
-        red.width = blah_size;
+		red.width = blah_size;
         red.height = blah_size;
         red.inputEnabled = true;
-        game.input.onDown.add(this.selected, {character: red, character_object : red_object, teams: 'red_team', teamArray: teamRed  });///////////
+        game.input.onDown.add(this.selected, {character: red, character_object : red_object, teams: 'red_team', teamArray: teamRed  });
+		
+		//player 2
+		red1 = this.add.sprite(650, 650, 'red');
+        red_object1 =  new Unit('red',10,6,5,0,'redTeam',false,10,10);           // create objs
+		red1.width = blah_size;
+        red1.height = blah_size;
+        red.inputEnabled = true;
+        game.input.onDown.add(this.selected, {character: red1, character_object : red_object1, teams: 'red_team', teamArray: teamRed  });
+		
+		
 
         blue = this.add.sprite(260, 455, 'blue');
         blue_object =  new Unit('blue',10,2,2,0,'blueTeam',true,4,7);
