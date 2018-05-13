@@ -177,7 +177,7 @@ selected:
 
 
         }
-        else if(selected_x - blueX <= 2 && selected_x - blueX > 0 && blueY  == selected_y && blue_object.turnEnd == false)
+        else if(selected_x - blueX <= 2 && selected_x - blueX > 0 && blueY  == selected_y && blue_object.turnEnd == false && red_object.isRightEmpty(selected_x) == true )
         {
             tweenD = game.add.tween(blue).to( { x: (blueX + selected_x - blueX) * 65 }, 1500, "Quart.easeOut");
             tweenD.start();
