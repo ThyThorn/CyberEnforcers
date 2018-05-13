@@ -1,17 +1,31 @@
-function Unit(name,health, attack, defense, moveCount, friend, turnEnd, xPlace, yPlace)   // Use the last two variables as part of making the sprite.
+function Unit(name,health, attack, defense, moveCount, team, turnEnd, xPlace, yPlace)   // Use the last two variables as part of making the sprite.
 {
     this.name = name;
     this.health = health;
     this.attack = attack;
     this.defense = defense;
     this.moveCount = moveCount; // Maximum number of squares a unit can move.
-    this.friend = friend; // This is a boolean that determines whether the unit is a player unit or an enemy unit.
+    this.team = team; // This is a boolean that determines whether the unit is a player unit or an enemy unit.
     //this.movesDone = 0; // Number of squares a unit has moved through so far.
     this.turnEnd = turnEnd; // A unit should be able to do its actions only if this variable remains false.
     this.attackedEnemy = false; // This remains false until the unit gets into a battle with another unit.
     this.xPlace = xPlace;
     this.yPlace = yPlace;
     myarray[xPlace][yPlace] = this;   // place the obj into the 2d array
+
+    if(this.team == 'redTeam')
+    {
+        teamRed.push(this);
+        this.index = redTeam_index;
+        redTeam_index ++;
+    }
+    else
+    {
+        teamBlue.push(this);
+        this.index = blueTeam_index;
+        blueTeam_index ++;
+    }
+    //redTeam_index ++;
 
     Unit.prototype.isLeftEmpty = function(selected_x)
     {
@@ -182,27 +196,9 @@ function Unit(name,health, attack, defense, moveCount, friend, turnEnd, xPlace, 
 
 
     };
-
-    Unit.prototype.TurnEnd = function(blue_team)               // if all characters on red team turnEnd == true, set all blue team member   turnEnd == false
-    {
-        if(this.moveCount >= 2 )
-        {
-            this.turnEnd = true;
-            blue_team.turnEnd = false;
-            return '\n2 Blues turn \n delete the movecount <= 2 restriciton to test collision';
-        }
-        else
-        {
-            return '1'
-        }
-
-
-
-    };
-
-
-
-
+   
 }
+
+
 
 
