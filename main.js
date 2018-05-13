@@ -1,9 +1,23 @@
-//
-var blah_size = 65; // characters' size
+
+
+/*
+5/12 
+Bugs: 1. A player can move more than 2 spaces, after the bug is fix the count>=2 in turnEnd function should be change to ==
+	  2. Case when there's a player in between the path, but still able to pass through it
+	  3. Players on same team shouldn't be allow to move at the same time
+	  4.  functions for detecting nearby players dont work for all cases, ex: isUp() function
+
+*/
+
+
+
+var blah_size = 65; // characters' size                                  
 var red;
+var red1;
 var redX;           // the xy block red in
 var redY;
 var blue;
+var blue1;
 var blueX;
 var blueY;
 var selected_x;    // mouse xy
@@ -12,7 +26,7 @@ var tweenR;        //tweens
 var tweenL;
 var tweenU;
 var tweenD;
-var tweenQ;
+var tweenQ;                                                                 
 var tweenE;
 var tweenF;
 var tweenG;
@@ -28,7 +42,7 @@ var blueTeam_index = 0;
 
 
 var Game = {};
-/*Player shouldn't be able to move 2 slot when count == 1*/
+
 Game.main =  function(game)
 {
 
@@ -77,14 +91,14 @@ create:
 		
 		//player 2
 		red1 = this.add.sprite(650, 650, 'red');
-        red_object1 =  new Unit('red',10,6,5,0,'redTeam',false,10,10);           // create objs
+        red_object1 =  new Unit('red1',10,6,5,0,'redTeam',false,10,10);           // create objs
 		red1.width = blah_size;
         red1.height = blah_size;
         red.inputEnabled = true;
         game.input.onDown.add(this.selected, {character: red1, character_object : red_object1, teams: 'red_team', teamArray: teamRed  });
 		
 		
-
+        //players 3
         blue = this.add.sprite(260, 455, 'blue');
         blue_object =  new Unit('blue',10,2,2,0,'blueTeam',true,4,7);
         blue.width = blah_size;
@@ -92,14 +106,28 @@ create:
         blue.inputEnabled = true;
         game.input.onDown.add(this.selected, {character: blue, character_object : blue_object, teams: 'blue_team', teamArray: teamBlue });
         // game.input.onDown.add(this.selected,  {red_sprite: red});
-
+		
+		
+		//players4
+		blue1 = this.add.sprite(195, 195, 'blue');
+        blue_object1 =  new Unit('blue1',10,2,2,0,'blueTeam',true,3,3);
+        blue1.width = blah_size;
+        blue1.height = blah_size;
+        blue1.inputEnabled = true;
+        game.input.onDown.add(this.selected, {character: blue1, character_object : blue_object1, teams: 'blue_team', teamArray: teamBlue });
+		
+		
+		
         //    5/11
 
         game.physics.arcade.enable(red); // for debug mode, delete after
         red.enableBody = true;
         game.physics.arcade.enable(blue);
         blue.enableBody = true;
-
+        game.physics.arcade.enable(red1);
+        red1.enableBody = true;
+		game.physics.arcade.enable(blue1);
+        blue1.enableBody = true;
 
 
 
@@ -146,7 +174,7 @@ selected:
             var blocks_away = Math.abs(selected_x - redX);
             myarray[player_object.xPlace + blocks_away][player_object.yPlace] = player_object;
             player_object.xPlace += blocks_away;
-            team_Array[player_object.index].moveCount ++;      // += blocks_away
+            team_Array[player_object.index].moveCount += blocks_away;      // += blocks_away
             //teamRed[player_object.index].moveCount ++;
             player_object.battle();
 
@@ -172,7 +200,7 @@ selected:
             var blocks_away = Math.abs(selected_x - redX);
             myarray[player_object.xPlace - blocks_away][player_object.yPlace] = player_object;
             player_object.xPlace -= blocks_away;
-            team_Array[player_object.index].moveCount ++;
+            team_Array[player_object.index].moveCount += blocks_away; 
             player_object.battle();
 
 
@@ -197,7 +225,7 @@ selected:
             var blocks_away = Math.abs(selected_y - redY);
             myarray[player_object.xPlace][player_object.yPlace + blocks_away] = player_object;
             player_object.yPlace += blocks_away;
-            team_Array[player_object.index].moveCount ++;
+            team_Array[player_object.index].moveCount += blocks_away; 
             player_object.battle();
 
 
@@ -221,7 +249,7 @@ selected:
             var blocks_away = Math.abs(selected_y - redY);
             myarray[player_object.xPlace][player_object.yPlace - blocks_away] = player_object;
             player_object.yPlace -= blocks_away;
-            team_Array[player_object.index].moveCount ++;
+            team_Array[player_object.index].moveCount += blocks_away; 
             player_object.battle();
 
             if(player_team == 'red_team')
@@ -240,35 +268,7 @@ selected:
         }
 
 
-        /* if(selected_x  >= 960)
-         {
-
-
-         }
-         else if(selected_x - blueX <= 2 && selected_x - blueX > 0 && blueY  == selected_y && blue_object.turnEnd == false && player_object.isRightEmpty(selected_x) == true )
-         {
-             tweenD = game.add.tween(blue).to( { x: (blueX + selected_x - blueX) * 65 }, 1500, "Quart.easeOut");
-             tweenD.start();
-
-         }
-         else if (blueX - selected_x <= 2 && selected_x - blueX < 0 && blueY  == selected_y && blue_object.turnEnd == false)
-         {
-             tweenE = game.add.tween(blue).to( { x: blueX * 65 - (blueX - selected_x )*65}, 1500, "Quart.easeOut");
-             tweenE.start();
-
-         }
-         else if (selected_y - blueY <= 2 && selected_y - blueY > 0 && blueX == selected_x && blue_object.turnEnd == false)
-         {
-             tweenF = game.add.tween(blue).to( { y: (blueY + selected_y - blueY) * 65}, 1500, "Quart.easeOut");
-             tweenF.start();
-
-         }
-         else if (blueY - selected_y <= 2 && selected_y - blueY < 0 && blueX  == selected_x && blue_object.turnEnd == false)
-         {
-             tweenG = game.add.tween(blue).to( { y: blueY * 65 - (blueY - selected_y )*65}, 1500, "Quart.easeOut");
-             tweenG.start();
-         }
-        */
+       
 
     },
 
@@ -288,6 +288,8 @@ render:
 
         game.debug.body(red);
         game.debug.body(blue);
+		game.debug.body(red1);
+		game.debug.body(blue1);
 
     },
 
@@ -295,8 +297,7 @@ render:
 
 function turnEnd (player)              // if all characters on red team turnEnd == true, set all blue team member   turnEnd == false
 {
-    //window.alert('fk u');
-
+    
     if(player == 'red')
     {
         var counter = 0;
@@ -331,7 +332,7 @@ function turnEnd (player)              // if all characters on red team turnEnd 
 
         for(var i =0; i < teamBlue.length; i++)
         {
-            if(teamBlue[i].moveCount == 2)
+            if(teamBlue[i].moveCount >= 2)
             {
                 counter ++;
             }
