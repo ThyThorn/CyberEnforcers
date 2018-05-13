@@ -1,7 +1,5 @@
 // Frame taken from plemuzic of opengameart.org.
 
-var game = new Phaser.Game(1200, 600, Phaser.AUTO, '');
-
 var beginningDialog = [
 	"Kaito: My name is Kaito Ichiki.",
 	"Kaito: I am a member of an organization called the Cybernetwork Enforcement\nand Regulation Commission.",
@@ -21,10 +19,7 @@ var beginningDialog = [
 	"Kaito: That's how CERC came to be. Now, life in Dennoshi City is rather peaceful,\nwith a virus attack every now and then.",
 	"Kaito: Could be better, I guess. But I don't mind how things are in 2070. It's a bit fun.",
 	"Kaito: As for me, well...",
-    "Atsumi: Kaito!"
-];
-
-var atsumiIntro = [
+    "Atsumi: Kaito!",
     "Kaito: Wh-What's the problem?!",
     "Kaito: (This is Atsumi Ayukawa. She's also a member of CERC.)",
     "Kaito: (I myself am a commander of my own squad, Squad 667, so I'm technically the leader.)",
@@ -46,8 +41,8 @@ var shake = true;
 var beginningDialogPlay = function(game) {};
 beginningDialogPlay.prototype = {
     preload: function() {
-        game.load.image('sky', 'assets/sky.png');
-        game.load.image('textBox', 'assets/g4410.png');
+        game.load.image('sky', 'phaser/myGame/assets/sky.png');
+        game.load.image('textBox', 'phaser/myGame/assets/g4410.png');
     },
 
     create: function() {
@@ -72,7 +67,7 @@ beginningDialogPlay.prototype = {
     		if(lineVar == beginningDialog.length) {
                 lineVar = 0;
                 line.destroy();
-    			game.state.start('atsumiIntroPlay');
+                game.state.start("battle");
     		}
             shake = true;
     		newLine = beginningDialog[lineVar]
@@ -81,37 +76,3 @@ beginningDialogPlay.prototype = {
     	}
     }   
 }
-
-var atsumiIntroPlay = function(game) {};
-atsumiIntroPlay.prototype = {
-    preload: function() {
-        game.load.image('sky', 'assets/sky.png');
-    },
-
-    create: function() {
-        var sky = game.add.sprite(0, 0, 'sky');
-        var textBox = game.add.sprite(0, game.world.height - 134, 'textBox');
-        textBox.width = game.world.width;
-        line = game.add.text(23,game.world.height - 120, "Kaito: Wh-What's the problem?!", {font: '23pt Georgia', fill: '#000' }); // The string put in here is the first line that pops up.
-        sky.scale.setTo(2, 1);
-    },
-
-    update: function() {
-        if(game.input.keyboard.isDown(Phaser.Keyboard.ENTER)){
-            game.paused = true;
-        }
-        if(game.paused){
-            game.paused = false;
-            if(lineVar == atsumiIntro.length) {
-                return;
-            }
-            newLine = atsumiIntro[lineVar]
-            line.text = '' + newLine;
-            lineVar += 1;
-        }
-    }   
-}
-
-game.state.add('beginningDialogPlay', beginningDialogPlay);
-game.state.add('atsumiIntroPlay', atsumiIntroPlay);
-game.state.start('beginningDialogPlay');
