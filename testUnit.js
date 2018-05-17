@@ -77,6 +77,76 @@ Unit.prototype.selector = function() {
     }
 }
 
-Unit.prototype.update = function() {
+Unit.prototype.battle = function() {
+    if(doCombat == true) {
+        var damage = this.attack - gameLevel1[this.xPlace - 1][this.yPlace].defense;
+        if(enemyLeft == true) {
+            gameLevel1[this.xPlace - 1][this.yPlace].health -= damage;
+            if(gameLevel1[this.xPlace - 1][this.yPlace].health <= 0) {
+                enemyLeft = false;
+            }
+        }
+        if(enemyRight == true) {
+            gameLevel1[this.xPlace + 1][this.yPlace].health -= damage;
+            if(gameLevel1[this.xPlace + 1][this.yPlace].health <= 0) {
+                enemyRight = false;
+            }
+        }
+        if(enemyUp == true) {
+            gameLevel1[this.xPlace][this.yPlace - 1].health -= damage;
+            if(gameLevel1[this.xPlace][this.yPlace - 1].team.health <= 0) {
+                enemyUp = false;
+            }
+        }
+        if(enemyDown == true) {
+            gameLevel1[this.xPlace][this.yPlace + 1].health -= damage;
+            if(gameLevel1[this.xPlace][this.yPlace + 1].team.health <= 0) {
+                enemyDown = false;
+            }
+        }
+    }
+    doCombat = false;
+}
 
+var doCombat = false;
+var enemyLeft = false;
+var enemyRight = false;
+var enemyUp = false;
+var enemyDown = false;
+
+Unit.prototype.checkEnemy = function() {
+    if(this.turnEnd == false) {
+        if(this.xPlace - 1 >= 0) {
+            if(gameLevel1[this.xPlace - 1][this.yPlace] instanceof Unit) {
+                if(gameLevel1[this.xPlace - 1][this.yPlace].team != this.team) {
+                    doCombat = true;
+                    enemyLeft = true;
+                }
+            }
+        }
+        if(this.xPlace + 1 <= 30) {
+            if(gameLevel1[this.xPlace + 1][this.yPlace] != 0) {
+                if(gameLevel1[this.xPlace + 1][this.yPlace].team != this.team) {
+                    doCombat = true;
+                    enemyRight = true;
+                }
+            }
+        }
+        if(this.yPlace - 1 >= 0) {
+            if(gameLevel1[this.xPlace][this.yPlace - 1] != 0) {
+                if(gameLevel1[this.xPlace][this.yPlace - 1].team != this.team) {
+                    doCombat = true;
+                    enemyUp = true;
+                }
+            }
+        }
+        if(this.yPlace + 1 <= 30) {
+            if(gameLevel1[this.xPlace][this.yPlace + 1] != 0) {
+                if(gameLevel1[this.xPlace][this.yPlace + 1].team != this.team) {
+                    doCombat = true;
+                    enemyDown = true;
+                }
+            }
+        }
+    }
 }
