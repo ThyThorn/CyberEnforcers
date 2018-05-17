@@ -43,6 +43,8 @@ var playerTeam = new Array();
 var enemyTeam = new Array();
 var playerTeamIndex = 0;
 var enemyTeamIndex = 0;
+var level1Width = 30; // Will be used to make copying code for the other levels easier,
+var level1Height = 30; // since it will involve only changing variable names and not hardcoded values.
 
 var level1Battle = function(game) {};
 level1Battle.prototype = {
@@ -59,12 +61,11 @@ level1Battle.prototype = {
         battleTheme1 = game.add.audio('battleTheme1');
         battleTheme1.loop = true;
         battleTheme1.play();
-        kaitoObject = new Unit('Kaito', 20, 40, 20, 10, 'player', false, 3, 3, 'atlas', 'kaito01');
+        kaitoObject = new Unit('Kaito', 20, 10, 5, 10, 'player', false, 19, 3, 'atlas', 'kaito01');
         game.add.existing(kaitoObject);
-        virusObject = new Unit('Virus', 20, 40, 20, 10, 'enemy', false, 20, 3, 'atlas', 'kenta01');
+        virusObject = new Unit('Virus', 25, 5, 5, 10, 'enemy', true, 20, 3, 'atlas', 'kenta01');
         game.add.existing(virusObject);
 	},
-
 	update: function(){
 
 	}
