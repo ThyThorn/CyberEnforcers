@@ -41,8 +41,6 @@ var kaitoObject;
 var virusObject;
 var playerTeam = new Array();
 var enemyTeam = new Array();
-var playerTeamIndex = 0;
-var enemyTeamIndex = 0;
 var level1Width = 30; // Will be used to make copying code for the other levels easier,
 var level1Height = 30; // since it will involve only changing variable names and not hardcoded values.
 
@@ -56,6 +54,7 @@ level1Battle.prototype = {
 	},
 
 	create: function() {
+		game.scale.setGameSize(960, 530);
 		background = game.add.image(0, 0, 'background');
 		backgroundVir = game.add.image(game.world.width/2, 0, 'backgroundVir');
         battleTheme1 = game.add.audio('battleTheme1');
