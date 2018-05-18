@@ -8,6 +8,7 @@ function Vert_World_Node(name,effect,path_up,path_down,path_left,path_right,xPla
 	this.xPlace = xPlace;	//position in x
 	this.yPlace = yPlace;	//position in y
 	//paths to the nodes that can be reached from this node
+	//store as arrays that can be read to show the paths to them along the node they are linked to
 	this.path_up = path_up;	
 	this.path_down = path_down;
 	this.path_left = path_left;
