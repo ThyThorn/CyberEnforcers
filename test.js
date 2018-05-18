@@ -96,32 +96,31 @@ function clickSquare() {
 	if(chosenSquare == true) {
 		xSelected = Math.floor(game.input.mousePointer.x / 16);
 		ySelected = Math.floor(game.input.mousePointer.y / 16);
-		console.log(xSelected);
-		console.log(ySelected);
-		console.log(xCoord);
-		console.log(yCoord);
-		console.log(gameLevel1[xSelected][ySelected] instanceof Level1Unit);
 		if((xSelected >= 0 && xSelected < 30) && (ySelected >= 0 && ySelected < 30)) {
-			console.log("hello");
 			if((gameLevel1[xSelected][ySelected] instanceof Level1Unit) == false) {
-				console.log("yes");
 				gameLevel1[xSelected][ySelected] = newUnit;
 				this.xPlace = xSelected;
 				this.yPlace = ySelected;
 				gameLevel1[xCoord][yCoord] = 0;
-				console.log(gameLevel1[xSelected][ySelected] instanceof Level1Unit);
-				changeSprite(this, this.xPlace, this.yPlace);
+				changeSprite(this);
 			}
 		}
 	}
 }
 
 function changeSprite(change) {
-	change.pathTiles.visible = false;
-	change.x = change.xPlace * 16;
-	change.y = change.yPlace * 16;
-	change.pathTiles.removeAll();
-	change.pathsFound = false;
+    if(chosenSquare == true) {
+    	change.pathTiles.visible = false;
+    	change.x = change.xPlace * 16;
+    	change.y = change.yPlace * 16;
+    	change.pathTiles.removeAll();
+    	change.pathsFound = false;
+        enemyLeft = false;
+        enemyRight = false;
+        enemyUp = false;
+        enemyDown = false;
+        chosenSquare = false;
+    }
 }
 
 function turnEnd (player) {             // if all characters on red team turnEnd == true, set all blue team member   turnEnd == false
