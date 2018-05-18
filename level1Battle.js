@@ -70,8 +70,12 @@ level1Battle.prototype = {
         battleTheme1.play();
         kaitoObject = new Level1Unit('Kaito', 20, 10, 5, 10, 'player', false, 19, 3, 'atlas', 'kaito01');
         game.add.existing(kaitoObject);
+        kaitoObject1 = new Level1Unit('Kaito1', 20, 10, 5, 10, 'player', false, 14, 10, 'atlas', 'kaito01');
+        game.add.existing(kaitoObject1);
+        kaitoObject2 = new Level1Unit('Kaito2', 20, 10, 5, 10, 'player', false, 7, 23, 'atlas', 'kaito01');
+        game.add.existing(kaitoObject2);
         virusObject = new Level1Unit('Virus', 25, 5, 5, 10, 'enemy', true, 15, 13, 'atlas', 'kenta01');
-        game.add.existing(virusObject)
+        game.add.existing(virusObject);
         virusObject1 = new Level1Unit('Virus', 25, 5, 5, 10, 'enemy', true, 20, 3, 'atlas', 'kenta01');
         game.add.existing(virusObject1);
         virusObject2 = new Level1Unit('Virus', 25, 5, 5, 10, 'enemy', true, 7, 24, 'atlas', 'kenta01');
@@ -93,9 +97,12 @@ function clickSquare() {
 	var newUnit = this;
 	var xCoord = this.xPlace;
 	var yCoord = this.yPlace;
+    console.log(newUnit);
 	if(chosenSquare == true) {
 		xSelected = Math.floor(game.input.mousePointer.x / 16);
 		ySelected = Math.floor(game.input.mousePointer.y / 16);
+        console.log('xSelected' + xSelected);
+        console.log('ySelected' + ySelected);
 		if((xSelected >= 0 && xSelected < 30) && (ySelected >= 0 && ySelected < 30)) {
 			if((gameLevel1[xSelected][ySelected] instanceof Level1Unit) == false) {
 				gameLevel1[xSelected][ySelected] = newUnit;
@@ -115,59 +122,21 @@ function changeSprite(change) {
     	change.y = change.yPlace * 16;
     	change.pathTiles.removeAll();
     	change.pathsFound = false;
-        enemyLeft = false;
-        enemyRight = false;
-        enemyUp = false;
-        enemyDown = false;
+        change.enemyLeft = false;
+        change.enemyRight = false;
+        change.enemyUp = false;
+        change.enemyDown = false;
         chosenSquare = false;
+        background.events.onInputDown.removeAll();
+        turnEnd(change.team);
     }
 }
 
 function turnEnd (player) {             // if all characters on red team turnEnd == true, set all blue team member   turnEnd == false
-    if(player == 'player')
-    {
-        var counter = 0;
-        for(var i = 0; i < playerTeam.length ; i++)
-        {
-            if(playerTeam[i].moveCount >= 2)
-            {
-                counter ++;
-            }
-        }
-        if(counter >= playerTeam.length )
-        {
-            for(var i = 0; i < playerTeam.length; i++)
-            {
-                playerTeam[i].turnEnd = true;
-                playerTeam[i].moveCount = 0;
-            }
-            for(var i =0; i < teamBlue.length ; i++)
-            {
-                enemyTeam[i].turnEnd = false;
-            }
-        }
+    if(playerTeam.length == 0) {
+        console.log("I lose!");
     }
-    else
-    {
-        var counter = 0;
-        for(var i = 0; i < enemyTeam.length; i++)
-        {
-            if(enemyTeam[i].moveCount >= 2)
-            {
-                counter++;
-            }
-        }
-        if(counter >= enemyTeam.length)
-        {
-            for(var i = 0; i < enemyTeam.length; i++)
-            {
-                enemyTeam[i].turnEnd = true;
-                enemyTeam[i].moveCount = 0;
-            }
-            for(var i =0; i < teamRed.length; i++)
-            {
-                playerTeam[i].turnEnd = false;
-            }
-        }
+    else if(enemyTeam.length == 0) {
+        console.log("I win!");
     }
 }
