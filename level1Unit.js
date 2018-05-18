@@ -25,6 +25,11 @@ function Level1Unit(unitName, health, attack, defense, moveCount, team, turnEnd,
     this.rightMax = 0;
     this.upMax = 0;
     this.downMax = 0;
+    this.select = false;
+    this.enemyLeft = false;
+    this.enemyRight = false;
+    this.enemyUp = false;
+    this.enemyDown = false;
     game.physics.enable(this);
     this.events.onInputDown.add(Level1Unit.prototype.selector, this);
     if(this.team == 'player') // Put the unit in either the player's team or the enemy's.
@@ -42,8 +47,20 @@ Level1Unit.prototype.constructor = Level1Unit;
 
 Level1Unit.prototype.selector = function() {
     var moveDiff = this.moveCount - this.movesDone; // The number of turns that a unit can truly make.
+    console.log(this.unitName);
     Level1Unit.prototype.checkEnemy(this); // These two functions are put here for now so that
     Level1Unit.prototype.battle(this); // you may test them.
+    if(this.team == 'player') {
+        for(var i = 0; i < playerTeam.length; i++) {
+            playerTeam[i].select = false;
+        }
+    }
+    else {
+        for(var i = 0; i < enemyTeam.length; i++) {
+            enemyTeam[i].select = false;
+        }
+    }
+    this.select = true;
     if(this.turnEnd == false) {
         if(this.pathsFound == false) {
             for(var i = 1; i <= moveDiff; i++){ // Go look at the western path.
@@ -89,6 +106,7 @@ Level1Unit.prototype.selector = function() {
                 this.pathTiles.visible = true;
                 chosenSquare = true;
                 var unitSelf = this;
+                console.log(unitSelf.unitName);
                 background.events.onInputDown.add(clickSquare, this, {newUnit: unitSelf, xCoord: unitSelf.xPlace, yCoord: unitSelf.yPlace});
         }
         else {
@@ -100,10 +118,6 @@ Level1Unit.prototype.selector = function() {
 }
 
 var doCombat = false; // Combat can be done only if this is true.
-var enemyLeft = false; // If this is true, then there is a unit of the opposite team on the left.
-var enemyRight = false; // Same, but the unit is on the right now.
-var enemyUp = false; // Now above.
-var enemyDown = false; // And below.
 
 Level1Unit.prototype.checkEnemy = function(player) {
     if(player.turnEnd == false) { // A unit cannot attack if its turn has already ended.
@@ -112,7 +126,7 @@ Level1Unit.prototype.checkEnemy = function(player) {
                 if(gameLevel1[player.xPlace - 1][player.yPlace].team != player.team) { // We want the unit to attack only if the unit is not on the same team as it is on.
                     console.log(gameLevel1[player.xPlace - 1][player.yPlace].health);
                     doCombat = true;
-                    enemyLeft = true;
+                    player.enemyLeft = true;
                 }
             }
         }
@@ -121,7 +135,7 @@ Level1Unit.prototype.checkEnemy = function(player) {
                 if(gameLevel1[player.xPlace + 1][player.yPlace].team != player.team) {
                     console.log(gameLevel1[player.xPlace + 1][player.yPlace].health);
                     doCombat = true;
-                    enemyRight = true;
+                    player.enemyRight = true;
                 }
             }
         }
@@ -130,7 +144,7 @@ Level1Unit.prototype.checkEnemy = function(player) {
                 if(gameLevel1[player.xPlace][player.yPlace - 1].team != player.team) {
                     console.log(gameLevel1[player.xPlace][player.yPlace - 1].health);
                     doCombat = true;
-                    enemyUp = true;
+                    player.enemyUp = true;
                 }
             }
         }
@@ -139,7 +153,7 @@ Level1Unit.prototype.checkEnemy = function(player) {
                 if(gameLevel1[player.xPlace][player.yPlace + 1].team != player.team) {
                     console.log(gameLevel1[player.xPlace][player.yPlace + 1].health);
                     doCombat = true;
-                    enemyDown = true;
+                    player.enemyDown = true;
                 }
             }
         }
@@ -147,14 +161,14 @@ Level1Unit.prototype.checkEnemy = function(player) {
 }
 
 Level1Unit.prototype.battle = function(attacker) {
-    console.log('left' + enemyLeft);
-    console.log('right' + enemyRight);
-    console.log('up' + enemyUp);
-    console.log('down' + enemyDown);
+    console.log('left' + attacker.enemyLeft);
+    console.log('right' + attacker.enemyRight);
+    console.log('up' + attacker.enemyUp);
+    console.log('down' + attacker.enemyDown);
     if(doCombat == true) { 
         var damage = 0;
         var attackedUnit; // Variable will be used in all four possible cases.
-        if(enemyLeft == true) {
+        if(attacker.enemyLeft == true) {
             attackedUnit = gameLevel1[attacker.xPlace - 1][attacker.yPlace]; 
             damage = attacker.attack - attackedUnit.defense; // Calculate the damage first.
             if(damage < 0) {
@@ -165,10 +179,10 @@ Level1Unit.prototype.battle = function(attacker) {
             if(attackedUnit.health <= 0) { // If unit is now dead...
                 Level1Unit.prototype.removeFromTeam(attacker, attackedUnit);
                 gameLevel1[attacker.xPlace - 1][attacker.yPlace] = 0; // Set the unit's square to 0, since nothing should be on it now.
-                enemyLeft = false; // No enemy is there anymore, so set this to false.
+                attacker.enemyLeft = false; // No enemy is there anymore, so set this to false.
             }
         }
-        else if(enemyRight == true) { // Same thing for the other three cases. Note that "else if" is used since a unit can attack only once a turn.
+        else if(attacker.enemyRight == true) { // Same thing for the other three cases. Note that "else if" is used since a unit can attack only once a turn.
             attackedUnit = gameLevel1[attacker.xPlace + 1][attacker.yPlace];
             damage = attacker.attack - attackedUnit.defense;
             if(damage < 0) {
@@ -179,10 +193,10 @@ Level1Unit.prototype.battle = function(attacker) {
             if(attackedUnit.health <= 0) {
                 Level1Unit.prototype.removeFromTeam(attacker, attackedUnit);
                 gameLevel1[attacker.xPlace + 1][attacker.yPlace] = 0;
-                enemyRight = false;
+                attacker.enemyRight = false;
             }
         }
-        else if(enemyUp == true) {
+        else if(attacker.enemyUp == true) {
             attackedUnit = gameLevel1[attacker.xPlace][attacker.yPlace - 1];
             damage = attacker.attack - attackedUnit.defense;
             if(damage < 0) {
@@ -193,10 +207,10 @@ Level1Unit.prototype.battle = function(attacker) {
             if(attackedUnit.health <= 0) {
                 Level1Unit.prototype.removeFromTeam(attacker, attackedUnit);
                 gameLevel1[attacker.xPlace][attacker.yPlace - 1] = 0;
-                enemyUp = false;
+                attacker.enemyUp = false;
             }
         }
-        else if(enemyDown == true) {
+        else if(attacker.enemyDown == true) {
             attackedUnit = gameLevel1[attacker.xPlace][attacker.yPlace + 1];
             damage = attacker.attack - attackedUnit.defense;
             if(damage < 0) {
@@ -207,11 +221,12 @@ Level1Unit.prototype.battle = function(attacker) {
             if(attackedUnit.health <= 0) {
                 Level1Unit.prototype.removeFromTeam(attacker, attackedUnit);
                 gameLevel1[attacker.xPlace][attacker.yPlace + 1] = 0;
-                enemyDown = false;
+                attacker.enemyDown = false;
             }
         }
     }
     doCombat = false; // Always check whether there is a unit of the opposite team before doing combat.
+    turnEnd(attacker.team);
 }
 
 Level1Unit.prototype.removeFromTeam = function(winner, loser) { // Now that the attacked unit is dead, it needs to be taken out of its team's array.
