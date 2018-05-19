@@ -47,6 +47,7 @@ var level1Height = 30; // since it will involve only changing variable names and
 var xSelected;
 var ySelected;
 var turnNumber = 1;
+var shiftFactor = 16;
 
 var level1Battle = function(game) {};
 level1Battle.prototype = {
@@ -156,12 +157,18 @@ function clickSquare() {
         console.log('ySelected' + ySelected);
         if((xSelected >= 0 && xSelected < 30) && (ySelected >= 0 && ySelected < 30)) {
             if((gameLevel1[xSelected][ySelected] instanceof Level1Unit) == false) {
-                gameLevel1[xSelected][ySelected] = newUnit;
-                console.log(gameLevel1[xSelected][ySelected].xPlace);
-                newUnit.xPlace = xSelected;
-                newUnit.yPlace = ySelected;
-                gameLevel1[xCoord][yCoord] = 0;
-                changeSprite(newUnit);
+                console.log(newUnit.leftMax);
+                if((game.math.difference(xSelected, xCoord) <= newUnit.leftMax && ySelected == yCoord) ||
+                (game.math.difference(xSelected, xCoord) <= newUnit.rightMax && ySelected == yCoord) ||
+                (game.math.difference(ySelected, yCoord) <= newUnit.upMax && xSelected == xCoord) ||
+                (game.math.difference(ySelected, yCoord) <= newUnit.downMax && xSelected == xCoord))
+                {
+                    gameLevel1[xSelected][ySelected] = newUnit;
+                    newUnit.xPlace = xSelected;
+                    newUnit.yPlace = ySelected;
+                    gameLevel1[xCoord][yCoord] = 0;
+                    changeSprite(newUnit);
+                }
             }
         }
     }
