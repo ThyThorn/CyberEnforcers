@@ -46,6 +46,7 @@ var level1Width = 30; // Will be used to make copying code for the other levels 
 var level1Height = 30; // since it will involve only changing variable names and not hardcoded values.
 var xSelected;
 var ySelected;
+var turnNumber = 1;
 
 var level1Battle = function(game) {};
 level1Battle.prototype = {
@@ -63,8 +64,9 @@ level1Battle.prototype = {
 		game.physics.startSystem(Phaser.Physics.ARCADE);
 		background = game.add.sprite(0, 0, 'background');
 		background.inputEnabled = true;
+        background.events.onInputDown.add(chooseUnit, this);
 		backgroundVir = game.add.sprite(game.world.width/2, 0, 'backgroundVir');
-		//moveButton = game.add.button(0, game.world.height - 50, 'moveButton', chooseSquare, this);
+		moveButton = game.add.button(0, game.world.height - 50, 'moveButton', moveUnit, this);
         battleTheme1 = game.add.audio('battleTheme1');
         battleTheme1.loop = true;
         battleTheme1.play();
@@ -86,48 +88,98 @@ level1Battle.prototype = {
 }
 
 var chosenSquare = false;
+var movePressed = false;
+var chosenX;
+var chosenY;
+
+function setInvisible() {
+    for(var i = 0; i < playerTeam.length; i++) {
+        playerTeam[i].pathTiles.visible = false;
+    }
+    for(var i = 0; i < enemyTeam.length; i++) {
+        enemyTeam[i].pathTiles.visible = false;
+    }
+}
+
+function moveUnit() {
+    setInvisible();
+    movePressed = !movePressed;
+}
+
+var newThing;
 var newX;
 var newY;
 
-/*function chooseSquare() {
-	chosenSquare = !chosenSquare;
-}*/
+function chooseUnit() {
+    chosenX = Math.floor(game.input.mousePointer.x / 16);
+    chosenY = Math.floor(game.input.mousePointer.y / 16);
+    if(gameLevel1[chosenX][chosenY] instanceof Level1Unit) {
+        setInvisible();
+        gameLevel1[chosenX][chosenY].pathFinder();
+        if(doNotShow == true) {
+            setInvisible();
+        }
+        if(turnNumber % 2 == 1) {
+            if(gameLevel1[chosenX][chosenY].team == 'player') {
+                if(movePressed == true) {
+                    chosenSquare = true;
+                    xSelected = 0;
+                    ySelected = 0;
+                    newThing = gameLevel1[chosenX][chosenY];
+                    newX = gameLevel1[chosenX][chosenY].xPlace;
+                    newY = gameLevel1[chosenX][chosenY].yPlace;
+                    background.events.onInputDown.add(clickSquare, this, {newUnit: newThing, 
+                        xCoord: newX, yCoord: newY});
+                }
+                else {
+                    doNotShow = false;
+                }
+            }
+        }
+    } 
+    else {
+        setInvisible();
+        movePressed = false;
+    }
+}
+
+var doNotShow = false;
 
 function clickSquare() {
-	var newUnit = this;
-	var xCoord = this.xPlace;
-	var yCoord = this.yPlace;
-    console.log(newUnit);
-	if(chosenSquare == true) {
-		xSelected = Math.floor(game.input.mousePointer.x / 16);
-		ySelected = Math.floor(game.input.mousePointer.y / 16);
+    var newUnit = newThing;
+    var xCoord = newX;
+    var yCoord = newY;
+    if(chosenSquare == true) {
+        xSelected = Math.floor(game.input.mousePointer.x / 16);
+        ySelected = Math.floor(game.input.mousePointer.y / 16);
         console.log('xSelected' + xSelected);
         console.log('ySelected' + ySelected);
-		if((xSelected >= 0 && xSelected < 30) && (ySelected >= 0 && ySelected < 30)) {
-			if((gameLevel1[xSelected][ySelected] instanceof Level1Unit) == false) {
-				gameLevel1[xSelected][ySelected] = newUnit;
-				this.xPlace = xSelected;
-				this.yPlace = ySelected;
-				gameLevel1[xCoord][yCoord] = 0;
-				changeSprite(this);
-			}
-		}
-	}
+        if((xSelected >= 0 && xSelected < 30) && (ySelected >= 0 && ySelected < 30)) {
+            if((gameLevel1[xSelected][ySelected] instanceof Level1Unit) == false) {
+                gameLevel1[xSelected][ySelected] = newUnit;
+                console.log(gameLevel1[xSelected][ySelected].xPlace);
+                newUnit.xPlace = xSelected;
+                newUnit.yPlace = ySelected;
+                gameLevel1[xCoord][yCoord] = 0;
+                changeSprite(newUnit);
+            }
+        }
+    }
 }
 
 function changeSprite(change) {
     if(chosenSquare == true) {
-    	change.pathTiles.visible = false;
     	change.x = change.xPlace * 16;
     	change.y = change.yPlace * 16;
     	change.pathTiles.removeAll();
-    	change.pathsFound = false;
         change.enemyLeft = false;
         change.enemyRight = false;
         change.enemyUp = false;
         change.enemyDown = false;
+        change.pathsFound = false;
         chosenSquare = false;
-        background.events.onInputDown.removeAll();
+        moveUnit();
+        doNotShow = true;
         turnEnd(change.team);
     }
 }
