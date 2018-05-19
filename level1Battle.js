@@ -137,6 +137,23 @@ function chooseUnit() {
                 }
             }
         }
+        else {
+            if(gameLevel1[chosenX][chosenY].team == 'enemy') {
+                if(movePressed == true) {
+                    chosenSquare = true;
+                    xSelected = 0;
+                    ySelected = 0;
+                    newThing = gameLevel1[chosenX][chosenY];
+                    newX = gameLevel1[chosenX][chosenY].xPlace;
+                    newY = gameLevel1[chosenX][chosenY].yPlace;
+                    background.events.onInputDown.add(clickSquare, this, {newUnit: newThing, 
+                        xCoord: newX, yCoord: newY});
+                }
+                else {
+                    doNotShow = false;
+                }
+            }
+        }
     } 
     else {
         setInvisible();
@@ -153,16 +170,38 @@ function clickSquare() {
     if(chosenSquare == true) {
         xSelected = Math.floor(game.input.mousePointer.x / 16);
         ySelected = Math.floor(game.input.mousePointer.y / 16);
-        console.log('xSelected' + xSelected);
-        console.log('ySelected' + ySelected);
-        if((xSelected >= 0 && xSelected < 30) && (ySelected >= 0 && ySelected < 30)) {
+        console.log('xSelected: ' + xSelected);
+        console.log('ySelected: ' + ySelected);
+        console.log(gameLevel1[xCoord][yCoord].movesDone);
+        if((xSelected >= 0 && xSelected < level1Width) && (ySelected >= 0 && ySelected < level1Height)) {
             if((gameLevel1[xSelected][ySelected] instanceof Level1Unit) == false) {
-                console.log(newUnit.leftMax);
-                if((game.math.difference(xSelected, xCoord) <= newUnit.leftMax && ySelected == yCoord) ||
-                (game.math.difference(xSelected, xCoord) <= newUnit.rightMax && ySelected == yCoord) ||
-                (game.math.difference(ySelected, yCoord) <= newUnit.upMax && xSelected == xCoord) ||
-                (game.math.difference(ySelected, yCoord) <= newUnit.downMax && xSelected == xCoord))
+                if((xCoord > xSelected && game.math.difference(xCoord, xSelected) <= newUnit.leftMax && yCoord == ySelected))
                 {
+                    newUnit.movesDone += game.math.difference(xCoord, xSelected);
+                    gameLevel1[xSelected][ySelected] = newUnit;
+                    newUnit.xPlace = xSelected;
+                    newUnit.yPlace = ySelected;
+                    gameLevel1[xCoord][yCoord] = 0;
+                    changeSprite(newUnit);
+                }
+                else if((xSelected > xCoord && game.math.difference(xCoord, xSelected) <= newUnit.rightMax && yCoord == ySelected)) {
+                    newUnit.movesDone += game.math.difference(xCoord, xSelected);
+                    gameLevel1[xSelected][ySelected] = newUnit;
+                    newUnit.xPlace = xSelected;
+                    newUnit.yPlace = ySelected;
+                    gameLevel1[xCoord][yCoord] = 0;
+                    changeSprite(newUnit);
+                }
+                else if((yCoord > ySelected && game.math.difference(yCoord, ySelected) <= newUnit.upMax && xCoord == xSelected)) {
+                    newUnit.movesDone += game.math.difference(yCoord, ySelected);
+                    gameLevel1[xSelected][ySelected] = newUnit;
+                    newUnit.xPlace = xSelected;
+                    newUnit.yPlace = ySelected;
+                    gameLevel1[xCoord][yCoord] = 0;
+                    changeSprite(newUnit);
+                }
+                else if((ySelected > yCoord && game.math.difference(yCoord, ySelected) <= newUnit.downMax && xCoord == xSelected)) {
+                    newUnit.movesDone += game.math.difference(yCoord, ySelected);
                     gameLevel1[xSelected][ySelected] = newUnit;
                     newUnit.xPlace = xSelected;
                     newUnit.yPlace = ySelected;
@@ -184,6 +223,10 @@ function changeSprite(change) {
         change.enemyUp = false;
         change.enemyDown = false;
         change.pathsFound = false;
+        change.leftMax = 0;
+        change.rightMax = 0;
+        change.upMax = 0;
+        change.downMax = 0;
         chosenSquare = false;
         moveUnit();
         doNotShow = true;
@@ -191,11 +234,52 @@ function changeSprite(change) {
     }
 }
 
-function turnEnd (player) {             // if all characters on red team turnEnd == true, set all blue team member   turnEnd == false
+function turnEnd (player) {        
     if(playerTeam.length == 0) {
         console.log("I lose!");
     }
     else if(enemyTeam.length == 0) {
         console.log("I win!");
+    }
+    counter = 0;
+    if(player == 'player') {
+        var counter = 0;
+        for(var i = 0; i < playerTeam.length; i++) {
+            if(playerTeam[i].movesDone == playerTeam[i].moveCount) {
+                counter += 1;
+            }
+        }
+        if(counter == playerTeam.length) {
+            for(var i = 0; i < playerTeam.length; i++) {
+                playerTeam[i].movesDone = 0;
+                playerTeam[i].turnEnd = true;
+                playerTeam[i].attackedEnemy = false;
+            }
+            for(var i = 0; i < enemyTeam.length; i++) {
+                enemyTeam[i].turnEnd = false;
+            }
+            doNotShow = false;
+            turnNumber += 1;
+        }
+    }
+    else {
+        var counter = 0;
+        for(var i = 0; i < enemyTeam.length; i++) {
+            if(enemyTeam[i].movesDone == enemyTeam[i].moveCount) {
+                counter += 1;
+            }
+        }
+        if(counter == enemyTeam.length) {
+            for(var i = 0; i < enemyTeam.length; i++) {
+                enemyTeam[i].movesDone = 0;
+                enemyTeam[i].turnEnd = true;
+                enemyTeam[i].attackedEnemy = false;
+            }
+            for(var i = 0; i < playerTeam.length; i++) {
+                playerTeam[i].turnEnd = false;
+            }
+            doNotShow = false;
+            turnNumber += 1;
+        }
     }
 }
