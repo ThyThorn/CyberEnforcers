@@ -24,7 +24,6 @@ function Level1Unit(unitName, health, attack, defense, moveCount, team, turnEnd,
     this.rightMax = 0;
     this.upMax = 0;
     this.downMax = 0;
-    this.select = false;
     this.enemyLeft = false;
     this.enemyRight = false;
     this.enemyUp = false;
@@ -44,9 +43,6 @@ Level1Unit.prototype = Object.create(Phaser.Sprite.prototype);
 Level1Unit.prototype.constructor = Level1Unit;
 
 Level1Unit.prototype.pathFinder = function() {
-    console.log(this.unitName);
-    console.log(this.xPlace);
-    console.log(this.yPlace);
     var moveDiff = this.moveCount - this.movesDone; // The number of turns that a unit can truly make.
     //Level1Unit.prototype.checkEnemy(this); // These two functions are put here for now so that
     //Level1Unit.prototype.battle(this); // you may test them.
@@ -61,6 +57,7 @@ Level1Unit.prototype.pathFinder = function() {
                 }
                 greenTile = this.pathTiles.create((this.xPlace - this.leftMax) * 16, this.yPlace * 16, 'greenTile'); // Tile to be used to show that a unit can go to the square.
             }
+            this.leftMax -= 1;
             for(this.upMax = 1; this.upMax <= moveDiff; this.upMax++){ // Now look at the northern path. Pathfinding works exactly the same way.
                 if(this.yPlace - this.upMax < 0) {
                     break;
@@ -70,6 +67,7 @@ Level1Unit.prototype.pathFinder = function() {
                 }
                 greenTile = this.pathTiles.create(this.xPlace * 16, (this.yPlace - this.upMax) * 16, 'greenTile');
             }
+            this.upMax -= 1;
             for(this.rightMax = 1; this.rightMax <= moveDiff; this.rightMax++) { // Now look at the eastern path.
                 if(this.xPlace + this.rightMax >= level1Width) {
                     break;
@@ -79,6 +77,7 @@ Level1Unit.prototype.pathFinder = function() {
                 }
                 greenTile = this.pathTiles.create((this.xPlace + this.rightMax) * 16, this.yPlace * 16, 'greenTile');
             }
+            this.rightMax -= 1;
             for(this.downMax = 1; this.downMax <= moveDiff; this.downMax++) { // Now look at the southern path.
                 if(this.yPlace + this.downMax >= level1Height) {
                     break;
@@ -88,6 +87,7 @@ Level1Unit.prototype.pathFinder = function() {
                 }
                 greenTile = this.pathTiles.create(this.xPlace * 16, (this.yPlace + this.downMax) * 16, 'greenTile');
             }
+            this.downMax -= 1;
             this.pathTiles.visible = true;
             this.pathsFound = true;
         }
@@ -100,7 +100,7 @@ Level1Unit.prototype.pathFinder = function() {
 var doCombat = false; // Combat can be done only if this is true.
 
 Level1Unit.prototype.checkEnemy = function(player) {
-    if(player.turnEnd == false) { // A unit cannot attack if its turn has already ended.
+    if(player.attackedEnemy == false) { // A unit cannot attack if it has already done combat.
         if(player.xPlace - 1 >= 0) { // Does the square to the left exist? If so...
             if(gameLevel1[player.xPlace - 1][player.yPlace] instanceof Level1Unit) { // Three possiblities: nothing, an obstacle, or a unit. We want only the last one.
                 if(gameLevel1[player.xPlace - 1][player.yPlace].team != player.team) { // We want the unit to attack only if the unit is not on the same team as it is on.
@@ -204,9 +204,9 @@ Level1Unit.prototype.battle = function(attacker) {
                 attacker.enemyDown = false;
             }
         }
+        attacker.attackedEnemy = true;
     }
     doCombat = false; // Always check whether there is a unit of the opposite team before doing combat.
-    turnEnd(attacker.team);
 }
 
 Level1Unit.prototype.removeFromTeam = function(winner, loser) { // Now that the attacked unit is dead, it needs to be taken out of its team's array.
