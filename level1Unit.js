@@ -17,10 +17,9 @@ function Level1Unit(unitName, health, attack, defense, moveCount, team, turnEnd,
     this.xPlace = xPlace; // Set the unit's x and y coordinates.
     this.yPlace = yPlace;
     gameLevel1[xPlace][yPlace] = this; // Put it in the 2D array.
-    this.inputEnabled = true; // Let the unit be clicked on.
-    this.pathsFound = false;
-    this.toggle = false;
+    this.inputEnabled = false;
     this.pathTiles = game.add.group();
+    this.pathsFound = false;
     this.leftMax = 0;
     this.rightMax = 0;
     this.upMax = 0;
@@ -31,7 +30,6 @@ function Level1Unit(unitName, health, attack, defense, moveCount, team, turnEnd,
     this.enemyUp = false;
     this.enemyDown = false;
     game.physics.enable(this);
-    this.events.onInputDown.add(Level1Unit.prototype.selector, this);
     if(this.team == 'player') // Put the unit in either the player's team or the enemy's.
     {
         playerTeam.push(this);
@@ -45,22 +43,13 @@ function Level1Unit(unitName, health, attack, defense, moveCount, team, turnEnd,
 Level1Unit.prototype = Object.create(Phaser.Sprite.prototype);
 Level1Unit.prototype.constructor = Level1Unit;
 
-Level1Unit.prototype.selector = function() {
-    var moveDiff = this.moveCount - this.movesDone; // The number of turns that a unit can truly make.
+Level1Unit.prototype.pathFinder = function() {
     console.log(this.unitName);
-    Level1Unit.prototype.checkEnemy(this); // These two functions are put here for now so that
-    Level1Unit.prototype.battle(this); // you may test them.
-    if(this.team == 'player') {
-        for(var i = 0; i < playerTeam.length; i++) {
-            playerTeam[i].select = false;
-        }
-    }
-    else {
-        for(var i = 0; i < enemyTeam.length; i++) {
-            enemyTeam[i].select = false;
-        }
-    }
-    this.select = true;
+    console.log(this.xPlace);
+    console.log(this.yPlace);
+    var moveDiff = this.moveCount - this.movesDone; // The number of turns that a unit can truly make.
+    //Level1Unit.prototype.checkEnemy(this); // These two functions are put here for now so that
+    //Level1Unit.prototype.battle(this); // you may test them.
     if(this.turnEnd == false) {
         if(this.pathsFound == false) {
             for(var i = 1; i <= moveDiff; i++){ // Go look at the western path.
@@ -99,21 +88,12 @@ Level1Unit.prototype.selector = function() {
                 }
                 greenTile = this.pathTiles.create(this.xPlace * 16, (this.yPlace + i) * 16, 'greenTile');
             }
+            this.pathTiles.visible = true;
             this.pathsFound = true;
-            this.toggle = true;
-        }
-        if(this.toggle == true) {
-                this.pathTiles.visible = true;
-                chosenSquare = true;
-                var unitSelf = this;
-                console.log(unitSelf.unitName);
-                background.events.onInputDown.add(clickSquare, this, {newUnit: unitSelf, xCoord: unitSelf.xPlace, yCoord: unitSelf.yPlace});
         }
         else {
-                this.pathTiles.visible = false;
-                chosenSquare = false;
+            this.pathTiles.visible = true;
         }
-        this.toggle = !(this.toggle);
     }
 }
 
