@@ -52,41 +52,41 @@ Level1Unit.prototype.pathFinder = function() {
     //Level1Unit.prototype.battle(this); // you may test them.
     if(this.turnEnd == false) {
         if(this.pathsFound == false) {
-            for(var i = 1; i <= moveDiff; i++){ // Go look at the western path.
-                if(this.xPlace - i < 0) { // If space does not exist, then stop, as there is no point in looking into this path anymore.
+            for(this.leftMax = 1; this.leftMax <= moveDiff; this.leftMax++){ // Go look at the western path.
+                if(this.xPlace - this.leftMax < 0) { // If space does not exist, then stop, as there is no point in looking into this path anymore.
                     break;
                 }
-                else if(gameLevel1[this.xPlace - i][this.yPlace] != 0) { // A free square has the value 0, so anything else means that the square is occupied.
+                else if(gameLevel1[this.xPlace - this.leftMax][this.yPlace] != 0) { // A free square has the value 0, so anything else means that the square is occupied.
                     break;
                 }
-                greenTile = this.pathTiles.create((this.xPlace - i) * 16, this.yPlace * 16, 'greenTile'); // Tile to be used to show that a unit can go to the square.
+                greenTile = this.pathTiles.create((this.xPlace - this.leftMax) * 16, this.yPlace * 16, 'greenTile'); // Tile to be used to show that a unit can go to the square.
             }
-            for(var i = 1; i <= moveDiff; i++){ // Now look at the northern path. Pathfinding works exactly the same way.
-                if(this.yPlace - i < 0) {
+            for(this.upMax = 1; this.upMax <= moveDiff; this.upMax++){ // Now look at the northern path. Pathfinding works exactly the same way.
+                if(this.yPlace - this.upMax < 0) {
                     break;
                 }
-                else if(gameLevel1[this.xPlace][this.yPlace - i] != 0) {
+                else if(gameLevel1[this.xPlace][this.yPlace - this.upMax] != 0) {
                     break;
                 }
-                greenTile = this.pathTiles.create(this.xPlace * 16, (this.yPlace - i) * 16, 'greenTile');
+                greenTile = this.pathTiles.create(this.xPlace * 16, (this.yPlace - this.upMax) * 16, 'greenTile');
             }
-            for(var i = 1; i <= moveDiff; i++) { // Now look at the eastern path.
-                if(this.xPlace + i >= level1Width) {
+            for(this.rightMax = 1; this.rightMax <= moveDiff; this.rightMax++) { // Now look at the eastern path.
+                if(this.xPlace + this.rightMax >= level1Width) {
                     break;
                 }
-                else if(gameLevel1[this.xPlace + i][this.yPlace] != 0) {
+                else if(gameLevel1[this.xPlace + this.rightMax][this.yPlace] != 0) {
                     break;
                 }
-                greenTile = this.pathTiles.create((this.xPlace + i) * 16, this.yPlace * 16, 'greenTile');
+                greenTile = this.pathTiles.create((this.xPlace + this.rightMax) * 16, this.yPlace * 16, 'greenTile');
             }
-            for(var i = 1; i <= moveDiff; i++) { // Now look at the southern path.
-                if(this.yPlace + i >= level1Height) {
+            for(this.downMax = 1; this.downMax <= moveDiff; this.downMax++) { // Now look at the southern path.
+                if(this.yPlace + this.downMax >= level1Height) {
                     break;
                 }
-                else if(gameLevel1[this.xPlace][this.yPlace + i] != 0) {
+                else if(gameLevel1[this.xPlace][this.yPlace + this.downMax] != 0) {
                     break;
                 }
-                greenTile = this.pathTiles.create(this.xPlace * 16, (this.yPlace + i) * 16, 'greenTile');
+                greenTile = this.pathTiles.create(this.xPlace * 16, (this.yPlace + this.downMax) * 16, 'greenTile');
             }
             this.pathTiles.visible = true;
             this.pathsFound = true;
