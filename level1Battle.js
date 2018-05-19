@@ -51,23 +51,23 @@ var shiftFactor = 16;
 
 var level1Battle = function(game) {};
 level1Battle.prototype = {
-	preload: function() {
+    preload: function() {
         game.load.atlas('atlas', 'phaser/myGame/assets/allSprites.png', 'phaser/myGame/assets/allSprites.json'); // Load the atlas.
-		game.load.image('background', 'phaser/myGame/assets/level1.png');
-		game.load.image('backgroundVir', 'phaser/myGame/assets/level1v.png');
-		game.load.image('greenTile', 'phaser/myGame/assets/highlight.png');
-		game.load.image('moveButton', 'phaser/myGame/assets/movefullicon.png');
-    	game.load.audio('battleTheme1', 'phaser/myGame/bgm/Fighting is not an option.mp3');
-	},
+        game.load.image('background', 'phaser/myGame/assets/level1.png');
+        game.load.image('backgroundVir', 'phaser/myGame/assets/level1v.png');
+        game.load.image('greenTile', 'phaser/myGame/assets/highlight.png');
+        game.load.image('moveButton', 'phaser/myGame/assets/movefullicon.png');
+        game.load.audio('battleTheme1', 'phaser/myGame/bgm/Fighting is not an option.mp3');
+    },
 
-	create: function() {
-		game.scale.setGameSize(960, 530);
-		game.physics.startSystem(Phaser.Physics.ARCADE);
-		background = game.add.sprite(0, 0, 'background');
-		background.inputEnabled = true;
+    create: function() {
+        game.scale.setGameSize(960, 530);
+        game.physics.startSystem(Phaser.Physics.ARCADE);
+        background = game.add.sprite(0, 0, 'background');
+        background.inputEnabled = true;
         background.events.onInputDown.add(chooseUnit, this);
-		backgroundVir = game.add.sprite(game.world.width/2, 0, 'backgroundVir');
-		moveButton = game.add.button(0, game.world.height - 50, 'moveButton', moveUnit, this);
+        backgroundVir = game.add.sprite(game.world.width/2, 0, 'backgroundVir');
+        moveButton = game.add.button(0, game.world.height - 50, 'moveButton', moveUnit, this);
         battleTheme1 = game.add.audio('battleTheme1');
         battleTheme1.loop = true;
         battleTheme1.play();
@@ -83,9 +83,9 @@ level1Battle.prototype = {
         game.add.existing(virusObject1);
         virusObject2 = new Level1Unit('Virus', 25, 5, 5, 10, 'enemy', true, 7, 24, 'atlas', 'kenta01');
         game.add.existing(virusObject2);
-	},
-	update: function(){
-	}
+    },
+    update: function(){
+    }
 }
 
 var chosenSquare = false;
@@ -105,13 +105,14 @@ function setInvisible() {
 function moveUnit() {
     setInvisible();
     movePressed = true;
-    moveButton.inputEnabled = false;
+    moveButton.input.enabled = false;
     console.log(movePressed);
 }
 
 var newUnit;
 
 function chooseUnit() {
+    notEnemy:
     if(chosenSquare == false) {
         chosenX = Math.floor(game.input.mousePointer.x / 16);
         chosenY = Math.floor(game.input.mousePointer.y / 16);
@@ -129,7 +130,7 @@ function chooseUnit() {
                 }
                 else {
                     console.log('No, you cannot do that.');
-                    moveButton.inputEnabled = true;
+                    break notEnemy;
                 }
             }
             else {
@@ -140,10 +141,15 @@ function chooseUnit() {
                         newUnit = gameLevel1[chosenX][chosenY];
                     }
                 }
+                else {
+                    console.log('No, you cannot do that.');
+                    break notEnemy;
+                }
             }
         } 
         else {
             setInvisible();
+            moveButton.input.enabled = true;
         }
     }
     else {
@@ -202,9 +208,9 @@ function chooseUnit() {
 }
 
 function changeSprite(change) {
-	change.x = change.xPlace * 16;
-	change.y = change.yPlace * 16;
-	change.pathTiles.removeAll();
+    change.x = change.xPlace * 16;
+    change.y = change.yPlace * 16;
+    change.pathTiles.removeAll();
     change.enemyLeft = false;
     change.enemyRight = false;
     change.enemyUp = false;
@@ -216,6 +222,7 @@ function changeSprite(change) {
     change.downMax = 0;
     chosenSquare = false;
     movePressed = false;
+    moveButton.input.enabled = true;
     moveUnit();
     turnEnd(change.team);
 }
