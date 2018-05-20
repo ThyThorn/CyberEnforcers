@@ -1,8 +1,8 @@
 // Constructor for unit in the Physical World.
 
-function Level1Unit(unitName, health, attack, defense, moveCount, team, turnEnd, xPlace, yPlace, key, frame)
+function PhysUnit(unitName, health, attack, defense, moveCount, team, turnEnd, xPlace, yPlace, key, frame)
 {
-	Phaser.Sprite.call(this, game, xPlace * 16, yPlace * 16, key, frame);
+    Phaser.Sprite.call(this, game, xPlace * 16, yPlace * 16, key, frame);
     this.width = 16; // Will likely be removed later, since this is needed
     this.height = 16; // only because the current sprite is too big.
     this.unitName = unitName; // Give the unit a name.
@@ -39,13 +39,13 @@ function Level1Unit(unitName, health, attack, defense, moveCount, team, turnEnd,
     }
 }
 
-Level1Unit.prototype = Object.create(Phaser.Sprite.prototype);
-Level1Unit.prototype.constructor = Level1Unit;
+PhysUnit.prototype = Object.create(Phaser.Sprite.prototype);
+PhysUnit.prototype.constructor = PhysUnit;
 
-Level1Unit.prototype.pathFinder = function() {
+PhysUnit.prototype.pathFinder = function() {
     var moveDiff = this.moveCount - this.movesDone; // The number of turns that a unit can truly make.
-    //Level1Unit.prototype.checkEnemy(this); // These two functions are put here for now so that
-    //Level1Unit.prototype.battle(this); // you may test them.
+    //PhysUnit.prototype.checkEnemy(this); // These two functions are put here for now so that
+    //PhysUnit.prototype.battle(this); // you may test them.
     if(this.turnEnd == false) {
         if(this.pathsFound == false) {
             for(this.leftMax = 1; this.leftMax <= moveDiff; this.leftMax++){ // Go look at the western path.
@@ -98,118 +98,82 @@ Level1Unit.prototype.pathFinder = function() {
 }
 
 var doCombat = false; // Combat can be done only if this is true.
+var attackedUnit;
 
-Level1Unit.prototype.checkEnemy = function(player) {
-    if(player.attackedEnemy == false) { // A unit cannot attack if it has already done combat.
-        if(player.xPlace - 1 >= 0) { // Does the square to the left exist? If so...
-            if(gameLevel1[player.xPlace - 1][player.yPlace] instanceof Level1Unit) { // Three possiblities: nothing, an obstacle, or a unit. We want only the last one.
-                if(gameLevel1[player.xPlace - 1][player.yPlace].team != player.team) { // We want the unit to attack only if the unit is not on the same team as it is on.
-                    console.log(gameLevel1[player.xPlace - 1][player.yPlace].health);
+PhysUnit.prototype.checkEnemy = function() {
+    xSelected = Math.floor(game.input.mousePointer.x / 16);
+    ySelected = Math.floor(game.input.mousePointer.y / 16);
+    if((xSelected >= 0 && xSelected < level1Width) && (ySelected >= 0 && ySelected < level1Height)) {
+        if((gameLevel1[xSelected][ySelected] instanceof PhysUnit) == true) {
+            if(gameLevel1[xSelected][ySelected].team != this.team){
+                if(xSelected == (this.xPlace - 1) && ySelected == this.yPlace) {
+                    attackedUnit = gameLevel1[xSelected][ySelected];
+                    console.log(attackedUnit.health);
                     doCombat = true;
-                    player.enemyLeft = true;
+                    this.enemyLeft = true;
                 }
-            }
-        }
-        if(player.xPlace + 1 < level1Width) { // Same thing as above, but the square checked on is now to the right.
-            if(gameLevel1[player.xPlace + 1][player.yPlace] instanceof Level1Unit) {
-                if(gameLevel1[player.xPlace + 1][player.yPlace].team != player.team) {
-                    console.log(gameLevel1[player.xPlace + 1][player.yPlace].health);
+                else if(xSelected == (this.xPlace + 1) && ySelected == this.yPlace) {
+                    attackedUnit = gameLevel1[xSelected][ySelected];
+                    console.log(attackedUnit.health);
                     doCombat = true;
-                    player.enemyRight = true;
+                    this.enemyRight = true;
                 }
-            }
-        }
-        if(player.yPlace - 1 >= 0) { // And now above.
-            if(gameLevel1[player.xPlace][player.yPlace - 1] instanceof Level1Unit) {
-                if(gameLevel1[player.xPlace][player.yPlace - 1].team != player.team) {
-                    console.log(gameLevel1[player.xPlace][player.yPlace - 1].health);
+                else if(xSelected == this.xPlace && ySelected == (this.yPlace - 1)) {
+                    attackedUnit = gameLevel1[xSelected][ySelected];
+                    console.log(attackedUnit.health);
                     doCombat = true;
-                    player.enemyUp = true;
+                    this.enemyUp = true;
                 }
-            }
-        }
-        if(player.yPlace + 1 < level1Height) { // And now below.
-            if(gameLevel1[player.xPlace][player.yPlace + 1] instanceof Level1Unit) {
-                if(gameLevel1[player.xPlace][player.yPlace + 1].team != player.team) {
-                    console.log(gameLevel1[player.xPlace][player.yPlace + 1].health);
+                else if(xSelected == this.xPlace && ySelected == (this.yPlace + 1)) {
+                    attackedUnit = gameLevel1[xSelected][ySelected];
+                    console.log(attackedUnit.health);
                     doCombat = true;
-                    player.enemyDown = true;
+                    this.enemyDown = true;
                 }
             }
         }
     }
-}
-
-Level1Unit.prototype.battle = function(attacker) {
-    console.log('left' + attacker.enemyLeft);
-    console.log('right' + attacker.enemyRight);
-    console.log('up' + attacker.enemyUp);
-    console.log('down' + attacker.enemyDown);
-    if(doCombat == true) { 
-        var damage = 0;
-        var attackedUnit; // Variable will be used in all four possible cases.
-        if(attacker.enemyLeft == true) {
-            attackedUnit = gameLevel1[attacker.xPlace - 1][attacker.yPlace]; 
-            damage = attacker.attack - attackedUnit.defense; // Calculate the damage first.
-            if(damage < 0) {
-                damage = 0; // Negative damage should not heal the unit, so set damage to 0.
-            }
-            attackedUnit.health -= damage; // Then deal it to the unit's health.
-            console.log(attackedUnit.health);
-            if(attackedUnit.health <= 0) { // If unit is now dead...
-                Level1Unit.prototype.removeFromTeam(attacker, attackedUnit);
-                gameLevel1[attacker.xPlace - 1][attacker.yPlace] = 0; // Set the unit's square to 0, since nothing should be on it now.
-                attacker.enemyLeft = false; // No enemy is there anymore, so set this to false.
-            }
-        }
-        else if(attacker.enemyRight == true) { // Same thing for the other three cases. Note that "else if" is used since a unit can attack only once a turn.
-            attackedUnit = gameLevel1[attacker.xPlace + 1][attacker.yPlace];
-            damage = attacker.attack - attackedUnit.defense;
-            if(damage < 0) {
-                damage = 0;
-            }
-            attackedUnit.health -= damage;
-            console.log(attackedUnit.health);
-            if(attackedUnit.health <= 0) {
-                Level1Unit.prototype.removeFromTeam(attacker, attackedUnit);
-                gameLevel1[attacker.xPlace + 1][attacker.yPlace] = 0;
-                attacker.enemyRight = false;
-            }
-        }
-        else if(attacker.enemyUp == true) {
-            attackedUnit = gameLevel1[attacker.xPlace][attacker.yPlace - 1];
-            damage = attacker.attack - attackedUnit.defense;
-            if(damage < 0) {
-                damage = 0;
-            }
-            attackedUnit.health -= damage;
-            console.log(attackedUnit.health);
-            if(attackedUnit.health <= 0) {
-                Level1Unit.prototype.removeFromTeam(attacker, attackedUnit);
-                gameLevel1[attacker.xPlace][attacker.yPlace - 1] = 0;
-                attacker.enemyUp = false;
-            }
-        }
-        else if(attacker.enemyDown == true) {
-            attackedUnit = gameLevel1[attacker.xPlace][attacker.yPlace + 1];
-            damage = attacker.attack - attackedUnit.defense;
-            if(damage < 0) {
-                damage = 0;
-            }
-            attackedUnit.health -= damage;
-            console.log(attackedUnit.health);
-            if(attackedUnit.health <= 0) {
-                Level1Unit.prototype.removeFromTeam(attacker, attackedUnit);
-                gameLevel1[attacker.xPlace][attacker.yPlace + 1] = 0;
-                attacker.enemyDown = false;
-            }
-        }
-        attacker.attackedEnemy = true;
+    if(doCombat == true) {
+        this.battle();
     }
-    doCombat = false; // Always check whether there is a unit of the opposite team before doing combat.
+    else {
+        attackPressed = false;
+        enableButtons();
+    }
 }
 
-Level1Unit.prototype.removeFromTeam = function(winner, loser) { // Now that the attacked unit is dead, it needs to be taken out of its team's array.
+PhysUnit.prototype.battle = function() {
+    console.log('left' + this.enemyLeft);
+    console.log('right' + this.enemyRight);
+    console.log('up' + this.enemyUp);
+    console.log('down' + this.enemyDown);
+    var damage = 0;
+    damage = this.attack - attackedUnit.defense; // Calculate the damage first.
+    if(damage < 0) {
+        damage = 0; // Negative damage should not heal the unit, so set damage to 0.
+        }
+    attackedUnit.health -= damage; // Then deal it to the unit's health.
+    console.log(attackedUnit.health);
+    if(attackedUnit.health <= 0) { // If unit is now dead...
+        PhysUnit.prototype.removeFromTeam(this, attackedUnit);
+        gameLevel1[attackedUnit.xPlace][attackedUnit.yPlace] = 0; // Set the unit's square to 0, since nothing should be on it now.
+    }
+    this.attackedEnemy = true;
+    this.enemyLeft = false;
+    this.enemyRight = false;
+    this.enemyUp = false;
+    this.enemyDown = false;
+    this.pathTiles.removeAll();
+    this.pathsFound = false;
+    chosenSquare = false;
+    attackPressed = false;
+    doCombat = false;
+    enableButtons();
+    this.pathFinder();
+    this.pathTiles.visible = false;
+}
+
+PhysUnit.prototype.removeFromTeam = function(winner, loser) { // Now that the attacked unit is dead, it needs to be taken out of its team's array.
     loser.kill(); // Get rid of the sprite.
     if(winner.team = 'player') {  
         for(var i = 0; i < enemyTeam.length; i++) { // Go through whole array and find the unit that has the same coordinates as the dead unit.
