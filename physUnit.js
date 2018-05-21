@@ -16,7 +16,7 @@ function PhysUnit(unitName, health, attack, defense, moveCount, team, turnEnd, x
     this.attackedEnemy = false; // This remains false until the unit gets into a battle with another unit.
     this.xPlace = xPlace; // Set the unit's x and y coordinates.
     this.yPlace = yPlace;
-    gameLevel1[xPlace][yPlace] = this; // Put it in the 2D array.
+    gameLevel[xPlace][yPlace] = this; // Put it in the 2D array.
     this.inputEnabled = false;
     this.pathTiles = game.add.group();
     this.pathsFound = false;
@@ -44,15 +44,13 @@ PhysUnit.prototype.constructor = PhysUnit;
 
 PhysUnit.prototype.pathFinder = function() {
     var moveDiff = this.moveCount - this.movesDone; // The number of turns that a unit can truly make.
-    //PhysUnit.prototype.checkEnemy(this); // These two functions are put here for now so that
-    //PhysUnit.prototype.battle(this); // you may test them.
     if(this.turnEnd == false) {
         if(this.pathsFound == false) {
             for(this.leftMax = 1; this.leftMax <= moveDiff; this.leftMax++){ // Go look at the western path.
                 if(this.xPlace - this.leftMax < 0) { // If space does not exist, then stop, as there is no point in looking into this path anymore.
                     break;
                 }
-                else if(gameLevel1[this.xPlace - this.leftMax][this.yPlace] != 0) { // A free square has the value 0, so anything else means that the square is occupied.
+                else if(gameLevel[this.xPlace - this.leftMax][this.yPlace] != 0) { // A free square has the value 0, so anything else means that the square is occupied.
                     break;
                 }
                 greenTile = this.pathTiles.create((this.xPlace - this.leftMax) * 16, this.yPlace * 16, 'greenTile'); // Tile to be used to show that a unit can go to the square.
@@ -62,27 +60,27 @@ PhysUnit.prototype.pathFinder = function() {
                 if(this.yPlace - this.upMax < 0) {
                     break;
                 }
-                else if(gameLevel1[this.xPlace][this.yPlace - this.upMax] != 0) {
+                else if(gameLevel[this.xPlace][this.yPlace - this.upMax] != 0) {
                     break;
                 }
                 greenTile = this.pathTiles.create(this.xPlace * 16, (this.yPlace - this.upMax) * 16, 'greenTile');
             }
             this.upMax -= 1;
             for(this.rightMax = 1; this.rightMax <= moveDiff; this.rightMax++) { // Now look at the eastern path.
-                if(this.xPlace + this.rightMax >= level1Width) {
+                if(this.xPlace + this.rightMax >= levelWidth) {
                     break;
                 }
-                else if(gameLevel1[this.xPlace + this.rightMax][this.yPlace] != 0) {
+                else if(gameLevel[this.xPlace + this.rightMax][this.yPlace] != 0) {
                     break;
                 }
                 greenTile = this.pathTiles.create((this.xPlace + this.rightMax) * 16, this.yPlace * 16, 'greenTile');
             }
             this.rightMax -= 1;
             for(this.downMax = 1; this.downMax <= moveDiff; this.downMax++) { // Now look at the southern path.
-                if(this.yPlace + this.downMax >= level1Height) {
+                if(this.yPlace + this.downMax >= levelHeight) {
                     break;
                 }
-                else if(gameLevel1[this.xPlace][this.yPlace + this.downMax] != 0) {
+                else if(gameLevel[this.xPlace][this.yPlace + this.downMax] != 0) {
                     break;
                 }
                 greenTile = this.pathTiles.create(this.xPlace * 16, (this.yPlace + this.downMax) * 16, 'greenTile');
@@ -103,29 +101,29 @@ var attackedUnit;
 PhysUnit.prototype.checkEnemy = function() {
     xSelected = Math.floor(game.input.mousePointer.x / 16);
     ySelected = Math.floor(game.input.mousePointer.y / 16);
-    if((xSelected >= 0 && xSelected < level1Width) && (ySelected >= 0 && ySelected < level1Height)) {
-        if((gameLevel1[xSelected][ySelected] instanceof PhysUnit) == true) {
-            if(gameLevel1[xSelected][ySelected].team != this.team){
+    if((xSelected >= 0 && xSelected < levelWidth) && (ySelected >= 0 && ySelected < levelHeight)) {
+        if((gameLevel[xSelected][ySelected] instanceof PhysUnit) == true) {
+            if(gameLevel[xSelected][ySelected].team != this.team){
                 if(xSelected == (this.xPlace - 1) && ySelected == this.yPlace) {
-                    attackedUnit = gameLevel1[xSelected][ySelected];
+                    attackedUnit = gameLevel[xSelected][ySelected];
                     console.log(attackedUnit.health);
                     doCombat = true;
                     this.enemyLeft = true;
                 }
                 else if(xSelected == (this.xPlace + 1) && ySelected == this.yPlace) {
-                    attackedUnit = gameLevel1[xSelected][ySelected];
+                    attackedUnit = gameLevel[xSelected][ySelected];
                     console.log(attackedUnit.health);
                     doCombat = true;
                     this.enemyRight = true;
                 }
                 else if(xSelected == this.xPlace && ySelected == (this.yPlace - 1)) {
-                    attackedUnit = gameLevel1[xSelected][ySelected];
+                    attackedUnit = gameLevel[xSelected][ySelected];
                     console.log(attackedUnit.health);
                     doCombat = true;
                     this.enemyUp = true;
                 }
                 else if(xSelected == this.xPlace && ySelected == (this.yPlace + 1)) {
-                    attackedUnit = gameLevel1[xSelected][ySelected];
+                    attackedUnit = gameLevel[xSelected][ySelected];
                     console.log(attackedUnit.health);
                     doCombat = true;
                     this.enemyDown = true;
@@ -143,10 +141,6 @@ PhysUnit.prototype.checkEnemy = function() {
 }
 
 PhysUnit.prototype.battle = function() {
-    console.log('left' + this.enemyLeft);
-    console.log('right' + this.enemyRight);
-    console.log('up' + this.enemyUp);
-    console.log('down' + this.enemyDown);
     var damage = 0;
     damage = this.attack - attackedUnit.defense; // Calculate the damage first.
     if(damage < 0) {
@@ -156,7 +150,7 @@ PhysUnit.prototype.battle = function() {
     console.log(attackedUnit.health);
     if(attackedUnit.health <= 0) { // If unit is now dead...
         PhysUnit.prototype.removeFromTeam(this, attackedUnit);
-        gameLevel1[attackedUnit.xPlace][attackedUnit.yPlace] = 0; // Set the unit's square to 0, since nothing should be on it now.
+        gameLevel[attackedUnit.xPlace][attackedUnit.yPlace] = 0; // Set the unit's square to 0, since nothing should be on it now.
     }
     this.attackedEnemy = true;
     this.enemyLeft = false;
