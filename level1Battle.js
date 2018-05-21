@@ -104,6 +104,14 @@ var chosenVirSquare = false;
 var chosenVirX;
 var chosenVirY;
 var kenta;
+var nodeColor = 'yellow';
+var physNode;
+var xAOE = 3;
+var yAOE = 3;
+var northBound;
+var southBound;
+var westBound;
+var eastBound;
 
 var level1Battle = function(game) {};
 level1Battle.prototype = {
@@ -114,6 +122,7 @@ level1Battle.prototype = {
         game.load.image('greenTile', 'phaser/myGame/assets/highlight.png');
         game.load.image('moveButton', 'phaser/myGame/assets/movefullicon.png');
         game.load.image('attackButton', 'phaser/myGame/assets/attackfullicon.png');
+        game.load.image('hackNodeButton', 'phaser/myGame/assets/hacknodefullicon.png')
         game.load.audio('battleThemePlayer1', 'phaser/myGame/bgm/Fighting is not an option.mp3');
         game.load.audio('battleThemeEnemy1', 'phaser/myGame/bgm/S31-Robotic City.mp3');
     },
@@ -129,6 +138,7 @@ level1Battle.prototype = {
         backgroundVir.events.onInputDown.add(chooseVirUnit, this);
         moveButton = game.add.button(0, game.world.height - 50, 'moveButton', moveUnit, this);
         attackButton = game.add.button(155, game.world.height - 50, 'attackButton', attackUnit, this);
+        hackNodeButton = game.add.button(310, game.world.height - 50, 'hackNodeButton', hackNode, this);
         battleThemePlayer1 = game.add.audio('battleThemePlayer1');
         battleThemePlayer1.loop = true;
         battleThemePlayer1.play();
@@ -196,6 +206,7 @@ level1Battle.prototype = {
         redNode4.south = greenNode5;
         redNode5.east = greenNode5;
     },
+
     update: function(){
     }
 }
@@ -218,11 +229,13 @@ function setInvisible() {
 function disableButtons() {
     moveButton.input.enabled = false;
     attackButton.input.enabled = false;
+    hackNodeButton.input.enabled = false;
 }
 
 function enableButtons() {
     moveButton.input.enabled = true;
     attackButton.input.enabled = true;
+    hackNodeButton.input.enabled = true;
 }
 
 function moveUnit() {
@@ -230,7 +243,6 @@ function moveUnit() {
     movePressed = true;
     attackPressed = false;
     disableButtons();
-    console.log(movePressed);
 }
 
 function attackUnit() {
@@ -238,7 +250,11 @@ function attackUnit() {
     attackPressed = true;
     movePressed = false;
     disableButtons();
-    console.log('attackPressed: ' + attackPressed);
+}
+
+function hackNode() {
+    setInvisible();
+    virLevel[kenta.xPlace][kenta.yPlace].whichKind();
 }
 
 var newUnit;
@@ -344,6 +360,11 @@ function chooseSquare() {
             enableButtons();
             return;
         }
+        movePressed = false;
+        chosenSquare = false;
+        setInvisible();
+        enableButtons();
+        return;
     }
 }
 
