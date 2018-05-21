@@ -1,13 +1,13 @@
 var gameLevel = [
+    [1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    [0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -75,6 +75,7 @@ var kaitoObject;
 var virusObject;
 var playerTeam = new Array();
 var enemyTeam = new Array();
+var virViruses = new Array();
 var levelWidth = 30;
 var levelHeight = 30;
 var xSelected;
@@ -130,6 +131,7 @@ level1Battle.prototype = {
     create: function() {
         game.scale.setGameSize(960, 530);
         game.physics.startSystem(Phaser.Physics.ARCADE);
+        gameLevel = Phaser.ArrayUtils.transposeMatrix(gameLevel);
         background = game.add.sprite(0, 0, 'background');
         background.inputEnabled = true;
         background.events.onInputDown.add(chooseUnit, this);
@@ -384,7 +386,6 @@ function changeSprite(change) {
     chosenSquare = false;
     movePressed = false;
     enableButtons();
-    console.log(change.health);
     turnEnd(change.team);
 }
 
@@ -403,7 +404,6 @@ function turnEnd (player) {
                 counter += 1;
             }
         }
-        console.log('playerCounter: ' + counter); 
         if(counter == playerTeam.length) {
             for(var i = 0; i < playerTeam.length; i++) {
                 playerTeam[i].movesDone = 0;
@@ -413,7 +413,6 @@ function turnEnd (player) {
             for(var i = 0; i < enemyTeam.length; i++) {
                 enemyTeam[i].turnEnd = false;
             }
-            console.log('enemy turn');
             doNotShow = false;
             turnNumber += 1;
             game.sound.stopAll();
@@ -445,8 +444,38 @@ function turnEnd (player) {
 }
 
 var goToThis;
+var blueNodeVar = false;
 
 function chooseVirUnit() {
+    if(blueNodeVar == true) {
+        disableButtons();
+        setInvisible();
+        xVirSelected = Math.floor(game.input.mousePointer.x / 16 - 30);
+        yVirSelected = Math.floor(game.input.mousePointer.y / 16);
+        chosenVirX = kenta.xPlace;
+        chosenVirY = kenta.yPlace;
+        newNode = virLevel[chosenVirX][chosenVirY];
+        tryAgain:
+        if(newNode instanceof Node) {
+            if(turnNumber % 2 == 1) {
+                if(virLevel[xVirSelected][yVirSelected].effect == 'blue' && virLevel[xVirSelected][yVirSelected].unit == null) {
+                    virLevel[xVirSelected][yVirSelected].unit = newNode.unit;
+                    virLevel[xVirSelected][yVirSelected].unit.xPlace = xVirSelected;
+                    virLevel[xVirSelected][yVirSelected].unit.yPlace = yVirSelected;
+                    virLevel[xVirSelected][yVirSelected].unit.x = 480 + (16 * newNode.unit.xPlace);
+                    virLevel[xVirSelected][yVirSelected].unit.y = 16 * yVirSelected;
+                    virLevel[chosenVirX][chosenVirY].unit = null;
+                    accessible = false;
+                }
+                else {
+                    break tryAgain;
+                }
+            }
+        }
+        enableButtons();
+        blueNodeVar = false;
+        return;
+    }
     notNode:
     if(chosenVirSquare == false) {
         chosenVirX = Math.floor(game.input.mousePointer.x / 16 - 30);
@@ -488,7 +517,7 @@ function chooseVirUnit() {
                 else {
                     isFull = false;
                 }
-                if(accessible == true && isFull == false) {
+                if(accessible == true && isFull == false && newNode.unit.movesDone < newNode.unit.moveCount) {
                     newNode.unit.movesDone += 1;
                     virLevel[xVirSelected][yVirSelected].unit = newNode.unit;
                     virLevel[xVirSelected][yVirSelected].unit.xPlace = xVirSelected;
