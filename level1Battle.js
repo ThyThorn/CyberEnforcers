@@ -78,10 +78,14 @@ var enemyTeam = new Array();
 var virViruses = new Array();
 var levelWidth = 30;
 var levelHeight = 30;
+var mapWidth = 480;
+var mapHeight = 480;
 var xSelected;
 var ySelected;
 var turnNumber = 1;
-var shiftFactor = 16;
+var shiftPhysFactor = 16;
+var shiftUIFactor = 16 * 12;
+var shiftVirFactor = 16 * 13;
 
 var greenNode1; // All the node variables must be declared first.
 var greenNode2;
@@ -105,7 +109,6 @@ var chosenVirSquare = false;
 var chosenVirX;
 var chosenVirY;
 var kenta;
-var nodeColor = 'yellow';
 var physNode;
 var xAOE = 3;
 var yAOE = 3;
@@ -117,50 +120,75 @@ var eastBound;
 var level1Battle = function(game) {};
 level1Battle.prototype = {
     preload: function() {
-        game.load.atlas('atlas', 'phaser/myGame/assets/allSprites.png', 'phaser/myGame/assets/allSprites.json'); // Load the atlas.
-        game.load.image('background', 'phaser/myGame/assets/level1.png');
-        game.load.image('backgroundVir', 'phaser/myGame/assets/level1v.png');
-        game.load.image('greenTile', 'phaser/myGame/assets/highlight.png');
-        game.load.image('moveButton', 'phaser/myGame/assets/movefullicon.png');
-        game.load.image('attackButton', 'phaser/myGame/assets/attackfullicon.png');
-        game.load.image('hackNodeButton', 'phaser/myGame/assets/hacknodefullicon.png')
-        game.load.audio('battleThemePlayer1', 'phaser/myGame/bgm/Fighting is not an option.mp3');
-        game.load.audio('battleThemeEnemy1', 'phaser/myGame/bgm/S31-Robotic City.mp3');
+        game.load.atlas('atlas', 'assets/img/allSprites.png', 'assets/img/allSprites.json'); // Load the atlas.
+
+        game.load.image('background', 'assets/img/level1.png');
+        game.load.image('backgroundVir', 'assets/img/level1v.png');
+        game.load.image('greenTile', 'assets/img/highlight.png');
+
+        game.load.image('moveButton', 'assets/img/movefullicon.png');
+        game.load.image('moveButtonPressed', 'assets/img/movefullicongrey.png');
+
+        game.load.image('attackButton', 'assets/img/attackfullicon.png');
+        game.load.image('attackButtonPressed', 'assets/img/attackfullicongrey.png');
+
+        game.load.image('hackNodeButton', 'assets/img/hacknodefullicon.png');
+        game.load.image('hackNodeButtonPressed', 'assets/img/hacknodefullicongrey.png');
+
+        game.load.image('turnEndButton', 'assets/img/turnendicon.png');
+
+        game.load.audio('battleThemePlayer1', 'assets/audio/Fighting is not an option.mp3');
+        game.load.audio('battleThemeEnemy1', 'assets/audio/S31-Robotic City.mp3');
     },
 
     create: function() {
-        game.scale.setGameSize(960, 530);
+        game.scale.setGameSize(shiftPhysFactor * 2 + mapWidth * 2 + shiftUIFactor, mapHeight + shiftPhysFactor * 2);
         game.physics.startSystem(Phaser.Physics.ARCADE);
         gameLevel = Phaser.ArrayUtils.transposeMatrix(gameLevel);
-        background = game.add.sprite(0, 0, 'background');
+
+        background = game.add.sprite(0 + shiftPhysFactor, 0 + shiftPhysFactor, 'background');
         background.inputEnabled = true;
         background.events.onInputDown.add(chooseUnit, this);
-        backgroundVir = game.add.sprite(game.world.width/2, 0, 'backgroundVir');
+
+        backgroundVir = game.add.sprite(background.width + shiftVirFactor, 0 + shiftPhysFactor, 'backgroundVir');
         backgroundVir.inputEnabled = true;
         backgroundVir.events.onInputDown.add(chooseVirUnit, this);
-        moveButton = game.add.button(0, game.world.height - 50, 'moveButton', moveUnit, this);
-        attackButton = game.add.button(155, game.world.height - 50, 'attackButton', attackUnit, this);
-        hackNodeButton = game.add.button(310, game.world.height - 50, 'hackNodeButton', hackNode, this);
+
+        moveButton = game.add.button(shiftPhysFactor + mapWidth + 16, mapHeight - 50 + shiftPhysFactor, 'moveButton', moveUnit, this);
+        moveButton.onInputDown.add(moveDown, this);
+
+        attackButton = game.add.button(shiftPhysFactor + mapWidth + 16, mapHeight - 110 + shiftPhysFactor, 'attackButton', attackUnit, this);
+        attackButton.onInputDown.add(attackDown, this);
+
+        hackNodeButton = game.add.button(shiftPhysFactor + mapWidth + 16, mapHeight - 170 + shiftPhysFactor, 'hackNodeButton', hackNode, this);
+        hackNodeButton.onInputDown.add(hackNodeDown, this);
+
+        turnEndButton = game.add.button(shiftPhysFactor + mapWidth + 16, mapHeight - 230 + shiftPhysFactor, 'turnEndButton', endTurn, this);
+
         battleThemePlayer1 = game.add.audio('battleThemePlayer1');
         battleThemePlayer1.loop = true;
         battleThemePlayer1.play();
         battleThemeEnemy1 = game.add.audio('battleThemeEnemy1');
         battleThemeEnemy1.loop = true;
+
         kaitoObject = new PhysUnit('Kaito', 20, 10, 5, 10, 'player', false, 19, 3, 'atlas', 'kaito01');
         game.add.existing(kaitoObject);
         kaitoObject1 = new PhysUnit('Kaito1', 20, 10, 5, 10, 'player', false, 14, 10, 'atlas', 'kaito01');
         game.add.existing(kaitoObject1);
         kaitoObject2 = new PhysUnit('Kaito2', 20, 10, 5, 10, 'player', false, 7, 23, 'atlas', 'kaito01');
         game.add.existing(kaitoObject2);
+
         virusObject = new PhysUnit('Virus', 25, 5, 5, 10, 'enemy', true, 15, 13, 'atlas', 'kenta01');
         game.add.existing(virusObject);
         virusObject1 = new PhysUnit('Virus', 25, 5, 5, 10, 'enemy', true, 20, 3, 'atlas', 'kenta01');
         game.add.existing(virusObject1);
         virusObject2 = new PhysUnit('Virus', 25, 5, 5, 10, 'enemy', true, 7, 24, 'atlas', 'kenta01');
         game.add.existing(virusObject2);
+
         kenta = new VirUnit('Kenta', 5, 'player', false, 2, 9, 'atlas', 'kenta01');
         game.add.existing(kenta);
-        greenNode1 = new Node('Green1', 'green', null, null, null, null, 2, 9, kenta);
+
+        greenNode1 = new Node('Green1', 'green', null, null, null, greenNode2, 2, 9, kenta);
         greenNode2 = new Node('Green2', 'green', null, null, greenNode1, greenNode3, 7, 9, null);
         greenNode1.east = greenNode2; // Note that since greenNode2 was undefined when I initialized greenNode1, I need to set its value to greenNode1.east again.
         
@@ -216,6 +244,7 @@ level1Battle.prototype = {
 var chosenSquare = false;
 var movePressed = false;
 var attackPressed = false;
+var turnEndPressed = false;
 var chosenX;
 var chosenY;
 
@@ -232,55 +261,107 @@ function disableButtons() {
     moveButton.input.enabled = false;
     attackButton.input.enabled = false;
     hackNodeButton.input.enabled = false;
+    turnEndButton.input.enabled = false;
 }
 
 function enableButtons() {
     moveButton.input.enabled = true;
+    moveButton.loadTexture('moveButton');
     attackButton.input.enabled = true;
+    attackButton.loadTexture('attackButton');
     hackNodeButton.input.enabled = true;
+    hackNodeButton.loadTexture('hackNodeButton');
+    turnEndButton.input.enabled = true;
 }
 
 function moveUnit() {
     setInvisible();
     movePressed = true;
     attackPressed = false;
+    turnEndPressed = false;
     disableButtons();
+}
+
+function moveDown() {
+    moveButton.loadTexture('moveButtonPressed');
 }
 
 function attackUnit() {
     setInvisible();
     attackPressed = true;
     movePressed = false;
+    turnEndPressed = false;
     disableButtons();
+}
+
+function attackDown() {
+    attackButton.loadTexture('attackButtonPressed');
 }
 
 function hackNode() {
     setInvisible();
+    disableButtons();
     virLevel[kenta.xPlace][kenta.yPlace].whichKind();
+}
+
+function hackNodeDown() {
+    hackNodeButton.loadTexture('hackNodeButtonPressed');
+}
+
+function endTurn() {
+    setInvisible();
+    turnEndPressed = true;
+    attackPressed = false;
+    movePressed = false;
+    disableButtons();
 }
 
 var newUnit;
 var attacker;
+var doneUnit;
 
 function chooseUnit() {
     notEnemy:
     if(chosenSquare == false) {
-        chosenX = Math.floor(game.input.mousePointer.x / 16);
-        chosenY = Math.floor(game.input.mousePointer.y / 16);
+        chosenX = Math.floor((game.input.mousePointer.x - shiftPhysFactor) / 16);
+        chosenY = Math.floor((game.input.mousePointer.y - shiftPhysFactor) / 16);
         if(gameLevel[chosenX][chosenY] instanceof PhysUnit) {
             setInvisible();
+            if(gameLevel[chosenX][chosenY].turnEnd == true) {
+                enableButtons();
+                return;
+            }
             gameLevel[chosenX][chosenY].pathFinder();
             if(turnNumber % 2 == 1) {
                 if(gameLevel[chosenX][chosenY].team == 'player') {
                     if(movePressed == true) {
+                        if(gameLevel[chosenX][chosenY].movesDone == gameLevel[chosenX][chosenY].moveCount) {
+                            enableButtons();
+                            return;
+                        }
                         chosenSquare = true;
                         newUnit = gameLevel[chosenX][chosenY];
                         return;
                     }
                     if(attackPressed == true) {
+                        if(gameLevel[chosenX][chosenY].attackedEnemy == true) {
+                            enableButtons();
+                            return;
+                        }
                         setInvisible();
                         chosenSquare = true;
                         attacker = gameLevel[chosenX][chosenY];
+                        return;
+                    }
+                    if(turnEndPressed == true) {
+                        setInvisible();
+                        chosenSquare = true;
+                        doneUnit = gameLevel[chosenX][chosenY];
+                        doneUnit.turnEnd = true;
+                        chosenSquare = false;
+                        enableButtons();
+                        turnEnd(doneUnit.team);
+                        return;
                     }
                 }
                 else {
@@ -290,14 +371,35 @@ function chooseUnit() {
             else {
                 if(gameLevel[chosenX][chosenY].team == 'enemy') {
                     if(movePressed == true) {
+                        if(gameLevel[chosenX][chosenY].movesDone == gameLevel[chosenX][chosenY].moveCount) {
+                            enableButtons();
+                            return;
+                        }
                         chosenSquare = true;
                         newUnit = gameLevel[chosenX][chosenY];
                         return;
                     }
                     if(attackPressed == true) {
+                        if(gameLevel[chosenX][chosenY].attackedEnemy == true) {
+                        enableButtons();
+                        return;
+                    }
                         setInvisible();
+                        console.log('attack');
                         chosenSquare = true;
                         attacker = gameLevel[chosenX][chosenY];
+                        return;
+                    }
+                    if(turnEndPressed == true) {
+                        setInvisible();
+                        chosenSquare = true;
+                        doneUnit = gameLevel[chosenX][chosenY];
+                        console.log('hello');
+                        doneUnit.turnEnd = true;
+                        chosenSquare = false;
+                        enableButtons();
+                        turnEnd(doneUnit.team);
+                        return;
                     }
                 }
                 else {
@@ -319,8 +421,8 @@ function chooseUnit() {
 }
 
 function chooseSquare() {
-    xSelected = Math.floor(game.input.mousePointer.x / 16);
-    ySelected = Math.floor(game.input.mousePointer.y / 16);
+    xSelected = Math.floor((game.input.mousePointer.x - shiftPhysFactor) / 16);
+    ySelected = Math.floor((game.input.mousePointer.y - shiftPhysFactor) / 16);
     if((xSelected >= 0 && xSelected < levelWidth) && (ySelected >= 0 && ySelected < levelHeight)) {
         if((gameLevel[xSelected][ySelected] instanceof PhysUnit) == false) {
             if((chosenX > xSelected && game.math.difference(chosenX, xSelected) <= newUnit.leftMax && chosenY == ySelected))
@@ -371,8 +473,8 @@ function chooseSquare() {
 }
 
 function changeSprite(change) {
-    change.x = change.xPlace * 16;
-    change.y = change.yPlace * 16;
+    change.x = change.xPlace * 16 + shiftPhysFactor;
+    change.y = change.yPlace * 16 + shiftPhysFactor;
     change.pathTiles.removeAll();
     change.enemyLeft = false;
     change.enemyRight = false;
@@ -386,7 +488,6 @@ function changeSprite(change) {
     chosenSquare = false;
     movePressed = false;
     enableButtons();
-    turnEnd(change.team);
 }
 
 function turnEnd (player) {        
@@ -400,20 +501,18 @@ function turnEnd (player) {
     if(player == 'player') {
         var counter = 0;
         for(var i = 0; i < playerTeam.length; i++) {
-            if(playerTeam[i].movesDone == playerTeam[i].moveCount) {
+            if(playerTeam[i].turnEnd == true) {
                 counter += 1;
             }
         }
         if(counter == playerTeam.length) {
             for(var i = 0; i < playerTeam.length; i++) {
                 playerTeam[i].movesDone = 0;
-                playerTeam[i].turnEnd = true;
                 playerTeam[i].attackedEnemy = false;
             }
             for(var i = 0; i < enemyTeam.length; i++) {
                 enemyTeam[i].turnEnd = false;
             }
-            doNotShow = false;
             turnNumber += 1;
             game.sound.stopAll();
             battleThemeEnemy1.play();
@@ -421,8 +520,9 @@ function turnEnd (player) {
     }
     else {
         var counter = 0;
+        console.log('yellow');
         for(var i = 0; i < enemyTeam.length; i++) {
-            if(enemyTeam[i].movesDone == enemyTeam[i].moveCount) {
+            if(enemyTeam[i].turnEnd == true) {
                 counter += 1;
             }
         }
@@ -435,7 +535,6 @@ function turnEnd (player) {
             for(var i = 0; i < playerTeam.length; i++) {
                 playerTeam[i].turnEnd = false;
             }
-            doNotShow = false;
             turnNumber += 1;
             game.sound.stopAll();
             battleThemePlayer1.play();
@@ -450,8 +549,8 @@ function chooseVirUnit() {
     if(blueNodeVar == true) {
         disableButtons();
         setInvisible();
-        xVirSelected = Math.floor(game.input.mousePointer.x / 16 - 30);
-        yVirSelected = Math.floor(game.input.mousePointer.y / 16);
+        xVirSelected = Math.floor((game.input.mousePointer.x - shiftUIFactor - shiftPhysFactor) / 16 - 30);
+        yVirSelected = Math.floor((game.input.mousePointer.y - shiftPhysFactor) / 16);
         chosenVirX = kenta.xPlace;
         chosenVirY = kenta.yPlace;
         newNode = virLevel[chosenVirX][chosenVirY];
@@ -462,8 +561,8 @@ function chooseVirUnit() {
                     virLevel[xVirSelected][yVirSelected].unit = newNode.unit;
                     virLevel[xVirSelected][yVirSelected].unit.xPlace = xVirSelected;
                     virLevel[xVirSelected][yVirSelected].unit.yPlace = yVirSelected;
-                    virLevel[xVirSelected][yVirSelected].unit.x = 480 + (16 * newNode.unit.xPlace);
-                    virLevel[xVirSelected][yVirSelected].unit.y = 16 * yVirSelected;
+                    virLevel[xVirSelected][yVirSelected].unit.x = shiftPhysFactor + mapWidth + shiftUIFactor + (16 * newNode.unit.xPlace);
+                    virLevel[xVirSelected][yVirSelected].unit.y = 16 * yVirSelected + shiftPhysFactor;
                     virLevel[chosenVirX][chosenVirY].unit = null;
                     accessible = false;
                 }
@@ -478,8 +577,8 @@ function chooseVirUnit() {
     }
     notNode:
     if(chosenVirSquare == false) {
-        chosenVirX = Math.floor(game.input.mousePointer.x / 16 - 30);
-        chosenVirY = Math.floor(game.input.mousePointer.y / 16);
+        chosenVirX = Math.floor((game.input.mousePointer.x - shiftUIFactor - shiftPhysFactor) / 16 - 30);
+        chosenVirY = Math.floor((game.input.mousePointer.y - shiftPhysFactor) / 16);
         newNode = virLevel[chosenVirX][chosenVirY];
         if(newNode instanceof Node) {
             if(turnNumber % 2 == 1) {
@@ -505,8 +604,8 @@ function chooseVirUnit() {
         }
     }
     else {
-        xVirSelected = Math.floor(game.input.mousePointer.x / 16 - 30);
-        yVirSelected = Math.floor(game.input.mousePointer.y / 16);
+        xVirSelected = Math.floor((game.input.mousePointer.x - shiftUIFactor - shiftPhysFactor) / 16 - 30);
+        yVirSelected = Math.floor((game.input.mousePointer.y - shiftPhysFactor) / 16);
         if((xVirSelected >= 0 && xVirSelected < levelWidth) && (yVirSelected >= 0 && yVirSelected < levelHeight)) {
             goToThis = virLevel[xVirSelected][yVirSelected];
             if(goToThis instanceof Node) {
@@ -522,8 +621,8 @@ function chooseVirUnit() {
                     virLevel[xVirSelected][yVirSelected].unit = newNode.unit;
                     virLevel[xVirSelected][yVirSelected].unit.xPlace = xVirSelected;
                     virLevel[xVirSelected][yVirSelected].unit.yPlace = yVirSelected;
-                    virLevel[xVirSelected][yVirSelected].unit.x = 480 + (16 * newNode.unit.xPlace);
-                    virLevel[xVirSelected][yVirSelected].unit.y = 16 * yVirSelected;
+                    virLevel[xVirSelected][yVirSelected].unit.x = shiftPhysFactor + mapWidth + shiftUIFactor + (16 * newNode.unit.xPlace);
+                    virLevel[xVirSelected][yVirSelected].unit.y = 16 * yVirSelected + shiftPhysFactor;
                     virLevel[chosenVirX][chosenVirY].unit = null;
                     chosenVirSquare = false;
                     movePressed = false;
