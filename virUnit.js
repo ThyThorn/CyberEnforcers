@@ -1,6 +1,6 @@
 function VirUnit(unitName, moveCount, team, turnEnd, xPlace, yPlace, key, frame)
 {
-	Phaser.Sprite.call(this, game, 480 + (xPlace * 16), yPlace * 16, key, frame);
+    Phaser.Sprite.call(this, game, shiftPhysFactor + mapWidth + shiftUIFactor + (xPlace * 16), shiftPhysFactor + yPlace * 16, key, frame);
     this.width = 16;
     this.height = 16;
     this.unitName = unitName;
@@ -11,6 +11,9 @@ function VirUnit(unitName, moveCount, team, turnEnd, xPlace, yPlace, key, frame)
     this.yPlace = yPlace;
     this.inputEnabled = false;
     game.physics.enable(this);
+    if(this.team == 'enemy') {
+        virViruses.push(this);
+    }
 }
 
 VirUnit.prototype = Object.create(Phaser.Sprite.prototype);
