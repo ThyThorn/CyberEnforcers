@@ -2,7 +2,7 @@
 
 function PhysUnit(unitName, health, attack, defense, moveCount, team, turnEnd, xPlace, yPlace, key, frame)
 {
-    Phaser.Sprite.call(this, game, xPlace * 16, yPlace * 16, key, frame);
+    Phaser.Sprite.call(this, game, xPlace * 16 + shiftPhysFactor, yPlace * 16 + shiftPhysFactor, key, frame);
     this.width = 16; // Will likely be removed later, since this is needed
     this.height = 16; // only because the current sprite is too big.
     this.unitName = unitName; // Give the unit a name.
@@ -53,7 +53,7 @@ PhysUnit.prototype.pathFinder = function() {
                 else if(gameLevel[this.xPlace - this.leftMax][this.yPlace] != 0) { // A free square has the value 0, so anything else means that the square is occupied.
                     break;
                 }
-                greenTile = this.pathTiles.create((this.xPlace - this.leftMax) * 16, this.yPlace * 16, 'greenTile'); // Tile to be used to show that a unit can go to the square.
+                greenTile = this.pathTiles.create((this.xPlace - this.leftMax) * 16 + shiftPhysFactor, this.yPlace * 16 + shiftPhysFactor, 'greenTile'); // Tile to be used to show that a unit can go to the square.
             }
             this.leftMax -= 1;
             for(this.upMax = 1; this.upMax <= moveDiff; this.upMax++){ // Now look at the northern path. Pathfinding works exactly the same way.
@@ -63,7 +63,7 @@ PhysUnit.prototype.pathFinder = function() {
                 else if(gameLevel[this.xPlace][this.yPlace - this.upMax] != 0) {
                     break;
                 }
-                greenTile = this.pathTiles.create(this.xPlace * 16, (this.yPlace - this.upMax) * 16, 'greenTile');
+                greenTile = this.pathTiles.create(this.xPlace * 16 + shiftPhysFactor, (this.yPlace - this.upMax) * 16 + shiftPhysFactor, 'greenTile');
             }
             this.upMax -= 1;
             for(this.rightMax = 1; this.rightMax <= moveDiff; this.rightMax++) { // Now look at the eastern path.
@@ -73,7 +73,7 @@ PhysUnit.prototype.pathFinder = function() {
                 else if(gameLevel[this.xPlace + this.rightMax][this.yPlace] != 0) {
                     break;
                 }
-                greenTile = this.pathTiles.create((this.xPlace + this.rightMax) * 16, this.yPlace * 16, 'greenTile');
+                greenTile = this.pathTiles.create((this.xPlace + this.rightMax) * 16 + shiftPhysFactor, this.yPlace * 16 + shiftPhysFactor, 'greenTile');
             }
             this.rightMax -= 1;
             for(this.downMax = 1; this.downMax <= moveDiff; this.downMax++) { // Now look at the southern path.
@@ -83,7 +83,7 @@ PhysUnit.prototype.pathFinder = function() {
                 else if(gameLevel[this.xPlace][this.yPlace + this.downMax] != 0) {
                     break;
                 }
-                greenTile = this.pathTiles.create(this.xPlace * 16, (this.yPlace + this.downMax) * 16, 'greenTile');
+                greenTile = this.pathTiles.create(this.xPlace * 16 + shiftPhysFactor, (this.yPlace + this.downMax) * 16 + shiftPhysFactor, 'greenTile');
             }
             this.downMax -= 1;
             this.pathTiles.visible = true;
@@ -99,8 +99,8 @@ var doCombat = false; // Combat can be done only if this is true.
 var attackedUnit;
 
 PhysUnit.prototype.checkEnemy = function() {
-    xSelected = Math.floor(game.input.mousePointer.x / 16);
-    ySelected = Math.floor(game.input.mousePointer.y / 16);
+    xSelected = Math.floor((game.input.mousePointer.x - shiftPhysFactor) / 16);
+    ySelected = Math.floor((game.input.mousePointer.y - shiftPhysFactor) / 16);
     if((xSelected >= 0 && xSelected < levelWidth) && (ySelected >= 0 && ySelected < levelHeight)) {
         if((gameLevel[xSelected][ySelected] instanceof PhysUnit) == true) {
             if(gameLevel[xSelected][ySelected].team != this.team){
@@ -131,10 +131,12 @@ PhysUnit.prototype.checkEnemy = function() {
             }
         }
     }
+    console.log('doCombat: ' + doCombat);
     if(doCombat == true) {
         this.battle();
     }
     else {
+        chosenSquare = false;
         attackPressed = false;
         enableButtons();
     }
@@ -142,6 +144,7 @@ PhysUnit.prototype.checkEnemy = function() {
 
 PhysUnit.prototype.battle = function() {
     var damage = 0;
+    console.log('attack: ' + this.attack);
     damage = this.attack - attackedUnit.defense; // Calculate the damage first.
     if(damage < 0) {
         damage = 0; // Negative damage should not heal the unit, so set damage to 0.
@@ -162,7 +165,7 @@ PhysUnit.prototype.battle = function() {
     chosenSquare = false;
     attackPressed = false;
     doCombat = false;
-    enableButtons();
+    enableButtons(); 
     this.pathFinder();
     this.pathTiles.visible = false;
 }
@@ -181,6 +184,26 @@ PhysUnit.prototype.removeFromTeam = function(winner, loser) { // Now that the at
         for(var i = 0; i < playerTeam.length; i++) {
             if(playerTeam[i].xPlace == loser.xPlace && playerTeam[i].yPlace == loser.yPlace) {
                 playerTeam.splice(i, 1);
+                break;
+            }
+        }
+    }
+}
+
+PhysUnit.prototype.deleteFromTeam = function() { // Function used to delete a single member.
+    this.kill();
+    if(this.team = 'player') {  
+        for(var i = 0; i < playerTeam.length; i++) { // Go through whole array and find the unit that has the same coordinates as the dead unit.
+            if(playerTeam[i].xPlace == this.xPlace && playerTeam[i].yPlace == this.yPlace) {
+                playerTeam.splice(i, 1); // Cut out the unit.
+                break; // Now that the unit has been found and removed, we can stop the loop now.
+            }
+        }
+    }
+    else {
+        for(var i = 0; i < enemyTeam.length; i++) {
+            if(enemyTeam[i].xPlace == this.xPlace && enemyTeam[i].yPlace == this.yPlace) {
+                enemyTeam.splice(i, 1);
                 break;
             }
         }
