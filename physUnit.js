@@ -99,8 +99,6 @@ var doCombat = false; // Combat can be done only if this is true.
 var attackedUnit;
 
 PhysUnit.prototype.checkEnemy = function() {
-    xSelected = Math.floor((game.input.mousePointer.x - shiftPhysFactor) / 16);
-    ySelected = Math.floor((game.input.mousePointer.y - shiftPhysFactor) / 16);
     if((xSelected >= 0 && xSelected < levelWidth) && (ySelected >= 0 && ySelected < levelHeight)) {
         if((gameLevel[xSelected][ySelected] instanceof PhysUnit) == true) {
             if(gameLevel[xSelected][ySelected].team != this.team){
@@ -131,7 +129,6 @@ PhysUnit.prototype.checkEnemy = function() {
             }
         }
     }
-    console.log('doCombat: ' + doCombat);
     if(doCombat == true) {
         this.battle();
     }
@@ -144,7 +141,6 @@ PhysUnit.prototype.checkEnemy = function() {
 
 PhysUnit.prototype.battle = function() {
     var damage = 0;
-    console.log('attack: ' + this.attack);
     damage = this.attack - attackedUnit.defense; // Calculate the damage first.
     if(damage < 0) {
         damage = 0; // Negative damage should not heal the unit, so set damage to 0.
@@ -172,7 +168,7 @@ PhysUnit.prototype.battle = function() {
 
 PhysUnit.prototype.removeFromTeam = function(winner, loser) { // Now that the attacked unit is dead, it needs to be taken out of its team's array.
     loser.kill(); // Get rid of the sprite.
-    if(winner.team = 'player') {  
+    if(winner.team == 'player') {  
         for(var i = 0; i < enemyTeam.length; i++) { // Go through whole array and find the unit that has the same coordinates as the dead unit.
             if(enemyTeam[i].xPlace == loser.xPlace && enemyTeam[i].yPlace == loser.yPlace) {
                 enemyTeam.splice(i, 1); // Cut out the unit.
@@ -192,7 +188,7 @@ PhysUnit.prototype.removeFromTeam = function(winner, loser) { // Now that the at
 
 PhysUnit.prototype.deleteFromTeam = function() { // Function used to delete a single member.
     this.kill();
-    if(this.team = 'player') {  
+    if(this.team == 'player') {  
         for(var i = 0; i < playerTeam.length; i++) { // Go through whole array and find the unit that has the same coordinates as the dead unit.
             if(playerTeam[i].xPlace == this.xPlace && playerTeam[i].yPlace == this.yPlace) {
                 playerTeam.splice(i, 1); // Cut out the unit.
