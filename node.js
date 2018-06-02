@@ -10,35 +10,35 @@ function Node(named,effect,north,south,west,east,xPlace,yPlace,unit){
 	this.unit = unit; // the unit that is on the node right now.
 	virLevel[this.xPlace][this.yPlace] = this;
 	this.AOETiles = game.add.group();
+	nodes.push(this);
 }
 
 Node.prototype.constructor = Node;
 
-var timer;
-
-Node.prototype.whichKind = function() {
+Node.prototype.whichKind = function() { // Only Kenta will ever use this, since enemies cannot activate nodes.
 	background.inputEnabled = false;
 	if(this.effect == 'green') {
 		this.checkAOE();
 		timer = game.time.create(false);
 		timer.add(1000, Node.prototype.greenNode, this);
-		timer.add(4000, Node.prototype.destroy, this);
+		timer.add(2000, Node.prototype.destroy, this);
 		timer.start();
 	}
 	else if(this.effect == 'red') {
 		this.checkAOE();
 		timer = game.time.create(false);
 		timer.add(1000, Node.prototype.redNode, this);
-		timer.add(4000, Node.prototype.destroy, this);
+		timer.add(2000, Node.prototype.destroy, this);
 		timer.start();
 	}
 	else if(this.effect == 'blue') {
-		blueNodeVar = true;
+		kenta.tint = 0xFFDF00;
+		blueNodeVar = true; // This is used for choosing the virtual unit (which is always Kenta for the player).
 	}
 }
 
-Node.prototype.checkAOE = function() {
-	for(northBound = 1; northBound <= yAOE; northBound++) {
+Node.prototype.checkAOE = function() { // Find the boundaries to the AOE.
+	for(northBound = 1; northBound <= yAOE; northBound++) { 
 		if(this.yPlace - northBound < 0) {
 			break;
 		}
@@ -64,20 +64,25 @@ Node.prototype.checkAOE = function() {
 	eastBound -= 1;
 }
 
-Node.prototype.destroy = function() {
+Node.prototype.destroy = function() { // Get rid of the AOE squares.
 	this.AOETiles.removeAll();
 	hackNodeButton.loadTexture('hackNodeButton');
 	enableButtons();
 	background.inputEnabled = true;
 }
 
-Node.prototype.greenNode = function() {
+Node.prototype.greenNode = function() { // Make the AOE and activate its effect.
 	for(var i = this.yPlace - northBound; i <= this.yPlace; i++) {
 		for(var j = this.xPlace - westBound; j <= this.xPlace; j++) {
 			if(gameLevel[j][i] != 1) {
 				blueTile = this.AOETiles.create(j * 16 + shiftPhysFactor, i * 16 + shiftPhysFactor, 'greenTile');
-				if(gameLevel[j][i] instanceof PhysUnit) {
-					gameLevel[j][i].health += 5;
+				if(gameLevel[j][i] instanceof PhysUnit) { // Heal any unit in the AOE.
+					if(gameLevel[j][i].team == 'player' && turnNumber % 2 == 1) {
+						gameLevel[j][i].health += 5;
+					}
+					if(gameLevel[j][i].team == 'enemy' && turnNumber % 2 == 0) {
+						gameLevel[j][i].health += 5;
+					}
 				} 
 			}
 		}
@@ -85,7 +90,12 @@ Node.prototype.greenNode = function() {
 			if(gameLevel[j][i] != 1) {
 				blueTile = this.AOETiles.create(j * 16 + shiftPhysFactor, i * 16 + shiftPhysFactor, 'greenTile');
 				if(gameLevel[j][i] instanceof PhysUnit) {
-					gameLevel[j][i].health += 5;
+					if(gameLevel[j][i].team == 'player' && turnNumber % 2 == 1) {
+						gameLevel[j][i].health += 5;
+					}
+					if(gameLevel[j][i].team == 'enemy' && turnNumber % 2 == 0) {
+						gameLevel[j][i].health += 5;
+					}
 				}
 			}
 		}
@@ -95,7 +105,12 @@ Node.prototype.greenNode = function() {
 			if(gameLevel[j][i] != 1) {
 				blueTile = this.AOETiles.create(j * 16 + shiftPhysFactor, i * 16 + shiftPhysFactor, 'greenTile');
 				if(gameLevel[j][i] instanceof PhysUnit) {
-					gameLevel[j][i].health += 5;
+					if(gameLevel[j][i].team == 'player' && turnNumber % 2 == 1) {
+						gameLevel[j][i].health += 5;
+					}
+					if(gameLevel[j][i].team == 'enemy' && turnNumber % 2 == 0) {
+						gameLevel[j][i].health += 5;
+					}
 				} 
 			}
 		}
@@ -103,22 +118,37 @@ Node.prototype.greenNode = function() {
 			if(gameLevel[j][i] != 1) {
 				blueTile = this.AOETiles.create(j * 16 + shiftPhysFactor, i * 16 + shiftPhysFactor, 'greenTile');
 				if(gameLevel[j][i] instanceof PhysUnit) {
-					gameLevel[j][i].health += 5;
+					if(gameLevel[j][i].team == 'player' && turnNumber % 2 == 1) {
+						gameLevel[j][i].health += 5;
+					}
+					if(gameLevel[j][i].team == 'enemy' && turnNumber % 2 == 0) {
+						gameLevel[j][i].health += 5;
+					}
 				} 
 			}
 		}
 	}
 },
 
-Node.prototype.redNode = function() {
+Node.prototype.redNode = function() { // Same thing as above, but the effect is different.
 	for(var i = this.yPlace - northBound; i <= this.yPlace; i++) {
 		for(var j = this.xPlace - westBound; j <= this.xPlace; j++) {
 			if(gameLevel[j][i] != 1) {
 				blueTile = this.AOETiles.create(j * 16 + shiftPhysFactor, i * 16 + shiftPhysFactor, 'greenTile');
 				if(gameLevel[j][i] instanceof PhysUnit) {
-					gameLevel[j][i].health -= 10;
-					if(gameLevel[j][i].health <= 0) {
-						gameLevel[j][i].deleteFromTeam();
+					if(gameLevel[j][i].team == 'enemy' && turnNumber % 2 == 1) {
+						gameLevel[j][i].health -= 10;
+						if(gameLevel[j][i].health <= 0) {
+							gameLevel[j][i].deleteFromTeam();
+							PhysUnit.prototype.turnEnd('player');
+						}
+					}
+					if(gameLevel[j][i].team == 'player' && turnNumber % 2 == 0) {
+						gameLevel[j][i].health -= 10;
+						if(gameLevel[j][i].health <= 0) {
+							gameLevel[j][i].deleteFromTeam();
+							PhysUnit.prototype.turnEnd('player');
+						}
 					}
 				} 
 			}
@@ -127,9 +157,18 @@ Node.prototype.redNode = function() {
 			if(gameLevel[j][i] != 1) {
 				blueTile = this.AOETiles.create(j * 16 + shiftPhysFactor, i * 16 + shiftPhysFactor, 'greenTile');
 				if(gameLevel[j][i] instanceof PhysUnit) {
-					gameLevel[j][i].health -= 10;
-					if(gameLevel[j][i].health <= 0) {
-						gameLevel[j][i].deleteFromTeam();
+					if(gameLevel[j][i].team == 'enemy' && turnNumber % 2 == 1) {
+						gameLevel[j][i].health -= 10;
+						if(gameLevel[j][i].health <= 0) {
+							gameLevel[j][i].deleteFromTeam();
+							PhysUnit.prototype.turnEnd('player');
+						}
+					}
+					if(gameLevel[j][i].team == 'player' && turnNumber % 2 == 0) {
+						gameLevel[j][i].health -= 10;
+						if(gameLevel[j][i].health <= 0) {
+							gameLevel[j][i].deleteFromTeam();
+						}
 					}
 				}
 			}
@@ -140,10 +179,18 @@ Node.prototype.redNode = function() {
 			if(gameLevel[j][i] != 1) {
 				blueTile = this.AOETiles.create(j * 16 + shiftPhysFactor, i * 16 + shiftPhysFactor, 'greenTile');
 				if(gameLevel[j][i] instanceof PhysUnit) {
-					gameLevel[j][i].health -= 10;			
-					if(gameLevel[j][i].health <= 0) {
-						gameLevel[j][i].deleteFromTeam();
-					}	
+					if(gameLevel[j][i].team == 'enemy' && turnNumber % 2 == 1) {
+						gameLevel[j][i].health -= 10;
+						if(gameLevel[j][i].health <= 0) {
+							gameLevel[j][i].deleteFromTeam();
+						}
+					}
+					if(gameLevel[j][i].team == 'player' && turnNumber % 2 == 0) {
+						gameLevel[j][i].health -= 10;
+						if(gameLevel[j][i].health <= 0) {
+							gameLevel[j][i].deleteFromTeam();
+						}
+					}
 				} 
 			}
 		}
@@ -151,9 +198,17 @@ Node.prototype.redNode = function() {
 			if(gameLevel[j][i] != 1) {
 				blueTile = this.AOETiles.create(j * 16 + shiftPhysFactor, i * 16 + shiftPhysFactor, 'greenTile');
 				if(gameLevel[j][i] instanceof PhysUnit) {
-					gameLevel[j][i].health -= 10;
-					if(gameLevel[j][i].health <= 0) {
-						gameLevel[j][i].deleteFromTeam();
+					if(gameLevel[j][i].team == 'enemy' && turnNumber % 2 == 1) {
+						gameLevel[j][i].health -= 10;
+						if(gameLevel[j][i].health <= 0) {
+							gameLevel[j][i].deleteFromTeam();
+						}
+					}
+					if(gameLevel[j][i].team == 'player' && turnNumber % 2 == 0) {
+						gameLevel[j][i].health -= 10;
+						if(gameLevel[j][i].health <= 0) {
+							gameLevel[j][i].deleteFromTeam();
+						}
 					}
 				} 
 			}
