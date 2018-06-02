@@ -2,15 +2,6 @@
 // To do list: add dialog sprites. If possible, do darkening of sprites to indicate which characters aren't speaking.
 
 var beginningDialog = [ // Used for the old dialog system. Lines will be reused for the new one.
-    "Kaito: My name is Kaito Ichiki.",
-    "Kaito: I am a member of an organization called the Cybernetwork Enforcement\nand Regulation Commission.", 
-    "Kaito: It's pretty long, though, so we call it CERC for short.",
-    "Kaito: We of CERC are in charge of maintaining the City's peace.",
-    "Kaito: Years ago, mankind had at last made something truly awesome,\nafter years of research in computer networks.",
-    "Kaito: There is now the Virtual World, which is a great advancement of the Internet.",
-    "Kaito: Our lives had already involved the Internet a lot more,\nbut the Virtual World only marked that we should not stop there.",
-    "Kaito: Thanks to the Virtual World, we don't even have to manually handle\nmuch of the technology in our daily lives. It's rather handy.",
-    "Kaito: Of course, that comes with its downfalls. It makes it easier\nfor evildoers to work havoc.",
     "Kaito: Computer viruses and other cybernetic fiends still are these days.", 
     "Kaito: And somehow, a few years ago, the monsters could at last\nmake their way from their virtual den to our real world!",
     "Kaito: Awful! They hurt many people, and by the time they were slain,\nmore had come to be in the Virtual World.",
@@ -73,16 +64,20 @@ var introTheme;
 var leftChar;
 var rightChar;
 var scene1 = new Array();
+var kaitoX = 20;
+var kaitoY = 80;
+var atsumiX = 450;
+var atsumiY = 40;
 
 var beginningDialogPlay = function(game) {};
 beginningDialogPlay.prototype = {
     preload: function() {
         game.load.image('sky', 'assets/img/sky.png');
         game.load.image('textBox', 'assets/img/g4410.png');
-        game.load.image('kaito', 'assets/img/f019.png');
+        game.load.image('kaito', 'assets/img/f343.png');
         game.load.image('kenta', 'assets/img/boy.png');
         game.load.image('atsumi', 'assets/img/f338.png');
-        game.load.image('junpei', 'assets/img/f249.png');
+        //game.load.image('junpei', 'assets/img/f249.png');
         game.load.audio('introTheme', 'assets/audio/1. The Market.mp3');
     },
 
@@ -97,14 +92,28 @@ beginningDialogPlay.prototype = {
 
         // Now add the lines of the dialog. This is rather tedious, but it must be done if we want more say in how scenes should look.
         // For what each parameter means, go to dialogLine.js.
-        line0 = new dialogLine("Kaito: My name is Kaito Ichiki.", 'kaito', '', 20, 100, 0, 0, 0.75, 1, scene1, '', '', true, false);
-        line1 = new dialogLine("Atsumi: Hurry!", 'kaito', 'atsumi', 20, 100, 450, 40, 0.75, 0.8, scene1, '', '', false, true);
+        line0 = new dialogLine("Kaito: It's a nice day today, isn't it?", 'kaito', '', kaitoX, kaitoY, 0, 0, 0.75, 1, scene1, '', '', true, false);
+        line1 = new dialogLine("Atsumi: Of course. We're here to maintain the peace, after all.", 'kaito', 'atsumi', kaitoX, kaitoY, atsumiX, atsumiY, 0.75, 0.8, scene1, '', '', false, true);
+        line2 = new dialogLine("Atsumi: But not for us, we should be in a great crisis.", 'kaito', 'atsumi', kaitoX, kaitoY, atsumiX, atsumiY, 0.75, 0.8, scene1, '', '', false, true);
+        line3 = new dialogLine("Kaito: Making it stay so is one of my duties as Commander. It's nice to see my work pay off, that's all.", 'kaito', 'atsumi', kaitoX, kaitoY, atsumiX, atsumiY, 0.75, 0.8, scene1, '', '', true, false);
+        line4 = new dialogLine("Kaito: (My name is Kaito Ichiki.)", 'kaito', 'atsumi', kaitoX, kaitoY, atsumiX, atsumiY, 0.75, 0.8, scene1, '', '', true, false);
+        line5 = new dialogLine("Kaito: (I am a member of an organization called the Cybernetwork Enforcement\nand Regulation Commission.)", 'kaito', 'atsumi', kaitoX, kaitoY, 450, 40, 0.75, 0.8, scene1, '', '', true, false);
+        line6 = new dialogLine("Kaito: (It's pretty long, though, so we call it CERC for short.)", 'kaito', 'atsumi', kaitoX, kaitoY, 450, 40, 0.75, 0.8, scene1, '', '', true, false);
+        line7 = new dialogLine("Kaito: (We of CERC are in charge of maintaining the City's peace.)", 'kaito', 'atsumi', kaitoX, kaitoY, 450, 40, 0.75, 0.8, scene1, '', '', true, false);
+        line8 = new dialogLine("Kaito: (Years ago, mankind had at last made something truly awesome,\nafter years of research in computer networks.)", 'kaito', 'atsumi', kaitoX, kaitoY, 450, 40, 0.75, 0.8, scene1, '', '', true, false);
+        line9 = new dialogLine("Kaito: (There is now the Virtual World, which is a great advancement of the Internet.)", 'kaito', 'atsumi', kaitoX, kaitoY, 450, 40, 0.75, 0.8, scene1, '', '', true, false);
+        line10 = new dialogLine("Kaito: (Our lives had already involved the Internet a lot more,\nbut the Virtual World only marked that we should not stop there.)", 'kaito', 'atsumi', kaitoX, kaitoY, 450, 40, 0.75, 0.8, scene1, '', '', true, false);
+        line11 = new dialogLine("Kaito: (Thanks to the Virtual World, we don't even have to manually handle\nmuch of the technology in our daily lives. It's rather handy.)", 'kaito', 'atsumi', kaitoX, kaitoY, 450, 40, 0.75, 0.8, scene1, '', '', true, false);
+        line12 = new dialogLine("Kaito: (Of course, that comes with its downfalls. It makes it easier\nfor evildoers to work havoc.)", 'kaito', 'atsumi', kaitoX, kaitoY, 450, 40, 0.75, 0.8, scene1, '', '', true, false);
+        line13 = new dialogLine("Kaito: (Computer viruses and other cybernetic fiends still are these days.)", 'kaito', 'atsumi', kaitoX, kaitoY, 450, 40, 0.75, 0.8, scene1, '', '', true, false);
+
+        /*line1 = new dialogLine("Atsumi: Hurry!", 'kaito', 'atsumi', 20, 100, 450, 40, 0.75, 0.8, scene1, '', '', false, true);
         line2 = new dialogLine("Kenta: I'm cute!", 'kaito', 'kenta', 20, 100, 550, 100, 0.75, 1, scene1, '', '', false, true);
         line3 = new dialogLine("Junpei: Ooh, how cool! Shaking!", 'kaito', 'junpei', 20, 100, 450, 50, 0.75, 0.8, scene1, '', 'shake', false, true);
         line4 = new dialogLine("Zaizen: That's right!", 'kaito', 'junpei', 20, 100, 450, 50, 0.75, 0.8, scene1, '', '', false, false);
         line5 = new dialogLine("All: Wow!", 'kaito', 'junpei', 20, 100, 450, 50, 0.75, 0.8, scene1, '', '', true, true);
         line6 = new dialogLine("Kaito: Let's go!", 'kaito', 'junpei', 20, 100, 450, 50, 0.75, 0.8, scene1, '', '', true, false);
-        line7 = new dialogLine("Kenta: And now, here's a flash!", 'kaito', 'kenta', 20, 100, 550, 100, 0.75, 1, scene1, '', '', false, true);
+        line7 = new dialogLine("Kenta: And now, here's a flash!", 'kaito', 'kenta', 20, 100, 550, 100, 0.75, 1, scene1, '', '', false, true);*/
         dialogSystem();
     },
 
