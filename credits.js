@@ -1,15 +1,25 @@
 var creditsScreen;
+var quitButton;
+var creditsMusic;
 
 var credits = function(game) {};
 credits.prototype = {
     preload: function() {
         game.load.image('sky', 'assets/img/sky.png');
+        game.load.image('quitButton', 'assets/img/menufullicon.png');
         game.load.audio('confirmation', 'assets/audio/Confirmation sound.wav');
+        game.load.audio('town', 'assets/audio/Town Theme 1.wav');
     },
     create: function() {
         creditsScreen = game.add.sprite(0, 0, 'sky');
         creditsScreen.scale.setTo(2, 2);
         confirmation = game.add.audio('confirmation');
+        quitButton = game.add.button(800, 550, 'quitButton', goToMenu);
+
+        creditsMusic = game.add.audio('town');
+        creditsMusic.loop = true;
+        creditsMusic.play();
+
         game.add.text(0, 10, 'Credits page', { fontSize: '20px', fill: '#000' });
         game.add.text(0, 40, 'Art:', { fontSize: '16px', fill: '#000' });
         game.add.text(0, 60, 'Character portraits for Kaito, Atsumi, Junpei,', { fontSize: '16px', fill: '#000' });
@@ -28,7 +38,10 @@ credits.prototype = {
         game.add.text(0, 390, 'https://fb.com/sonettocommons. Copyright 2017, 2018 Guilherme Vieira', { fontSize: '16px', fill: '#000' });
 
     },
+}
 
-    update: function() {
-    }
+goToMenu = function() {
+    game.sound.stopAll();
+    confirmation.play();
+    game.state.start("title");
 }
