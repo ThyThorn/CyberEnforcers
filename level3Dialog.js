@@ -5,6 +5,8 @@ var rightChar;
 var background;
 var crisis;
 var normal;
+var melancholy;
+var angry;
 var scene = new Array();
 var kaitoX = 20;
 var kaitoY = 80;
@@ -34,7 +36,8 @@ level3Dialog.prototype = {
         game.load.image('kimura', 'assets/img/kimura.png');
         game.load.image('hayato', 'assets/img/hayato.png');
         game.load.image('kazuhito', 'assets/img/kazuhito.png');
-        game.load.audio('crisis', 'assets/audio/S31-Winning the Race.mp3');
+        game.load.audio('melancholy', 'assets/audio/Melancholy.wav');
+        game.load.audio('angry', 'assets/audio/Chapel of Hate v0_8.mp3');
         game.load.audio('normal', 'assets/audio/GUI Sound Effects_031.mp3');
     },
 
@@ -44,6 +47,12 @@ level3Dialog.prototype = {
         background.inputEnabled = true;
         background.events.onInputDown.add(dialogSystem3, this); // Add the listener function to it. 
         normal = game.add.audio('normal');
+
+        melancholy = game.add.audio('melancholy');
+        melancholy.loop = true;
+
+        angry = game.add.audio('angry');
+        angry.loop = true;
 
         line = new dialogLine("Hayato: Gah! I-I give up!",
             'kaito', 'hayato', kaitoX, kaitoY, hayatoX, hayatoY, 0.75, 0.8, scene, '', '', false, true);
@@ -58,7 +67,7 @@ level3Dialog.prototype = {
 
         line = new dialogLine("Hayato: Look, I don't think you're bad folks, truly. But it's my father.\nHe's making me do all this, even though I have my doubts about the order's cause.",
             'kaito', 'hayato', kaitoX, kaitoY, hayatoX, hayatoY, 0.75, 0.8, scene, '', '', false, true);
-        line = new dialogLine("Hayato: I don't like what he's been doing. But I can't leave him.\nI want to help clear his name, and I don't think his revenge plan will work.",
+        line = new dialogLine("Hayato: I don't like what he's been doing. But I can't leave him.\nI want to help clear his name, and I don't think his plan will work.",
             'kaito', 'hayato', kaitoX, kaitoY, hayatoX, hayatoY, 0.75, 0.8, scene, '', '', false, true);
         line = new dialogLine("Kaito: Clear his name? You're convinced your father's innocent?",
             'kaito', 'hayato', kaitoX, kaitoY, hayatoX, hayatoY, 0.75, 0.8, scene, '', '', true, false);
@@ -126,9 +135,33 @@ level3Dialog.prototype = {
             'hayato', 'kazuhito', kaitoX, hayatoY, kazuhitoX, kazuhitoY, 0.75, 0.8, scene, '', '', true, false);
         line = new dialogLine("Kaito: Ugh... His anger is consuming him. Looks like we'll have to fight once more.",
             'kaito', 'kazuhito', kaitoX, kaitoY, kazuhitoX, kazuhitoY, 0.75, 0.8, scene, '', '', true, false);
+        line = new dialogLine("Kenta: Well, time for me to get up! I'm done waiting for you grown-ups to stop\ntalking. Let's get to the exciting part already!",
+            'kenta', 'kazuhito', kaitoX, kentaY, kazuhitoX, kazuhitoY, 1, 0.8, scene, '', '', true, false);
+        line = new dialogLine("Kazuhito: Wh-What's this, now? You... You! You, the blond boy!",
+            'kenta', 'kazuhito', kaitoX, kentaY, kazuhitoX, kazuhitoY, 1, 0.8, scene, '', '', false, true);
+        line = new dialogLine("Kenta: Hey, what's with you? I thought you were all tough and stuff!",
+            'kenta', 'kazuhito', kaitoX, kentaY, kazuhitoX, kazuhitoY, 1, 0.8, scene, '', '', true, false);
+
+        line = new dialogLine("Kazuhito: Could it be... No, that can't be true. Yet you look just like him!",
+            'kenta', 'kazuhito', kaitoX, kentaY, kazuhitoX, kazuhitoY, 1, 0.8, scene, '', '', false, true);
+        line = new dialogLine("Kazuhito: The boy from the project twenty years ago!",
+            'kenta', 'kazuhito', kaitoX, kentaY, kazuhitoX, kazuhitoY, 1, 0.8, scene, '', '', false, true);
+        line = new dialogLine("Kenta: Whoa there! What the heck are you talking about? I do look like a boy,\nand I am pretty cute, but I'm just a program!",
+            'kenta', 'kazuhito', kaitoX, kentaY, kazuhitoX, kazuhitoY, 1, 0.8, scene, '', '', true, false);
+        line = new dialogLine("Atsumi: There's something going odd here. I didn't expect Kenta to make Kisaki\nreact like that.",
+            'kaito', 'atsumi', kaitoX, kaitoY, atsumiX, atsumiY, 0.75, 0.8, scene, '', '', false, true);
+        line = new dialogLine("Kaito: Does he and Kenta have some sort of connection?",
+            'kaito', 'atsumi', kaitoX, kaitoY, atsumiX, atsumiY, 0.75, 0.8, scene, '', '', true, false);
+
+        line = new dialogLine("Junpei: With a reaction like that, that's got to be the case!",
+            'kaito', 'junpei', kaitoX, kaitoY, junpeiX, junpeiY, 0.75, 0.8, scene, '', '', false, true);
+        line = new dialogLine("Kazuhito: I see now! I must take hold of your so-called program and examine\nhim further.",
+            'kaito', 'kazuhito', kaitoX, kaitoY, kazuhitoX, kazuhitoY, 0.75, 0.8, scene, '', '', false, true);
         line = new dialogLine("Kazuhito: My son may have been weaker than I thought, but you shall soon behold\nthe greatness of my might and fighting skills!",
             'kaito', 'kazuhito', kaitoX, kaitoY, kazuhitoX, kazuhitoY, 0.75, 0.8, scene, '', '', false, true);
-        line = new dialogLine("Kazuhito: Let us fight in one of my house's rooms. I dislike this weather.",
+        line = new dialogLine("Kazuhito: But... not here. I trust not this weather.",
+            'kaito', 'kazuhito', kaitoX, kaitoY, kazuhitoX, kazuhitoY, 0.75, 0.8, scene, '', '', false, true);
+        line = new dialogLine("Kazuhito: Let us fight inside. There, we shall settle this wretched case once and\nfor all!",
             'kaito', 'kazuhito', kaitoX, kaitoY, kazuhitoX, kazuhitoY, 0.75, 0.8, scene, '', '', false, true);
 
         dialogSystem3();
@@ -144,9 +177,16 @@ dialogSystem3 = function() {
         game.camera.onFadeComplete.add(goToBattle3, this);
     }
     else {
+        if(lineVar == 5) {
+            melancholy.play();
+        }
         if(lineVar == 14) { // To do something special in a line, take ineVar and subtract 1 from it, since lineVar hasn't been raised yet at this point.
+            game.sound.stopAll();
             background = game.add.sprite(0, 0, 'mansion');
             background.scale.setTo(0.7, 0.7);
+        }
+        if(lineVar == 15){
+            angry.play();
         }
         scene[lineVar].execute(); // Check the dialog line constructor for the function.
     }
