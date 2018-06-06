@@ -39,8 +39,11 @@ dialogLine.prototype.execute = function() {
     textBox.bringToTop();
     gameLine.bringToTop();
     lineVar += 1;
-    if(this.specialEffect == 'shake') {
-    	game.camera.shake(0.1, 500);
+    if(this.soundEffect == '') {
+        normal.play();
+    }
+    if(this.specialEffect == 'flash') {
+        game.camera.flash(0xffffff, 500);
     }
     if(this.leftSpeaker == true && this.rightSpeaker == false) {
     	rightChar.tint = 0x696969;
