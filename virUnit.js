@@ -4,6 +4,7 @@ function VirUnit(unitName, moveCount, team, turnEnd, xPlace, yPlace, key, frame,
     this.portrait = game.add.image(31*16,16*5, portrait);
     this.portrait.scale.set(.5,.5);
     this.portrait.visible = false;
+    this.portrait.sendToBack();
     this.unitName = unitName;
     this.moveCount = moveCount; // Maximum number of squares a unit can move.
     this.team = team;
@@ -51,6 +52,7 @@ VirUnit.prototype.chooseVirUnit = function() {
         if(newNode instanceof Node) {
             if(turnNumber % 2 == 1) { // The next condition makes sure that the node clicked on is empty and blue.
                 if(virLevel[xVirSelected][yVirSelected].effect == 'blue' && virLevel[xVirSelected][yVirSelected].unit == null) {
+                    blueNodeSound.play();
                     virLevel[xVirSelected][yVirSelected].unit = newNode.unit;
                     virLevel[xVirSelected][yVirSelected].unit.xPlace = xVirSelected;
                     virLevel[xVirSelected][yVirSelected].unit.yPlace = yVirSelected;
@@ -121,6 +123,7 @@ VirUnit.prototype.chooseVirUnit = function() {
                 }
                 if(accessible == true && isFull == false && newNode.unit.movesDone < newNode.unit.moveCount) { // Move Kenta to the new node.
                     newNode.unit.movesDone += 1;
+                    confirmation.play();
                     virLevel[xVirSelected][yVirSelected].unit = newNode.unit;
                     virLevel[xVirSelected][yVirSelected].unit.xPlace = xVirSelected;
                     virLevel[xVirSelected][yVirSelected].unit.yPlace = yVirSelected;
@@ -170,12 +173,11 @@ VirUnit.prototype.moveVir = function(unit) {
     var oldY = unit.yPlace;
     var newX = unit.xPlace;
     var newY = unit.yPlace;
-    console.log('chooser: ' + chooser);
-    console.log('virCounter: ' + virCounter);
     if(chooser == 1) {
         if(virLevel[unit.xPlace][unit.yPlace].north != null) {
             if(virLevel[unit.xPlace][unit.yPlace].north.unit == null) {
                 unit.movesDone += 1;
+                confirmation.play();
                 oldX = virLevel[unit.xPlace][unit.yPlace].xPlace;
                 oldY = virLevel[unit.xPlace][unit.yPlace].yPlace;
                 newX = virLevel[unit.xPlace][unit.yPlace].north.xPlace;
@@ -193,6 +195,7 @@ VirUnit.prototype.moveVir = function(unit) {
         if(virLevel[unit.xPlace][unit.yPlace].east != null) {
             if(virLevel[unit.xPlace][unit.yPlace].east.unit == null) {
                 unit.movesDone += 1;
+                confirmation.play();
                 oldX = virLevel[unit.xPlace][unit.yPlace].xPlace;
                 oldY = virLevel[unit.xPlace][unit.yPlace].yPlace;
                 newX = virLevel[unit.xPlace][unit.yPlace].east.xPlace;
@@ -210,6 +213,7 @@ VirUnit.prototype.moveVir = function(unit) {
         if(virLevel[unit.xPlace][unit.yPlace].south != null) {
             if(virLevel[unit.xPlace][unit.yPlace].south.unit == null) {
                 unit.movesDone += 1;
+                confirmation.play();
                 oldX = virLevel[unit.xPlace][unit.yPlace].xPlace;
                 oldY = virLevel[unit.xPlace][unit.yPlace].yPlace;
                 newX = virLevel[unit.xPlace][unit.yPlace].south.xPlace;
@@ -227,6 +231,7 @@ VirUnit.prototype.moveVir = function(unit) {
         if(virLevel[unit.xPlace][unit.yPlace].west != null) {
             if(virLevel[unit.xPlace][unit.yPlace].west.unit == null) {
                 unit.movesDone += 1;
+                confirmation.play();
                 oldX = virLevel[unit.xPlace][unit.yPlace].xPlace;
                 oldY = virLevel[unit.xPlace][unit.yPlace].yPlace;
                 newX = virLevel[unit.xPlace][unit.yPlace].west.xPlace;
@@ -255,37 +260,21 @@ VirUnit.prototype.moveVir = function(unit) {
 }
 
 VirUnit.prototype.whichNode = function(unit) {
-    var chooser = game.rnd.integerInRange(1, 2);
-    console.log('secondChooser: ' + chooser);
-    console.log(virLevel[unit.xPlace][unit.yPlace].effect);
     if(virLevel[unit.xPlace][unit.yPlace].effect == 'blue') {
-        if(chooser == 1) {
-            kenta.tint = 0xff0000;
-            kenta.movesDone += 1;
-            console.log('The blue one');
-        }
+        blueNodeSound.play();
+        kenta.tint = 0xff0000;
+        kenta.movesDone += 1;
     }
     else if(virLevel[unit.xPlace][unit.yPlace].effect == 'green') {
-        if(chooser == 1) {
-            virLevel[unit.xPlace][unit.yPlace].whichKind();
-            console.log('The green one');
-        }
+        virLevel[unit.xPlace][unit.yPlace].whichKind();
     }
     else if(virLevel[unit.xPlace][unit.yPlace].effect == 'red') {
-        if(chooser == 1) {
-            virLevel[unit.xPlace][unit.yPlace].whichKind();
-            console.log('The red one');
-        }
+        virLevel[unit.xPlace][unit.yPlace].whichKind();
     }
-    else if(virLevel[unit.xPlace][unit.yPlace].effect == 'yellow') {
-        if(chooser == 1) {
-            for(var i = 0; i < playerTeam.length; i++) {
-                playerTeam[i].tint = 0xff0000;
-                playerTeam[i].movesDone += 1;
-            }
-            console.log('The yellow one');
+    /*else if(virLevel[unit.xPlace][unit.yPlace].effect == 'yellow') {
+        for(var i = 0; i < playerTeam.length; i++) {
         }
-    }
+    }*/
     if(stopAI == true) {
         return;
     }
@@ -297,6 +286,7 @@ VirUnit.prototype.virEnd = function() {
     if(stopAI == true) {
         return;
     }
+    clickThruSound.play();
     for(var i = 0; i < playerTeam.length; i++) {
         playerTeam[i].tint = 0xffffff;
     }
@@ -315,6 +305,7 @@ VirUnit.prototype.virEnd = function() {
         }
         for(var i = 0; i < virViruses.length; i++) {
             virViruses[i].tint = 0xffffff;
+            virViruses[i].movesDone = 0;
         }
         turnNumber += 1;
         game.sound.stopAll();
