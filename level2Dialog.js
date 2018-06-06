@@ -3,7 +3,9 @@ var textBox;
 var leftChar;
 var rightChar;
 var background;
+var thinking;
 var crisis;
+var town;
 var normal;
 var scene = new Array();
 var kaitoX = 20;
@@ -24,7 +26,7 @@ level2Dialog.prototype = {
     preload: function() {
         game.load.image('urban', 'assets/img/urban.jpg');
         game.load.image('office', 'assets/img/office.jpg');
-        game.load.image('medieval', 'assets/img/medieval.jpg')
+        game.load.image('medieval', 'assets/img/medieval.jpg');
         game.load.image('textBox', 'assets/img/g4410.png');
         game.load.image('kaito', 'assets/img/kaito.png');
         game.load.image('kenta', 'assets/img/kenta.png');
@@ -32,7 +34,9 @@ level2Dialog.prototype = {
         game.load.image('junpei', 'assets/img/junpei.png');
         game.load.image('kimura', 'assets/img/kimura.png');
         game.load.image('hayato', 'assets/img/hayato.png');
+        game.load.audio('thinking', 'assets/audio/S31-Let the Games Begin.mp3');
         game.load.audio('crisis', 'assets/audio/S31-Winning the Race.mp3');
+        game.load.audio('town', 'assets/audio/Town Theme 1.wav');
         game.load.audio('normal', 'assets/audio/GUI Sound Effects_031.mp3');
     },
 
@@ -42,6 +46,15 @@ level2Dialog.prototype = {
         background.inputEnabled = true;
         background.events.onInputDown.add(dialogSystem2, this); // Add the listener function to it. 
         normal = game.add.audio('normal');
+
+        crisis = game.add.audio('crisis');
+        crisis.loop = true;
+
+        town = game.add.audio('town');
+        town.loop = true;
+
+        thinking = game.add.audio('thinking');
+        thinking.loop = true;
 
         line = new dialogLine("Kaito: Take this, you stupid creatures!",
             'kaito', '', kaitoX, kaitoY, 0, 0, 0.75, 1, scene, '', '', true, false);
@@ -245,9 +258,22 @@ dialogSystem2 = function() {
             background = game.add.sprite(0, 0, 'office');
             background.scale.setTo(0.7, 0.7);
         }
+        if(lineVar == 12) {
+            thinking.play();
+        }
         if(lineVar == 33) {
+            game.sound.stopAll();
             background = game.add.sprite(0, 0, 'medieval');
             background.scale.setTo(0.9, 0.9);
+        }
+        if(lineVar == 34) {
+            town.play();
+        }
+        if(lineVar == 60) {
+            game.sound.stopAll();
+        }
+        if(lineVar == 75) {
+            crisis.play();
         }
         scene[lineVar].execute(); // Check the dialog line constructor for the function.
     }
