@@ -1,3 +1,4 @@
+var gameOverScreen;
 var gameOverMusic;
 var restartButton;
 var quitButton;
@@ -5,18 +6,18 @@ var quitButton;
 var gameOver = function(game) {};
 gameOver.prototype = {
     preload: function() {
-        game.load.image('restartButton', 'assets/img/attackfullicon.png');
-        game.load.image('quitButton', 'assets/img/movefullicon.png');
-        game.load.audio('title', 'assets/audio/S31-Hit and Run.mp3'); 
+        game.load.image('gameOverScreen', 'assets/img/gameOverScreen.png');
+        game.load.image('restartButton', 'assets/img/retryfullicon.png');
+        game.load.image('quitButton', 'assets/img/menufullicon.png');
+        game.load.audio('melancholy', 'assets/audio/Melancholy.wav'); 
         game.load.audio('confirmation', 'assets/audio/Confirmation sound.wav');
     },
     create: function() {
+        gameOverScreen = game.add.sprite(0, 0, 'gameOverScreen')
         confirmation = game.add.audio('confirmation');
-        restartButton = game.add.button(180, 200, 'restartButton', restart);
-        quitButton = game.add.button(180, 300, 'quitButton', quit);
-        game.add.text(340,350, 'Click with the mouse to start playing.', { fontSize: '16px', fill: '#000' });
-        game.add.text(340, 390, 'Press UP to go to the state currently tested.', { fontSize: '16px', fill: '#000' });
-        gameOverMusic = game.add.audio('title');
+        restartButton = game.add.button(400, 350, 'restartButton', restart);
+        quitButton = game.add.button(400, 410, 'quitButton', quit);
+        gameOverMusic = game.add.audio('melancholy');
         gameOverMusic.loop = true; // Let title theme loop.
         gameOverMusic.play(); // Start playing the theme.
     },
