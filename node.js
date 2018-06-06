@@ -17,8 +17,18 @@ Node.prototype.constructor = Node;
 
 Node.prototype.whichKind = function() { // Only Kenta will ever use this, since enemies cannot activate nodes.
 	background.inputEnabled = false;
+	if(this.unit.movesDone >= this.unit.moveCount) {
+		kenta.tint = 0xffffff;
+        kenta.portrait.visible = false;
+        kenta.UImovecountT.visible = false;
+        enableButtons();
+		return;
+	}
 	if(this.effect == 'green') {
 		this.checkAOE();
+		kenta.tint = 0xffffff;
+        kenta.portrait.visible = false;
+        kenta.UImovecountT.visible = false;
 		timer = game.time.create(false);
 		timer.add(1000, Node.prototype.greenNode, this);
 		timer.add(2000, Node.prototype.destroy, this);
@@ -26,6 +36,9 @@ Node.prototype.whichKind = function() { // Only Kenta will ever use this, since 
 	}
 	else if(this.effect == 'red') {
 		this.checkAOE();
+		kenta.tint = 0xffffff;
+        kenta.portrait.visible = false;
+        kenta.UImovecountT.visible = false;
 		timer = game.time.create(false);
 		timer.add(1000, Node.prototype.redNode, this);
 		timer.add(2000, Node.prototype.destroy, this);
@@ -72,6 +85,7 @@ Node.prototype.destroy = function() { // Get rid of the AOE squares.
 }
 
 Node.prototype.greenNode = function() { // Make the AOE and activate its effect.
+	greenNodeSound.play();
 	for(var i = this.yPlace - northBound; i <= this.yPlace; i++) {
 		for(var j = this.xPlace - westBound; j <= this.xPlace; j++) {
 			if(gameLevel[j][i] != 1) {
@@ -128,9 +142,11 @@ Node.prototype.greenNode = function() { // Make the AOE and activate its effect.
 			}
 		}
 	}
+	this.unit.movesDone += 2;
 },
 
 Node.prototype.redNode = function() { // Same thing as above, but the effect is different.
+	redNodeSound.play();
 	for(var i = this.yPlace - northBound; i <= this.yPlace; i++) {
 		for(var j = this.xPlace - westBound; j <= this.xPlace; j++) {
 			if(gameLevel[j][i] != 1) {
@@ -140,14 +156,14 @@ Node.prototype.redNode = function() { // Same thing as above, but the effect is 
 						gameLevel[j][i].health -= 10;
 						if(gameLevel[j][i].health <= 0) {
 							gameLevel[j][i].deleteFromTeam();
-							PhysUnit.prototype.turnEnd('player');
+							PhysUnit.prototype.turnEnd();
 						}
 					}
 					if(gameLevel[j][i].team == 'player' && turnNumber % 2 == 0) {
 						gameLevel[j][i].health -= 10;
 						if(gameLevel[j][i].health <= 0) {
 							gameLevel[j][i].deleteFromTeam();
-							PhysUnit.prototype.turnEnd('player');
+							PhysUnit.prototype.turnEnd();
 						}
 					}
 				} 
@@ -161,7 +177,7 @@ Node.prototype.redNode = function() { // Same thing as above, but the effect is 
 						gameLevel[j][i].health -= 10;
 						if(gameLevel[j][i].health <= 0) {
 							gameLevel[j][i].deleteFromTeam();
-							PhysUnit.prototype.turnEnd('player');
+							PhysUnit.prototype.turnEnd();
 						}
 					}
 					if(gameLevel[j][i].team == 'player' && turnNumber % 2 == 0) {
@@ -214,4 +230,5 @@ Node.prototype.redNode = function() { // Same thing as above, but the effect is 
 			}
 		}
 	}
+	this.unit.movesDone += 2;
 }
