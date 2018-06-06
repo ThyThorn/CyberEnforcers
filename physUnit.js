@@ -6,6 +6,7 @@ function PhysUnit(unitName, health, attack, defense, moveCount, team, turnEnd, x
     this.portrait = game.add.image(31*16,16*5, portrait);
     this.portrait.scale.set(.5,.5);
     this.portrait.visible = false;
+    this.portrait.sendToBack();
     this.unitName = unitName; // Give the unit a name.
     this.health = health; // Give unit health, attack and defense.
     this.attack = attack;
@@ -113,26 +114,26 @@ PhysUnit.prototype.checkEnemy = function() {
             if(gameLevel[xSelected][ySelected].team != this.team){
                 if(xSelected == (this.xPlace - 1) && ySelected == this.yPlace) {
                     attackedUnit = gameLevel[xSelected][ySelected];
-                    console.log(attackedUnit.health);
                     doCombat = true;
+                    attackedUnit.tint = 0xff0000;
                     this.enemyLeft = true;
                 }
                 else if(xSelected == (this.xPlace + 1) && ySelected == this.yPlace) {
                     attackedUnit = gameLevel[xSelected][ySelected];
-                    console.log(attackedUnit.health);
                     doCombat = true;
+                    attackedUnit.tint = 0xff0000;
                     this.enemyRight = true;
                 }
                 else if(xSelected == this.xPlace && ySelected == (this.yPlace - 1)) {
                     attackedUnit = gameLevel[xSelected][ySelected];
-                    console.log(attackedUnit.health);
                     doCombat = true;
+                    attackedUnit.tint = 0xff0000;
                     this.enemyUp = true;
                 }
                 else if(xSelected == this.xPlace && ySelected == (this.yPlace + 1)) {
                     attackedUnit = gameLevel[xSelected][ySelected];
-                    console.log(attackedUnit.health);
                     doCombat = true;
+                    attackedUnit.tint = 0xff0000;
                     this.enemyDown = true;
                 }
             }
@@ -159,7 +160,6 @@ PhysUnit.prototype.battle = function() {
         damage = 0; // Negative damage should not heal the unit, so set damage to 0.
     }
     attackedUnit.health -= damage; // Then deal it to the unit's health.
-    console.log(attackedUnit.health);
     if(attackedUnit.health <= 0) { // If unit is now dead...
         var winner = this;
         attackTimer.add(1000, PhysUnit.prototype.removeFromTeam, this, winner, attackedUnit);
@@ -183,6 +183,7 @@ PhysUnit.prototype.battle = function() {
 
 PhysUnit.prototype.removeFromTeam = function(winner, loser) { // Now that the attacked unit is dead, it needs to be taken out of its team's array.
     loser.kill(); // Get rid of the sprite.
+    deathSound.play();
     if(winner.team == 'player') {  
         for(var i = 0; i < enemyTeam.length; i++) { // Go through whole array and find the unit that has the same coordinates as the dead unit.
             if(enemyTeam[i].xPlace == loser.xPlace && enemyTeam[i].yPlace == loser.yPlace) {
@@ -271,12 +272,12 @@ PhysUnit.prototype.chooseUnit = function() {
                         newUnit = gameLevel[chosenX][chosenY];
                         return;
                     }
-                    if(attackPressed == true) { // What happens if you have pressed the attack button.
+                    else if(attackPressed == true) { // What happens if you have pressed the attack button.
                         setInvisible();
-                        /*if(gameLevel[chosenX][chosenY].attackedEnemy == true) { // If the unit has already attacked, leave.
+                        if(gameLevel[chosenX][chosenY].attackedEnemy == true) { // If the unit has already attacked, leave.
                             enableButtons();
                             return;
-                        }*/
+                        }
                         gameLevel[chosenX][chosenY].tint = 0xFFDF00;
                         gameLevel[chosenX][chosenY].portrait.visible = true;
                         gameLevel[chosenX][chosenY].UIdefenseT.visible = true;
@@ -289,13 +290,15 @@ PhysUnit.prototype.chooseUnit = function() {
                         attacker = gameLevel[chosenX][chosenY];
                         return;
                     }
-                    if(turnEndPressed == true) { // What happens if you have pressed the turn end button.
+                    else if(turnEndPressed == true) { // What happens if you have pressed the turn end button.
                         setInvisible();
                         doneUnit = gameLevel[chosenX][chosenY];
                         doneUnit.turnEnd = true;
                         doneUnit.tint = 0x696969;
+                        doneUnit.portrait.visible = false;
                         turnEndPressed = false;
                         enableButtons();
+                        clickThruSound.play();
                         return;
                     }
                 }
@@ -369,6 +372,7 @@ PhysUnit.prototype.chooseSquare = function() {
 }
 
 PhysUnit.prototype.changeSprite = function(change) { // Change the sprite.
+    confirmation.play();
     change.x = change.xPlace * 16 + shiftPhysFactor;
     change.y = change.yPlace * 16 + shiftPhysFactor;
     change.pathTiles.removeAll();
@@ -385,39 +389,38 @@ PhysUnit.prototype.changeSprite = function(change) { // Change the sprite.
     movePressed = false;
 }
 
-PhysUnit.prototype.turnEnd = function(player) { // Function determining what happens if the player unit ends its turn.
-    counter = 0;
-    if(player == 'player') {
-        var counter = 0;
-        for(var i = 0; i < playerTeam.length; i++) { // Count how many units have ended their turn.
-            if(playerTeam[i].turnEnd == true) {
-                counter += 1;
-            }
+PhysUnit.prototype.turnEnd = function() { // Function determining what happens if the player unit ends its turn.
+    var counter = 0;
+    for(var i = 0; i < playerTeam.length; i++) { // Count how many units have ended their turn.
+        if(playerTeam[i].turnEnd == true) {
+            counter += 1;
         }
-        if(counter == playerTeam.length) { // Execute only if all the units have ended their turn.
-            for(var i = 0; i < playerTeam.length; i++) {
-                playerTeam[i].movesDone = 0;
-                playerTeam[i].attackedEnemy = false;
-                playerTeam[i].pathsFound = false;
-                playerTeam[i].pathTiles.removeAll();
-                playerTeam[i].tint = 0xffffff;
-                kenta.movesDone = 0; // Make sure to reset Kenta's moves.
-            }
-            for(var i = 0; i < enemyTeam.length; i++) {
-                enemyTeam[i].turnEnd = false;
-            }
-            for(var i = 0; i < virViruses.length; i++) {
-                virViruses[i].turnEnd = false;
-            }
-            turnNumber += 1; // Raise the turn number.
-            turnEndPressed = false;
-            game.sound.stopAll(); // Stop all the game music and sounds.
-            battleThemeEnemy.play(); // Play the enemy theme.
-            background.inputEnabled = false; // Make sure the player cannot do anything to the screen.
-            backgroundVir.inputEnabled = false;
-            disableButtons();
-            PhysUnit.prototype.physEnemyAI(enemyTeam[aiIndex]);
+    }
+    if(counter == playerTeam.length) { // Execute only if all the units have ended their turn.
+        for(var i = 0; i < playerTeam.length; i++) {
+            playerTeam[i].movesDone = 0;
+            playerTeam[i].attackedEnemy = false;
+            playerTeam[i].pathsFound = false;
+            playerTeam[i].pathTiles.removeAll();
+            playerTeam[i].tint = 0xffffff;
+            playerTeam[i].portrait.visible = false;
+            kenta.movesDone = 0; // Make sure to reset Kenta's moves.
         }
+        for(var i = 0; i < enemyTeam.length; i++) {
+            enemyTeam[i].turnEnd = false;
+        }
+        for(var i = 0; i < virViruses.length; i++) {
+            virViruses[i].turnEnd = false;
+        }
+        turnNumber += 1; // Raise the turn number.
+        turnEndPressed = false;
+        game.sound.stopAll(); // Stop all the game music and sounds.
+        battleThemeEnemy.play(); // Play the enemy theme.
+        background.inputEnabled = false; // Make sure the player cannot do anything to the screen.
+        backgroundVir.inputEnabled = false;
+        disableButtons();
+        console.log(doneUnit.portrait.visible);
+        PhysUnit.prototype.physEnemyAI(enemyTeam[aiIndex]);
     }
 }
 
@@ -426,13 +429,13 @@ PhysUnit.prototype.physEnemyAI = function(unit) { // Start the Physical World en
         return;
     }
     unit.tint = 0xFFDF00;
-    gameLevel[chosenX][chosenY].portrait.visible = true;
-    gameLevel[chosenX][chosenY].UIdefenseT.visible = true;
-    gameLevel[chosenX][chosenY].UIattackT.visible = true;
-    gameLevel[chosenX][chosenY].UImovecountT.visible = true;
-    gameLevel[chosenX][chosenY].UImovecountT.text = gameLevel[chosenX][chosenY].movesDone + '/' + gameLevel[chosenX][chosenY].moveCount;
-    gameLevel[chosenX][chosenY].UIhealthT.visible = true;
-    gameLevel[chosenX][chosenY].UIhealthT.text = gameLevel[chosenX][chosenY].health;
+    unit.portrait.visible = true;
+    unit.UIdefenseT.visible = true;
+    unit.UIattackT.visible = true;
+    unit.UImovecountT.visible = true;
+    unit.UImovecountT.text = unit.movesDone + '/' + unit.moveCount;
+    unit.UIhealthT.visible = true;
+    unit.UIhealthT.text = unit.health;
     aiTimer = game.time.create(false);
     aiTimer.add(2000, PhysUnit.prototype.findNearestUnit, this, unit); 
     aiTimer.start();
@@ -581,13 +584,14 @@ PhysUnit.prototype.findPathToUnit = function(enemy, player) { // Similar to path
         }
     }
     setInvisible(); 
-    gameLevel[chosenX][chosenY].portrait.visible = true;
-    gameLevel[chosenX][chosenY].UIdefenseT.visible = true;
-    gameLevel[chosenX][chosenY].UIattackT.visible = true;
-    gameLevel[chosenX][chosenY].UImovecountT.visible = true;
-    gameLevel[chosenX][chosenY].UImovecountT.text = gameLevel[chosenX][chosenY].movesDone + '/' + gameLevel[chosenX][chosenY].moveCount;
-    gameLevel[chosenX][chosenY].UIhealthT.visible = true;
-    gameLevel[chosenX][chosenY].UIhealthT.text = gameLevel[chosenX][chosenY].health;
+    confirmation.play();
+    enemy.portrait.visible = true;
+    enemy.UIdefenseT.visible = true;
+    enemy.UIattackT.visible = true;
+    enemy.UImovecountT.visible = true;
+    enemy.UImovecountT.text = enemy.movesDone + '/' + enemy.moveCount;
+    enemy.UIhealthT.visible = true;
+    enemy.UIhealthT.text = enemy.health;
     aiTimer.add(1000, PhysUnit.prototype.checkForBattle, this, enemy, player); // Do battle.
 }
 
@@ -596,6 +600,8 @@ PhysUnit.prototype.checkForBattle = function(enemy, player) {
         if((gameLevel[enemy.xPlace - 1][enemy.yPlace] instanceof PhysUnit) == true) {
             if(gameLevel[enemy.xPlace - 1][enemy.yPlace] == player && enemy.attackedEnemy == false){
                 enemy.tint = 0xFFDF00;
+                player.tint = 0xff0000;
+                attackSound.play();
                 aiTimer.add(1500, PhysUnit.prototype.attackPlayer, this, enemy, player);
                 return; // Make sure that nothing funny should happen.
             }
@@ -605,6 +611,8 @@ PhysUnit.prototype.checkForBattle = function(enemy, player) {
         if((gameLevel[enemy.xPlace][enemy.yPlace - 1] instanceof PhysUnit) == true) {
             if(gameLevel[enemy.xPlace][enemy.yPlace - 1] == player && enemy.attackedEnemy == false){
                 enemy.tint = 0xFFDF00;
+                player.tint = 0xff0000;
+                attackSound.play();
                 aiTimer.add(1500, PhysUnit.prototype.attackPlayer, this, enemy, player);
                 return;
             }
@@ -614,6 +622,8 @@ PhysUnit.prototype.checkForBattle = function(enemy, player) {
         if((gameLevel[enemy.xPlace + 1][enemy.yPlace] instanceof PhysUnit) == true) {
             if(gameLevel[enemy.xPlace + 1][enemy.yPlace] == player && enemy.attackedEnemy == false){
                 enemy.tint = 0xFFDF00;
+                player.tint = 0xff0000;
+                attackSound.play();
                 aiTimer.add(1500, PhysUnit.prototype.attackPlayer, this, enemy, player);
                 return;
             }
@@ -623,6 +633,8 @@ PhysUnit.prototype.checkForBattle = function(enemy, player) {
         if((gameLevel[enemy.xPlace][enemy.yPlace + 1] instanceof PhysUnit) == true) {
             if(gameLevel[enemy.xPlace][enemy.yPlace + 1] == player && enemy.attackedEnemy == false){
                 enemy.tint = 0xFFDF00;
+                player.tint = 0xff0000;
+                attackSound.play();
                 aiTimer.add(1500, PhysUnit.prototype.attackPlayer, this, enemy, player);
                 return;
             }
@@ -652,6 +664,7 @@ PhysUnit.prototype.attackPlayer = function(enemy, player) {
         return;
     }
     enemy.tint = 0x696969;
+    player.tint = 0xffffff;
     setInvisible();
     PhysUnit.prototype.endAITurn();
 }
@@ -660,6 +673,7 @@ PhysUnit.prototype.endAITurn = function() {
     if(stopAI == true) {
         return;
     }
+    clickThruSound.play();
     enemyTeam[aiIndex].turnEnd = true; // The enemy unit cannot do anything else, so it ends its turn.
     aiIndex += 1; // Raise the index by 1, since we need to go to the next element in the enemy team array.
     var counter = 0;
@@ -670,9 +684,32 @@ PhysUnit.prototype.endAITurn = function() {
     }
     if(counter == enemyTeam.length) {
         aiIndex = 0;
-        VirUnit.prototype.virAI(virViruses[aiIndex]);
+        setInvisible();
+        if(virViruses.length > 0) {
+            VirUnit.prototype.virAI(virViruses[aiIndex]);
+        }
+        else {
+            for(var i = 0; i < playerTeam.length; i++) {
+                playerTeam[i].turnEnd = false;
+            }
+            for(var i = 0; i < enemyTeam.length; i++) {
+                enemyTeam[i].movesDone = 0;
+                enemyTeam[i].attackedEnemy = false;
+                enemyTeam[i].pathsFound = false;
+                enemyTeam[i].tint = 0xffffff;
+            }
+            turnNumber += 1;
+            game.sound.stopAll();
+            battleThemePlayer.play();
+            background.inputEnabled = true;
+            backgroundVir.inputEnabled = true;
+            aiIndex = 0;
+            turnEndEnsure = false;
+            enableButtons();
+        }
     }
     else { // If the whole array has not been gone through yet, go to the next element.
+        setInvisible();
         PhysUnit.prototype.physEnemyAI(enemyTeam[aiIndex]);
     }
 }
