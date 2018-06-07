@@ -419,7 +419,6 @@ PhysUnit.prototype.turnEnd = function() { // Function determining what happens i
         background.inputEnabled = false; // Make sure the player cannot do anything to the screen.
         backgroundVir.inputEnabled = false;
         disableButtons();
-        console.log(doneUnit.portrait.visible);
         PhysUnit.prototype.physEnemyAI(enemyTeam[aiIndex]);
     }
 }
