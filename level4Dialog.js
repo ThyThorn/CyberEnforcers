@@ -352,7 +352,7 @@ level4Dialog.prototype = {
             'kaito', 'zaizen', kaitoX, kaitoY, zaizenX, zaizenY, 0.75, 0.8, scene, '', '', false, true);
         line = new dialogLine("Zaizen: I'll show you that even without the help of viruses, I still have\nthe upper hand!",
             'kaito', 'zaizen', kaitoX, kaitoY, zaizenX, zaizenY, 0.75, 0.8, scene, '', '', false, true);
-        lineVar = 70;
+        
         dialogSystem4();
     },
 }
