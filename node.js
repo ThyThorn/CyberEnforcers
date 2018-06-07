@@ -10,14 +10,13 @@ function Node(named,effect,north,south,west,east,xPlace,yPlace,unit){
 	this.unit = unit; // the unit that is on the node right now.
 	virLevel[this.xPlace][this.yPlace] = this;
 	this.AOETiles = game.add.group();
-	nodes.push(this);
 }
 
 Node.prototype.constructor = Node;
 
 Node.prototype.whichKind = function() { // Only Kenta will ever use this, since enemies cannot activate nodes.
 	background.inputEnabled = false;
-	if(this.unit.movesDone >= this.unit.moveCount) {
+	if(this.unit.movesDone >= this.unit.moveCount && this.unit.unitName == 'kenta') {
 		kenta.tint = 0xffffff;
         kenta.portrait.visible = false;
         kenta.UImovecountT.visible = false;
