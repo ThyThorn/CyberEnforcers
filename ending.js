@@ -3,6 +3,8 @@ var textBox;
 var leftChar;
 var rightChar;
 var background;
+var melancholy;
+var peace;
 var normal;
 var scene = new Array();
 var kaitoX = 20;
@@ -37,6 +39,8 @@ ending.prototype = {
         game.load.image('hayato', 'assets/img/hayato.png');
         game.load.image('kazuhito', 'assets/img/kazuhito.png');
         game.load.image('zaizen', 'assets/img/zaizen.png');
+        game.load.audio('melancholy', 'assets/audio/Melancholy.wav');
+        game.load.audio('peace', 'assets/audio/Town Theme 1.wav');
         game.load.audio('normal', 'assets/audio/GUI Sound Effects_031.mp3');
     },
 
@@ -46,6 +50,12 @@ ending.prototype = {
         background.inputEnabled = true;
         background.events.onInputDown.add(dialogSystemEnding, this); // Add the listener function to it. 
         normal = game.add.audio('normal');
+
+        melancholy = game.add.audio('melancholy');
+        melancholy.loop = true;
+
+        peace = game.add.audio('peace');
+        peace.loop = true;
 
         line = new dialogLine("Kaito: Take this, Zaizen!",
             'kaito', '', kaitoX, kaitoY, 0, 0, 0.75, 1, scene, '', '', true, false);
@@ -62,22 +72,66 @@ ending.prototype = {
             'hayato', 'kimura', kaitoX, hayatoY, kimuraX, kimuraY, 0.75, 0.8, scene, '', '', true, false);
         line = new dialogLine("Atsumi: Director Zaizen, will you give up at last?",
             'atsumi', 'zaizen', kaitoX, atsumiY, zaizenX, zaizenY, 0.75, 0.8, scene, '', '', true, false);
-        line = new dialogLine("Zaizen: ... How can I control a world when I couldn't even control you?",
+        line = new dialogLine("Zaizen: .........",
             'atsumi', 'zaizen', kaitoX, atsumiY, zaizenX, zaizenY, 0.75, 0.8, scene, '', '', false, true);
-        line = new dialogLine("Zaizen: My ambitions... They were made for stronger men.",
+        line = new dialogLine("Zaizen: An old man like me has gotten enough sense to know when to quit.",
             'atsumi', 'zaizen', kaitoX, atsumiY, zaizenX, zaizenY, 0.75, 0.8, scene, '', '', false, true);
-        line = new dialogLine("Zaizen: Someday, they will be fulfilled, even if I'm not the one to do so.",
+        line = new dialogLine("Zaizen: If I couldn't control you, how could I control two worlds?",
             'atsumi', 'zaizen', kaitoX, atsumiY, zaizenX, zaizenY, 0.75, 0.8, scene, '', '', false, true);
 
-        line = new dialogLine("Kaito: Oh, will they? Well, then, we'll stop them, however strong\nhe may be!",
+        line = new dialogLine("Atsumi: Thank you, Director, for causing no more trouble for us.",
+            'atsumi', 'zaizen', kaitoX, atsumiY, zaizenX, zaizenY, 0.75, 0.8, scene, '', '', true, false);
+        line = new dialogLine("Zaizen: It's the least that I can do, Miss Ayukawa, to save what little\ndignity I still have.",
+            'atsumi', 'zaizen', kaitoX, atsumiY, zaizenX, zaizenY, 0.75, 0.8, scene, '', '', false, true);
+        line = new dialogLine("Kenta: Director Zaizen...",
+            'kenta', 'zaizen', kaitoX, kentaY, zaizenX, zaizenY, 1, 0.8, scene, '', '', true, false);
+        line = new dialogLine("Zaizen: I was not lying when I said that I wanted to bring you back, Hajime Kousaki.",
+            'kenta', 'zaizen', kaitoX, kentaY, zaizenX, zaizenY, 1, 0.8, scene, '', '', false, true);
+        line = new dialogLine("Zaizen: To do so would have been one of the greatest wonders that the world\nhad ever seen. It would have been the start of a wonderland.",
+            'kenta', 'zaizen', kaitoX, kentaY, zaizenX, zaizenY, 1, 0.8, scene, '', '', false, true);
+
+        line = new dialogLine("Zaizen: I was willing to do anything for it... Even if it meant framing\nan innocent man.",
+            'kenta', 'zaizen', kaitoX, kentaY, zaizenX, zaizenY, 1, 0.8, scene, '', '', false, true);
+        line = new dialogLine("Kaito: And framing that innocent man only ended up making things worse for you.",
             'kaito', 'zaizen', kaitoX, kaitoY, zaizenX, zaizenY, 0.75, 0.8, scene, '', '', true, false);
-        line = new dialogLine("Kaito: Whenever there's trouble involving our two worlds, the CERC\nwill be there to stop it!",
-            'kaito', 'zaizen', kaitoX, kaitoY, zaizenX, zaizenY, 0.75, 0.8, scene, '', '', true, false);
-        line = new dialogLine("Zaizen: Gwah... Curse you!",
+        line = new dialogLine("Zaizen: Yes, that I will not deny. Poor Kazuhito proved more trouble than\nI had thought.",
             'kaito', 'zaizen', kaitoX, kaitoY, zaizenX, zaizenY, 0.75, 0.8, scene, '', '', false, true);
+        line = new dialogLine("Zaizen: ... Kaito, society has no more use for an old man like me. I'm willing\nto accept the consequences of my failure.",
+            'kaito', 'zaizen', kaitoX, kaitoY, zaizenX, zaizenY, 0.75, 0.8, scene, '', '', false, true);
+        line = new dialogLine("Zaizen: But before I leave, let me leave you a gift.",
+            'kaito', 'zaizen', kaitoX, kaitoY, zaizenX, zaizenY, 0.75, 0.8, scene, '', '', false, true);
+
+        line = new dialogLine("Kaito: Gift?",
+            'kaito', 'zaizen', kaitoX, kaitoY, zaizenX, zaizenY, 0.75, 0.8, scene, '', '', true, false);
+        line = new dialogLine("Zaizen: If you search my office, you will find my diary. You are free to examine\nits contents as you see fit.",
+            'kaito', 'zaizen', kaitoX, kaitoY, zaizenX, zaizenY, 0.75, 0.8, scene, '', '', false, true);
+        line = new dialogLine("Zaizen: In one of the entries, however, I have written details about the whereabouts\nof Hajime Kousaki's body.",
+            'kaito', 'zaizen', kaitoX, kaitoY, zaizenX, zaizenY, 0.75, 0.8, scene, '', '', false, true);
+        line = new dialogLine("Kenta: My body! It's still here, even after twenty years?!",
+            'kenta', 'zaizen', kaitoX, kentaY, zaizenX, zaizenY, 1, 0.8, scene, '', '', true, false);
+        line = new dialogLine("Zaizen: Yes... After Project Connection failed, a few other researchers and I\nput it in a capsule that would preserve it wholly.",
+            'kenta', 'zaizen', kaitoX, kentaY, zaizenX, zaizenY, 1, 0.8, scene, '', '', false, true);
+
+        line = new dialogLine("Zaizen: If you wish to return to the Physical World, you will need your body,\nof course. If you return, you will be a little boy in both body and mind.",
+            'kenta', 'zaizen', kaitoX, kentaY, zaizenX, zaizenY, 1, 0.8, scene, '', '', false, true);
+        line = new dialogLine("Atsumi: Director... Why are you telling us this?",
+            'atsumi', 'zaizen', kaitoX, atsumiY, zaizenX, zaizenY, 0.75, 0.8, scene, '', '', true, false);
+        line = new dialogLine("Zaizen: You've earned the right to know it, Miss Ayukawa.",
+            'atsumi', 'zaizen', kaitoX, atsumiY, zaizenX, zaizenY, 0.75, 0.8, scene, '', '', false, true);
+        line = new dialogLine("Zaizen: And perhaps... you can pull off the wonder that I could not make come true.",
+            'atsumi', 'zaizen', kaitoX, atsumiY, zaizenX, zaizenY, 0.75, 0.8, scene, '', '', false, true);
+        line = new dialogLine("Zaizen: I have tried many methods before deciding that control over both worlds\nwas the only solution.",
+            'atsumi', 'zaizen', kaitoX, atsumiY, zaizenX, zaizenY, 0.75, 0.8, scene, '', '', false, true);
+
+        line = new dialogLine("Zaizen: But... there may be another way to which I am blind. Perhaps your eyes\nwill see it.",
+            'atsumi', 'zaizen', kaitoX, atsumiY, zaizenX, zaizenY, 0.75, 0.8, scene, '', '', false, true);
+        line = new dialogLine("Kaito: .........",
+            'kaito', 'zaizen', kaitoX, kaitoY, zaizenX, zaizenY, 0.75, 0.8, scene, '', '', true, false);
+        line = new dialogLine("Zaizen: Thank you, Director. That's all I will say to you.",
+            'kaito', 'zaizen', kaitoX, kaitoY, zaizenX, zaizenY, 0.75, 0.8, scene, '', '', true, false);
         line = new dialogLine("Kaito: And that, everyone, is a job well done.",
             'kaito', 'zaizen', kaitoX, kaitoY, zaizenX, zaizenY, 0.75, 0.8, scene, '', '', true, false);
-        line = new dialogLine("Kaito: Justice will be served at last.",
+        line = new dialogLine("Kaito: Let's take him away. Justice will be served at last.",
             'kaito', 'zaizen', kaitoX, kaitoY, zaizenX, zaizenY, 0.75, 0.8, scene, '', '', true, false);
 
         line = new dialogLine("A few weeks later...",
@@ -104,11 +158,11 @@ ending.prototype = {
 
         line = new dialogLine("Kaito: That may be, but I won't let you do anything willy-nilly, just because of that.",
             'kaito', 'junpei', kaitoX, kaitoY, junpeiX, junpeiY, 0.75, 0.8, scene, '', '', true, false);
-        line = new dialogLine("Kaito: But! You've been doing some good work lately. Keep it up.",
+        line = new dialogLine("Kaito: But! You've been doing some good work lately. Keep it up, and maybe you'll\nfind the girl of your dreams.",
             'kaito', 'junpei', kaitoX, kaitoY, junpeiX, junpeiY, 0.75, 0.8, scene, '', '', true, false);
         line = new dialogLine("Junpei: Heh, will do!",
             'kaito', 'junpei', kaitoX, kaitoY, junpeiX, junpeiY, 0.75, 0.8, scene, '', '', false, true);
-        line = new dialogLine("Hayato: Kaito, I mean, Commander!",
+        line = new dialogLine("Hayato: Kaito! I'm glad to see you here!",
             'kaito', 'hayato', kaitoX, kaitoY, hayatoX, hayatoY, 0.75, 0.8, scene, '', 'flash', false, true);
         line = new dialogLine("Hayato: I'd just like to thank you once more for clearing my father's name!",
             'kaito', 'hayato', kaitoX, kaitoY, hayatoX, hayatoY, 0.75, 0.8, scene, '', '', false, true);
@@ -137,24 +191,24 @@ ending.prototype = {
 
         line = new dialogLine("Hajime: And guess what? Kisaki's agreed to find a way to take me back to the\nPhysical World!",
             'kaito', 'kenta', kaitoX, kaitoY, kentaX, kentaY, 0.75, 1, scene, '', '', false, true);
-        line = new dialogLine("Kaito: What?! But how?",
+        line = new dialogLine("Kaito: Great! What's happened so far?",
             'kaito', 'kenta', kaitoX, kaitoY, kentaX, kentaY, 0.75, 1, scene, '', '', true, false);
-        line = new dialogLine("Hajime: Some of his men found a strange capsule in one of the places Zaizen\ndescribed in his diary.",
+        line = new dialogLine("Hajime: He had some of his men from his order look into what Zaizen had told us\nthat night about my body.",
             'kaito', 'kenta', kaitoX, kaitoY, kentaX, kentaY, 0.75, 1, scene, '', '', false, true);
-        line = new dialogLine("Hajime: And can you believe that they found a body that looks exactly like me!",
+        line = new dialogLine("Hajime: And can you believe that they found a body that looks exactly like me!\nI was brimming with joy when I took a good look at myself!",
             'kaito', 'kenta', kaitoX, kaitoY, kentaX, kentaY, 0.75, 1, scene, '', '', false, true);
-        line = new dialogLine("Kaito: So that's where the researchers put your body after the project failed\ntwenty years ago!",
-            'kaito', 'kenta', kaitoX, kaitoY, kentaX, kentaY, 0.75, 1, scene, '', '', true, false);
-
         line = new dialogLine("Hajime: It's pretty handy that my body's in perfect condition. Right now, Kisaki's\nalso investigating the capsule itself.",
             'kaito', 'kenta', kaitoX, kaitoY, kentaX, kentaY, 0.75, 1, scene, '', '', false, true);
-        line = new dialogLine("Hajime: It seems our former boss still has his fair share of secrets.",
+
+        line = new dialogLine("Hajime: It'll take a while for him and his men to find a way to put my mind back into\nmy body. I'll wait as long as it takes, but I hope it'll be soon. That way, we can still be\nfriends in our true world.",
             'kaito', 'kenta', kaitoX, kaitoY, kentaX, kentaY, 0.75, 1, scene, '', '', false, true);
         line = new dialogLine("Junpei: Hmm... If truth be told, it'll feel weird once they manage to put you\nback into your body.",
             'junpei', 'kenta', kaitoX, junpeiY, kentaX, kentaY, 0.75, 1, scene, '', '', true, false);
         line = new dialogLine("Junpei: I'll have no virtual boy to argue with anymore.",
             'junpei', 'kenta', kaitoX, junpeiY, kentaX, kentaY, 0.75, 1, scene, '', '', true, false);
         line = new dialogLine("Hajime: Yeah, even though I'm excited to go back to your world, I admit, there\nare some parts of being in the Virtual World that I'll miss.",
+            'junpei', 'kenta', kaitoX, junpeiY, kentaX, kentaY, 0.75, 1, scene, '', '', false, true);
+        line = new dialogLine("Hajime: I did like messing around in machines and causing chaos to happen!",
             'junpei', 'kenta', kaitoX, junpeiY, kentaX, kentaY, 0.75, 1, scene, '', '', false, true);
 
         line = new dialogLine("Hajime: Don't worry, though. I'll have plenty of stories about your incidents\nto tell to my classmates once I go to school again.",
@@ -168,13 +222,13 @@ ending.prototype = {
         line = new dialogLine("Atsumi: Oh, it's, uh, nothing, Kaito. It's just that I'm still enthralled by how\nheroic you were when dealing with Zaizen.",
             'kaito', 'atsumi', kaitoX, kaitoY, atsumiX, atsumiY, 0.75, 0.8, scene, '', '', false, true);
 
-        line = new dialogLine("Atsumi: You were willing to reject Zaizen's lies, all for your dearest one's sake.",
+        line = new dialogLine("Atsumi: You were willing to reject Zaizen's offer for paradise, all for your\ndearest one's sake.",
             'kaito', 'atsumi', kaitoX, kaitoY, atsumiX, atsumiY, 0.75, 0.8, scene, '', '', false, true);
         line = new dialogLine("Kaito: My dearest one's sake?",
             'kaito', 'atsumi', kaitoX, kaitoY, atsumiX, atsumiY, 0.75, 0.8, scene, '', '', true, false);
         line = new dialogLine("Atsumi: You know, someone who's always been there for you, and will do anything\nto protect you.",
             'kaito', 'atsumi', kaitoX, kaitoY, atsumiX, atsumiY, 0.75, 0.8, scene, '', '', false, true);
-        line = new dialogLine("Kaito: Hmm... I guess I could consider the whole squad to be that.",
+        line = new dialogLine("Kaito: Hmm... Every one of you is dear to me. We're a squad, after all.",
             'kaito', 'atsumi', kaitoX, kaitoY, atsumiX, atsumiY, 0.75, 0.8, scene, '', '', true, false);
         line = new dialogLine("Kaito: We'd do anything to help each other at times of need, wouldn't we?",
             'kaito', 'atsumi', kaitoX, kaitoY, atsumiX, atsumiY, 0.75, 0.8, scene, '', '', true, false);
@@ -189,7 +243,8 @@ ending.prototype = {
             'kaito', 'atsumi', kaitoX, kaitoY, atsumiX, atsumiY, 0.75, 0.8, scene, '', '', true, false);
         line = new dialogLine("Atsumi: Sigh... You still have much to learn, Kaito.",
             'kaito', 'atsumi', kaitoX, kaitoY, atsumiX, atsumiY, 0.75, 0.8, scene, '', '', false, true);
-        line = new dialogLine("THE END",
+
+        line = new dialogLine("THE END\nTHANK YOU FOR PLAYING",
             '', '', 0, 0, 0, 0, 0, 0, scene, '', 'flash', false, false);
         dialogSystemEnding();
     },
@@ -199,13 +254,21 @@ dialogSystemEnding = function() {
     if(lineVar == scene.length - 1) { // Check whether the array of dialog lines has reached its end.
         background = game.add.sprite(0, 0, 'black');
         background.inputEnabled = false;
-        game.sound.stopAll();
         scene[lineVar].execute();
     }
     else {
-        if(lineVar == 15) {
+        if(lineVar == 13) {
+            melancholy.play();
+        }
+        if(lineVar == 32) {
+            game.sound.stopAll();
+        }
+        if(lineVar == 35) {
             background = game.add.sprite(0, 0, 'park'); // Add the background first.
             background.scale.setTo(0.7, 0.7);
+        }
+        if(lineVar == 36) {
+            peace.play();
         }
         scene[lineVar].execute(); // Check the dialog line constructor for the function.
     }
