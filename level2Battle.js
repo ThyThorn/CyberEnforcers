@@ -315,7 +315,7 @@ level2Battle.prototype = {
         blueNode2 = new Node('Blue2', 'blue', null, null, null, yellowNode1, 8, 6, null);
         yellowNode1.west = blueNode2;
 
-        redNode1 = new Node('Red1', 'red', null, yellowNode2, yellowNode1, yellowNode3, 13, 15, kenta);
+        redNode1 = new Node('Red1', 'red', null, yellowNode2, yellowNode1, yellowNode3, 13, 15, null);
         yellowNode1.east = redNode1;
 
         yellowNode2 = new Node('Yellow2', 'yellow', redNode1, redNode2, null, null, 13, 16, null);
@@ -327,7 +327,7 @@ level2Battle.prototype = {
         yellowNode4 = new Node('Yellow4', 'yellow', null, null, redNode2, redNode3, 14, 18, virEnemy);
         redNode2.east = yellowNode4;
 
-        redNode3 = new Node('Red3', 'red', yellowNode5, null, yellowNode4, blueNode3, 16, 18, kenta);
+        redNode3 = new Node('Red3', 'red', yellowNode5, null, yellowNode4, blueNode3, 16, 18, null);
         yellowNode4.east = redNode3;
 
         yellowNode5 = new Node('Yellow5', 'yellow', redNode4, redNode3, null, null, 16, 16, null);
