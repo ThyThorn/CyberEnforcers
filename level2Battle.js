@@ -126,6 +126,7 @@ level2Battle.prototype = {
         game.load.audio('death', 'assets/audio/death.wav');
         game.load.audio('confirmation', 'assets/audio/Confirmation sound.wav');
         game.load.audio('clickThru', 'assets/audio/ClickThruSound.mp3');
+        game.load.audio('negative', 'assets/audio/Negative.mp3');
     },
 
     create: function() {
@@ -245,11 +246,11 @@ level2Battle.prototype = {
         game.add.image(31*16+28*3+16*3,16*13,'UIc');
         game.add.image(31*16, 16*18+10,'UIr');
         game.add.image(31*16+14, 16*14,'defenseicon');
-        var attackicon =game.add.image(34*16+13, 16*14+3,'attackicon');
+        var attackicon = game.add.image(34*16+13, 16*14+3,'attackicon');
         attackicon.scale.set(.8,.8);
-        var moveicon= game.add.image(37*16+8, 16*14+2,'moveicon');
+        var moveicon = game.add.image(37*16+8, 16*14+2,'moveicon');
         moveicon.scale.set(.9,.9);
-        var moveicon= game.add.image(40*16+1, 16*14,'itemicon');
+        var moveicon = game.add.image(40*16+1, 16*14,'itemicon');
         game.add.image(31*16, 16*22+12,'UIr');
         game.add.image(31*16, 16*26+14,'UIr');
 
@@ -279,21 +280,22 @@ level2Battle.prototype = {
         deathSound = game.add.audio('death');
         confirmation = game.add.audio('confirmation');
         clickThruSound = game.add.audio('clickThru');
+        negative = game.add.audio('negative');
 
         // Only three player units.
-        kaitoObject = new PhysUnit('Kaito', 20, 100, 6, 200, 'player', false, 8, 11, 'atlas', 'Kaito01', 'kaito');
+        kaitoObject = new PhysUnit('Kaito', 20, 10, 6, 7, 'player', false, 3, 9, 'atlas', 'Kaito01', 'kaito');
         game.add.existing(kaitoObject);
-        atsumiObject = new PhysUnit('Atsumi', 25, 180, 5, 200, 'player', false, 12, 10, 'atlas', 'Atsumi01', 'atsumi');
+        atsumiObject = new PhysUnit('Atsumi', 25, 14, 5, 8, 'player', false, 6, 16, 'atlas', 'Atsumi01', 'atsumi');
         game.add.existing(atsumiObject);
-        junpeiObject = new PhysUnit('Junpei', 15, 200, 3, 70, 'player', false, 10, 12, 'atlas', 'Junpei01', 'junpei');
+        junpeiObject = new PhysUnit('Junpei', 15, 20, 3, 7, 'player', false, 2, 22, 'atlas', 'Junpei01', 'junpei');
         game.add.existing(junpeiObject);
 
-        // One 'boss' character and three to four viruses as his minions.
-        hayatoObject = new PhysUnit('Hayato', 40, 150, 5, 9, 'enemy', true, 22, 13, 'atlas', 'Hayato01', 'hayato');
+        // One 'boss' character and two viruses as his minions.
+        hayatoObject = new PhysUnit('Hayato', 35, 15, 2, 7, 'enemy', true, 22, 28, 'atlas', 'Hayato01', 'hayato');
         game.add.existing(hayatoObject);
-        virusObject1 = new PhysUnit('Virus', 35, 150, 5, 9, 'enemy', true, 20, 3, 'atlas', 'EnemyRed01');
+        virusObject1 = new PhysUnit('Virus', 20, 15, 5, 4, 'enemy', true, 16, 9, 'atlas', 'EnemyRed01');
         game.add.existing(virusObject1);
-        virusObject2 = new PhysUnit('Virus', 55, 150, 5, 9, 'enemy', true, 7, 24, 'atlas', 'EnemyGreen01');
+        virusObject2 = new PhysUnit('Virus', 20, 15, 2, 7, 'enemy', true, 7, 13, 'atlas', 'EnemyGreen01');
         game.add.existing(virusObject2);
 
         kenta = new VirUnit('Kenta', 5, 'player', false, 2, 14, 'atlas', 'Kenta01', 'kenta');
