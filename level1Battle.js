@@ -124,6 +124,7 @@ level1Battle.prototype = {
         game.load.audio('death', 'assets/audio/death.wav');
         game.load.audio('confirmation', 'assets/audio/Confirmation sound.wav');
         game.load.audio('clickThru', 'assets/audio/ClickThruSound.mp3');
+        game.load.audio('negative', 'assets/audio/Negative.mp3');
     },
 
     create: function() {
@@ -243,11 +244,11 @@ level1Battle.prototype = {
         game.add.image(31*16+28*3+16*3,16*13,'UIc');
         game.add.image(31*16, 16*18+10,'UIr');
         game.add.image(31*16+14, 16*14,'defenseicon');
-        var attackicon =game.add.image(34*16+13, 16*14+3,'attackicon');
+        var attackicon = game.add.image(34*16+13, 16*14+3,'attackicon');
         attackicon.scale.set(.8,.8);
-        var moveicon= game.add.image(37*16+8, 16*14+2,'moveicon');
+        var moveicon = game.add.image(37*16+8, 16*14+2,'moveicon');
         moveicon.scale.set(.9,.9);
-        var moveicon= game.add.image(40*16+1, 16*14,'itemicon');
+        var moveicon = game.add.image(40*16+1, 16*14,'itemicon');
         game.add.image(31*16, 16*22+12,'UIr');
         game.add.image(31*16, 16*26+14,'UIr');
 
@@ -265,11 +266,11 @@ level1Battle.prototype = {
 
         battleThemePlayer = game.add.audio('battleThemePlayer');
         battleThemePlayer.loop = true;
-        battleThemePlayer.volume = 0.6;
+        battleThemePlayer.volume = 0.1;
         battleThemePlayer.play();
         battleThemeEnemy = game.add.audio('battleThemeEnemy');
         battleThemeEnemy.loop = true;
-        battleThemeEnemy.volume = 0.6;
+        battleThemeEnemy.volume = 0.3;
         attackSound = game.add.audio('attackSound');
         redNodeSound = game.add.audio('redNode');
         blueNodeSound = game.add.audio('blueNode');
@@ -277,6 +278,7 @@ level1Battle.prototype = {
         deathSound = game.add.audio('death');
         confirmationSound = game.add.audio('confirmation');
         clickThruSound = game.add.audio('clickThru');
+        negative = game.add.audio('negative');
 
         // Only three player units.
         kaitoObject = new PhysUnit('Kaito', 20, 10, 6, 7, 'player', false, 3, 9, 'atlas', 'Kaito01', 'kaito');
@@ -286,7 +288,7 @@ level1Battle.prototype = {
         junpeiObject = new PhysUnit('Junpei', 15, 20, 3, 7, 'player', false, 2, 22, 'atlas', 'Junpei01', 'junpei');
         game.add.existing(junpeiObject);
 
-        // About four to six viruses as enemies.
+        // Three viruses as enemies.
         virusObject = new PhysUnit('Virus', 20, 15, 5, 4, 'enemy', true, 14, 14, 'atlas', 'EnemyRed01');
         game.add.existing(virusObject);
         virusObject1 = new PhysUnit('Virus', 20, 15, 5, 4, 'enemy', true, 16, 9, 'atlas', 'EnemyRed01');
