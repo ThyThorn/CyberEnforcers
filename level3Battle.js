@@ -33,15 +33,29 @@ var greenNode5;
 var blueNode1;
 var blueNode2;
 var blueNode3;
+var blueNode4;
+var blueNode5;
+var blueNode6;
+var blueNode7;
+var blueNode8;
+var blueNode9;
+var blueNode10;
+var blueNode11;
+var blueNode12;
+var blueNode13; 
 var redNode1;
 var redNode2;
 var redNode3;
 var redNode4;
 var redNode5;
-var yellowNode1;
-var yellowNode2;
-var yellowNode3;
-var yellowNode4;
+var redNode6;
+var redNode7;
+var redNode8;
+var redNode9;
+
+
+
+
 var accessible;
 var isFull;
 var chosenVirSquare;
@@ -82,7 +96,7 @@ level3Battle.prototype = {
     preload: function() {
         game.load.atlas('atlas', 'assets/img/allSprites-wBase.png', 'assets/img/allSprites-wBase.json'); // Load the atlas.
         game.load.image('background', 'assets/img/level3.png');
-        game.load.image('backgroundVir', 'assets/img/level1v.png');
+        game.load.image('backgroundVir', 'assets/img/level3v.png');
         game.load.image('greenTile', 'assets/img/highlight.png');
 
         game.load.image('moveButton', 'assets/img/movefullicon.png');
@@ -304,53 +318,115 @@ level3Battle.prototype = {
         virEnemy2 = new VirUnit('Virus', 1, 'enemy', true, 11, 13, 'atlas', 'EnemyBlue01');
         game.add.existing(virEnemy2);
 
-        greenNode1 = new Node('Green1', 'green', yellowNode4, null, null, greenNode2, 2, 9, kenta); // Make sure to give the node the corresponding unit, if there is any!
-        greenNode2 = new Node('Green2', 'green', null, null, greenNode1, greenNode3, 7, 9, null);
-        greenNode1.east = greenNode2; // Note that since greenNode2 was undefined when I initialized greenNode1, I need to set its value to greenNode1.east again.
+        greenNode1 = new Node('Green1', 'green', null, null, null, null, 3, 2, null); // Make sure to give the node the corresponding unit, if there is any!
+        greenNode2 = new Node('Green2', 'green', null, null, null, null, 14, 3, null);
+		greenNode3 = new Node('Green3', 'green', null, null, null, null, 27, 2, null);
+	    greenNode4 = new Node('Green4', 'green', null, null, null, null, 2, 26, null);
+		
+	    redNode1 = new Node('Red1', 'red', null, null, null, null,9 ,8 , null);
+        redNode2 = new Node('Red2', 'red', null, null, null, null, 21 ,8 , null);
+		redNode3 = new Node('Red3', 'red', null, null, null, null,2 ,15, null);
+		redNode4 = new Node('Red4', 'red', null, null, null, null,15,14, null);
+		redNode5 = new Node('Red5', 'red', null, null, null, null,26 ,15 , null);
+		redNode6 = new Node('Red6', 'red', null, null, null, null,8 ,20 , null);
+        redNode7 = new Node('Red7', 'red', null, null, null, null,28 ,20 , null);
+		redNode8 = new Node('Red8', 'red', null, null, null, null,14 ,26 , null);
+		redNode9 = new Node('Red9', 'red', null, null, null, null,26 ,26 , null);
+		
+		blueNode1 = new Node('Blue1', 'blue', null, null, null, null,4 , 2, null);
+		blueNode2 = new Node('Blue2', 'blue', null, null, null, null,14 , 4, null);
+		blueNode3 = new Node('Blue3', 'blue', null, null, null, null,27 ,4 , null);
+		blueNode4 = new Node('Blue4', 'blue', null, null, null, null, 9, 10, null);
+		blueNode5 = new Node('Blue5', 'blue', null, null, null, null,21 ,10 , null);
+        blueNode6 = new Node('Blue6', 'blue', null, null, null, null,2 ,16 , null);   
+	    blueNode7 = new Node('Blue7', 'blue', null, null, null, null, 14, 16, null);
+		blueNode8 = new Node('Blue8', 'blue', null, null, null, null,26,17, null);
+		blueNode9 = new Node('Blue9', 'blue', null, null, null, null,8 ,22, null);
+		blueNode10 = new Node('Blue10', 'blue', null, null, null, null,28 , 22, null);
+		blueNode11 = new Node('Blue11', 'blue', null, null, null, null,2,28, null);
+		blueNode12 = new Node('Blue12', 'blue', null, null, null, null,14,28, null);
+		blueNode13 = new Node('Blue13', 'blue', null, null, null, null,26,28, null);
         
-        greenNode3 = new Node('Green3', 'green', null, redNode2, greenNode2, blueNode1, 11, 9, null);
-        greenNode2.east = greenNode3;
+		// setting up directions
+		greenNode1.west = blueNode1;
+		greenNode1.south = redNode3;
+		greenNode2.east = blueNode1;
+		greenNode2.west = greendNode3;
+		greenNode2.south = blueNode2;
+		greenNode3.east = greenNode2;
+		greenNode3.south = blueNode3;
+		greenNode4.north = blueNode6;
+		greenNode4.south = blueNode11;
+		greenNode4.west = redNode8;
+		
+		blueNode1.east = greenNode1;
+		blueNode1.west = greenNode2;
+		blueNode2.north = greenNode2;
+		blueNode2.south = blueNode7;
+		blueNode3.north = greenNode3;
+		blueNode4.north = redNode1;
+		blueNode4.west = blueNode5;
+		blueNode5.east = blueNode4;
+		blueNode5.north = redNode2;
+		blueNode5.south = redNode7;
+		blueNode6.north = redNode3;
+		blueNode6.south = greenNode4;
+		blueNode6.west = blueNode7;
+		blueNode7.north = redNode4;
+		blueNode7.east = blueNode6;
+		blueNode7.south = redNode8;
+		blueNode8.north = redNode5;
+		blueNode8.south = redNode9;
+		blueNode9.north = redNode6;
+		blueNode10.north = redNode7;
+		blueNode11.north = greenNode4;
+		blueNode11.west = blueNode12;
+		blueNode12.north = redNode8;
+		blueNode12.east = blueNode11;
+		blueNode12.west = blueNode13;
+		blueNode13.north = redNode9;
+		blueNode13.east = blueNode12;
+		
+		redNode1.west = redNode2;
+		redNode1.south = blueNode4;
+		redNode2.east = redNode1;
+		redNode2.south = blueNode5;
+		redNode3.north = greenNode1;
+		redNode3.south = blueNode6;
+		redNode3.west = redNode5;
+		redNode4.south = blueNode7;
+		redNode5.east = redNode3;
+		redNode5.south = blueNode8;
+		redNode6.south = blueNode9;
+		redNode6.west = redNode7;
+		redNode7.north = blueNode5;
+		redNode7.east = redNode6;
+		redNode7.south = blueNode10;
+		redNode8.east = greenNode4;
+		redNode8.north = blueNode7;
+		redNode8.south = blueNode12;
+		redNode8.west = blueNode13;
+		redNode9.north = redNode5;
+		redNode9.east = redNode8;
+		redNode9.south = blueNode13;
+		
+		yellowNode1 = 0;
+        yellowNode2 = 0;
+        yellowNode3 = 0;
+        yellowNode4 = 0;
+        yellowNode5 = 0;
+		
+		
+		
+		
+		
+	
+		
+		
+		
+		
         
-        redNode1 = new Node('Red1', 'red', null, blueNode1, null, null, 16, 3, null);
-        blueNode1 = new Node('Blue1', 'blue', redNode1, yellowNode1, greenNode3, yellowNode3, 16, 9, null);
-        redNode1.south = blueNode1;
-        
-        redNode2 = new Node('Red2', 'red', greenNode3, null, null, null, 11, 13, virEnemy2);
-        greenNode3.south = redNode2;
-        greenNode3.east = blueNode1;
-        
-        yellowNode1 = new Node('Yellow1', 'yellow', blueNode1, null, null, yellowNode2, 16, 27, virEnemy);
-        blueNode1.south = yellowNode1;
-        
-        yellowNode2 = new Node('Yellow2', 'yellow', greenNode4, null, yellowNode1, null, 27, 27, null);
-        yellowNode1.east = yellowNode2;
-        
-        greenNode4 = new Node('Green4', 'green', yellowNode3, yellowNode2, null, null, 27, 22, null);
-        yellowNode2.north = greenNode4;
-        
-        yellowNode3 = new Node('Yellow3', 'yellow', blueNode2, greenNode4, blueNode1, redNode3, 27, 8, null);
-        blueNode1.east = yellowNode3;
-        greenNode4.north = yellowNode3;
-
-        redNode3 = new Node('Red3', 'red', null, null, yellowNode3, null, 29, 7, null);
-        yellowNode3.east = redNode3;
-
-        blueNode2 = new Node('Blue2', 'blue', null, yellowNode3, null, null, 27, 2, null);
-        yellowNode3.north = blueNode2;
-
-        blueNode3 = new Node('Blue3', 'blue', null, null, redNode4, null, 13, 22, null);
-
-        redNode4 = new Node('Red4', 'red', null, null, greenNode5, blueNode3, 10, 23, null);
-        blueNode3.west = redNode4;
-
-        redNode5 = new Node('Red5', 'red', null, greenNode5, null, null, 3, 21, null); // This one is a bit tricky because of the node placements.
-
-        greenNode5 = new Node('Green5', 'green', redNode5, null, null, redNode4, 3, 25, null);
-        redNode4.west = greenNode5;
-        redNode5.south = greenNode5;
-
-        yellowNode4 = new Node('Yellow4', 'yellow', null, greenNode1, null, null, 2, 4, null);
-        greenNode1.north = yellowNode4;
+       
     },
 
     update: function(){
