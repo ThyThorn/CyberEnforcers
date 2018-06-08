@@ -12,7 +12,6 @@ var virusObject;
 var playerTeam = new Array();
 var enemyTeam = new Array();
 var virViruses = new Array();
-var nodes = new Array(); // Not likely to be used, but it could be helpful later.
 var levelWidth;
 var levelHeight;
 var mapWidth;
@@ -289,11 +288,11 @@ level1Battle.prototype = {
         game.add.existing(junpeiObject);
 
         // Three viruses as enemies.
-        virusObject = new PhysUnit('Virus', 20, 15, 5, 4, 'enemy', true, 14, 14, 'atlas', 'EnemyRed01');
+        virusObject = new PhysUnit('Virus', 20, 15, 5, 4, 'enemy', true, 19, 9, 'atlas', 'EnemyRed01');
         game.add.existing(virusObject);
-        virusObject1 = new PhysUnit('Virus', 20, 15, 5, 4, 'enemy', true, 16, 9, 'atlas', 'EnemyRed01');
+        virusObject1 = new PhysUnit('Virus', 20, 15, 5, 4, 'enemy', true, 19,22, 'atlas', 'EnemyRed01');
         game.add.existing(virusObject1);
-        virusObject2 = new PhysUnit('Virus', 25, 15, 3, 9, 'enemy', true, 14, 23, 'atlas', 'EnemyGreen01');
+        virusObject2 = new PhysUnit('Virus', 25, 15, 3, 9, 'enemy', true, 23, 16, 'atlas', 'EnemyGreen01');
         game.add.existing(virusObject2);
 
         kenta = new VirUnit('Kenta', 5, 'player', false, 2, 9, 'atlas', 'Kenta01', 'kenta');
@@ -307,27 +306,27 @@ level1Battle.prototype = {
         greenNode1 = new Node('Green1', 'green', yellowNode4, null, null, greenNode2, 2, 9, kenta); // Make sure to give the node the corresponding unit, if there is any!
         greenNode2 = new Node('Green2', 'green', null, null, greenNode1, greenNode3, 7, 9, null);
         greenNode1.east = greenNode2; // Note that since greenNode2 was undefined when I initialized greenNode1, I need to set its value to greenNode1.east again.
-        
+
         greenNode3 = new Node('Green3', 'green', null, redNode2, greenNode2, blueNode1, 11, 9, null);
         greenNode2.east = greenNode3;
-        
+
         redNode1 = new Node('Red1', 'red', null, blueNode1, null, null, 16, 3, null);
         blueNode1 = new Node('Blue1', 'blue', redNode1, yellowNode1, greenNode3, yellowNode3, 16, 9, null);
         redNode1.south = blueNode1;
-        
+
         redNode2 = new Node('Red2', 'red', greenNode3, null, null, null, 11, 13, virEnemy2);
         greenNode3.south = redNode2;
         greenNode3.east = blueNode1;
-        
+
         yellowNode1 = new Node('Yellow1', 'yellow', blueNode1, null, null, yellowNode2, 16, 27, virEnemy);
         blueNode1.south = yellowNode1;
-        
+
         yellowNode2 = new Node('Yellow2', 'yellow', greenNode4, null, yellowNode1, null, 27, 27, null);
         yellowNode1.east = yellowNode2;
-        
+
         greenNode4 = new Node('Green4', 'green', yellowNode3, yellowNode2, null, null, 27, 22, null);
         yellowNode2.north = greenNode4;
-        
+
         yellowNode3 = new Node('Yellow3', 'yellow', blueNode2, greenNode4, blueNode1, redNode3, 27, 8, null);
         blueNode1.east = yellowNode3;
         greenNode4.north = yellowNode3;
