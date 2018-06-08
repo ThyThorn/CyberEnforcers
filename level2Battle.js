@@ -283,19 +283,19 @@ level2Battle.prototype = {
         negative = game.add.audio('negative');
 
         // Only three player units.
-        kaitoObject = new PhysUnit('Kaito', 20, 10, 6, 7, 'player', false, 3, 9, 'atlas', 'Kaito01', 'kaito');
+        kaitoObject = new PhysUnit('Kaito', 20, 10, 6, 7, 'player', false, 16, 25, 'atlas', 'Kaito01', 'kaito');
         game.add.existing(kaitoObject);
-        atsumiObject = new PhysUnit('Atsumi', 25, 14, 5, 8, 'player', false, 6, 16, 'atlas', 'Atsumi01', 'atsumi');
+        atsumiObject = new PhysUnit('Atsumi', 25, 14, 5, 8, 'player', false, 20, 25, 'atlas', 'Atsumi01', 'atsumi');
         game.add.existing(atsumiObject);
-        junpeiObject = new PhysUnit('Junpei', 15, 20, 3, 7, 'player', false, 2, 22, 'atlas', 'Junpei01', 'junpei');
+        junpeiObject = new PhysUnit('Junpei', 15, 20, 3, 7, 'player', false, 12, 28, 'atlas', 'Junpei01', 'junpei');
         game.add.existing(junpeiObject);
 
         // One 'boss' character and two viruses as his minions.
-        hayatoObject = new PhysUnit('Hayato', 35, 15, 2, 7, 'enemy', true, 22, 28, 'atlas', 'Hayato01', 'hayato');
+        hayatoObject = new PhysUnit('Hayato', 35, 15, 2, 7, 'enemy', true, 15, 5, 'atlas', 'Hayato01', 'hayato');
         game.add.existing(hayatoObject);
-        virusObject1 = new PhysUnit('Virus', 20, 15, 5, 4, 'enemy', true, 16, 9, 'atlas', 'EnemyRed01');
+        virusObject1 = new PhysUnit('Virus', 20, 15, 5, 4, 'enemy', true, 20, 9, 'atlas', 'EnemyRed01');
         game.add.existing(virusObject1);
-        virusObject2 = new PhysUnit('Virus', 20, 15, 2, 7, 'enemy', true, 7, 13, 'atlas', 'EnemyGreen01');
+        virusObject2 = new PhysUnit('Virus', 20, 15, 2, 7, 'enemy', true, 10, 10, 'atlas', 'EnemyGreen01');
         game.add.existing(virusObject2);
 
         kenta = new VirUnit('Kenta', 5, 'player', false, 2, 14, 'atlas', 'Kenta01', 'kenta');
