@@ -146,6 +146,7 @@ PhysUnit.prototype.checkEnemy = function() {
         attackTimer.start();
     }
     else {
+        negative.play();
         chosenSquare = false;
         attackPressed = false;
         setInvisible();
@@ -257,6 +258,7 @@ PhysUnit.prototype.chooseUnit = function() {
             gameLevel[chosenX][chosenY].UIhealthT.visible = true;
             gameLevel[chosenX][chosenY].UIhealthT.text = gameLevel[chosenX][chosenY].health;
             if(gameLevel[chosenX][chosenY].turnEnd == true) { // There is no point in continuing if the unit has already ended its turn.
+                negative.play();
                 enableButtons();
                 return;
             }
@@ -265,6 +267,7 @@ PhysUnit.prototype.chooseUnit = function() {
                 if(gameLevel[chosenX][chosenY].team == 'player') { // Make sure that the unit clicked on is a player unit.
                     if(movePressed == true) { // What happens if you have pressed the move button.
                         if(gameLevel[chosenX][chosenY].movesDone == gameLevel[chosenX][chosenY].moveCount) { // If the unit cannot move anymore, leave.
+                            negative.play();
                             enableButtons();
                             return;
                         }
@@ -275,6 +278,7 @@ PhysUnit.prototype.chooseUnit = function() {
                     else if(attackPressed == true) { // What happens if you have pressed the attack button.
                         setInvisible();
                         if(gameLevel[chosenX][chosenY].attackedEnemy == true) { // If the unit has already attacked, leave.
+                            negative.play();
                             enableButtons();
                             return;
                         }
@@ -357,17 +361,23 @@ PhysUnit.prototype.chooseSquare = function() {
                 gameLevel[chosenX][chosenY] = 0;
                 PhysUnit.prototype.changeSprite(newUnit);
             }
+            else {
+                negative.play();
+            }
             movePressed = false;
             chosenSquare = false;
             setInvisible();
             enableButtons();
             return;
         }
-        movePressed = false;
-        chosenSquare = false;
-        setInvisible();
-        enableButtons();
-        return;
+        else {
+            negative.play();
+            movePressed = false;
+            chosenSquare = false;
+            setInvisible();
+            enableButtons();
+            return;
+        }
     }
 }
 
