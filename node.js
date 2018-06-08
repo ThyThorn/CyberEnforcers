@@ -16,7 +16,8 @@ Node.prototype.constructor = Node;
 
 Node.prototype.whichKind = function() { // Only Kenta will ever use this, since enemies cannot activate nodes.
 	background.inputEnabled = false;
-	if(this.unit.movesDone >= this.unit.moveCount && this.unit.unitName == 'kenta') {
+	if(this.unit.movesDone >= this.unit.moveCount && this.unit.unitName == 'Kenta') {
+		negative.play();
 		kenta.tint = 0xffffff;
         kenta.portrait.visible = false;
         kenta.UImovecountT.visible = false;
