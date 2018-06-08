@@ -69,6 +69,9 @@ VirUnit.prototype.chooseVirUnit = function() {
                 }
             }
         }
+        else {
+            negative.play();
+        }
         enableButtons();
         blueNodeVar = false;
         kenta.tint = 0xffffff;
@@ -99,6 +102,7 @@ VirUnit.prototype.chooseVirUnit = function() {
             }
         }
         else {
+            negative.play();
             chosenVirSquare = false;
             movePressed = false;
             accessible = false;
@@ -136,6 +140,9 @@ VirUnit.prototype.chooseVirUnit = function() {
                     accessible = false;
                     enableButtons();
                 }
+                else {
+                    negative.play();
+                }
                 chosenVirSquare = false;
                 movePressed = false;
                 accessible = false;
@@ -145,6 +152,7 @@ VirUnit.prototype.chooseVirUnit = function() {
                 enableButtons();
             }
             else { 
+                negative.play();
                 chosenVirSquare = false;
                 movePressed = false;
                 accessible = false;
