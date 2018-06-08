@@ -57,7 +57,16 @@ level1Dialog.prototype = {
         game.load.image('park', 'assets/img/park.jpg');
         game.load.image('urban', 'assets/img/urban.jpg');
         game.load.image('textBox', 'assets/img/g4410.png');
-        game.load.image('tutorialPic1', 'assets/img/tutorialImage1.png');
+        game.load.image('Tutorial01', 'assets/img/Tutorial01.png');
+        game.load.image('Tutorial02', 'assets/img/Tutorial02.png');
+        game.load.image('Tutorial03', 'assets/img/Tutorial03.png');
+        game.load.image('Tutorial04', 'assets/img/Tutorial04.png');
+        game.load.image('Tutorial05', 'assets/img/Tutorial05.png');
+        game.load.image('Tutorial06', 'assets/img/Tutorial06.png');
+        game.load.image('Tutorial07', 'assets/img/Tutorial07.png');
+        game.load.image('Tutorial08', 'assets/img/Tutorial08.png');
+        game.load.image('Tutorial09', 'assets/img/Tutorial09.png');
+        game.load.image('Tutorial10', 'assets/img/Tutorial10.png');
         game.load.image('kaito', 'assets/img/kaito.png');
         game.load.image('kenta', 'assets/img/kenta.png');
         game.load.image('atsumi', 'assets/img/atsumi.png');
@@ -242,8 +251,53 @@ dialogSystem1 = function() {
             thinking.play();
             background = game.add.sprite(0, 0, 'sky');
             background.scale.setTo(2, 2);
-            tutorialPic1 = game.add.sprite(100, 70, 'tutorialPic1');
-            tutorialPic1.scale.setTo(0.5, 0.5);
+            tutorialPic1 = game.add.sprite(100, 70, 'Tutorial01');
+            tutorialPic1.scale.setTo(0.75, 0.75);
+        }
+        if(lineVar == 32) {
+            tutorialPic1.kill();
+            tutorialPic1 = game.add.sprite(200, 70, 'Tutorial03');
+            tutorialPic1.scale.setTo(0.6, 0.6);
+        }
+        if(lineVar == 33) {
+            tutorialPic1.kill();
+            tutorialPic1 = game.add.sprite(200, 70, 'Tutorial04');
+            tutorialPic1.scale.setTo(0.6, 0.6);
+        }
+        if(lineVar == 34) {
+            tutorialPic1.kill();
+            tutorialPic1 = game.add.sprite(200, 70, 'Tutorial05');
+            tutorialPic1.scale.setTo(0.6, 0.6);
+        }
+        if(lineVar == 35) {
+            tutorialPic1.kill();
+            tutorialPic1 = game.add.sprite(200, 70, 'Tutorial06');
+            tutorialPic1.scale.setTo(0.6, 0.6);
+        }
+        if(lineVar == 36) {
+            tutorialPic1.kill();
+            tutorialPic1 = game.add.sprite(200, 70, 'Tutorial07');
+            tutorialPic1.scale.setTo(0.6, 0.6);
+        }
+        if(lineVar == 37) {
+            tutorialPic1.kill();
+            tutorialPic1 = game.add.sprite(200, 70, 'Tutorial08');
+            tutorialPic1.scale.setTo(0.6, 0.6);
+        }
+        if(lineVar == 38) {
+            tutorialPic1.kill();
+            tutorialPic1 = game.add.sprite(200, 70, 'Tutorial09');
+            tutorialPic1.scale.setTo(0.6, 0.6);
+        }
+        if(lineVar == 39) {
+            tutorialPic1.kill();
+            tutorialPic1 = game.add.sprite(200, 70, 'Tutorial02');
+            tutorialPic1.scale.setTo(0.6, 0.6);
+        }
+        if(lineVar == 43) {
+            tutorialPic1.kill();
+            tutorialPic1 = game.add.sprite(200, 70, 'Tutorial10');
+            tutorialPic1.scale.setTo(0.6, 0.6);
         }
         scene[lineVar].execute(); // Check the dialog line constructor for the function.
     }
