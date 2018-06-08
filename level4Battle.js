@@ -34,15 +34,33 @@ var greenNode5;
 var blueNode1;
 var blueNode2;
 var blueNode3;
+var blueNode4;
+var blueNode5;
+var blueNode6;
+var blueNode7;
+var blueNode8;
+var blueNode9;
+var blueNode10;
+var blueNode11;
+var blueNode12;
+var blueNode13;
 var redNode1;
 var redNode2;
 var redNode3;
 var redNode4;
 var redNode5;
+var redNode6;
+var redNode7;
+var redNode8;
+var redNode9;
 var yellowNode1;
 var yellowNode2;
 var yellowNode3;
 var yellowNode4;
+var yellowNode5;
+var yellowNode6;
+var yellowNode7;
+var yellowNode8;
 var accessible;
 var isFull;
 var chosenVirSquare;
@@ -83,7 +101,7 @@ level4Battle.prototype = {
     preload: function() {
         game.load.atlas('atlas', 'assets/img/allSprites-wBase.png', 'assets/img/allSprites-wBase.json'); // Load the atlas.
         game.load.image('background', 'assets/img/level4.png');
-        game.load.image('backgroundVir', 'assets/img/level1v.png');
+        game.load.image('backgroundVir', 'assets/img/level4v.png');
         game.load.image('greenTile', 'assets/img/highlight.png');
 
         game.load.image('moveButton', 'assets/img/movefullicon.png');
@@ -127,6 +145,7 @@ level4Battle.prototype = {
         game.load.audio('death', 'assets/audio/death.wav');
         game.load.audio('confirmation', 'assets/audio/Confirmation sound.wav');
         game.load.audio('clickThru', 'assets/audio/ClickThruSound.mp3');
+        game.load.audio('negative', 'assets/audio/Negative.mp3');
     },
 
     create: function() {
@@ -280,6 +299,7 @@ level4Battle.prototype = {
         deathSound = game.add.audio('death');
         confirmationSound = game.add.audio('confirmation');
         clickThruSound = game.add.audio('clickThru');
+        negative = game.add.audio('negative');
 
         // Only four player units.
         kaitoObject = new PhysUnit('Kaito', 20, 10, 6, 200, 'player', false, 14, 25, 'atlas', 'Kaito01', 'kaito');
@@ -297,56 +317,88 @@ level4Battle.prototype = {
         zaizenObject = new PhysUnit('Zaizen', 25, 150, 5, 9, 'enemy', true, 14, 6, 'atlas', 'Zaizen01', 'zaizen');
         game.add.existing(zaizenObject);
 
-        kenta = new VirUnit('Kenta', 5, 'player', false, 2, 9, 'atlas', 'Kenta01', 'kenta');
+        kenta = new VirUnit('Kenta', 7, 'player', null, 9, 4, 'atlas', 'Kenta01', 'kenta');
         game.add.existing(kenta);
 
-        greenNode1 = new Node('Green1', 'green', yellowNode4, null, null, greenNode2, 2, 9, kenta); // Make sure to give the node the corresponding unit, if there is any!
-        greenNode2 = new Node('Green2', 'green', null, null, greenNode1, greenNode3, 7, 9, null);
-        greenNode1.east = greenNode2; // Note that since greenNode2 was undefined when I initialized greenNode1, I need to set its value to greenNode1.east again.
-        
-        greenNode3 = new Node('Green3', 'green', null, redNode2, greenNode2, blueNode1, 11, 9, null);
-        greenNode2.east = greenNode3;
-        
-        redNode1 = new Node('Red1', 'red', null, blueNode1, null, null, 16, 3, null);
-        blueNode1 = new Node('Blue1', 'blue', redNode1, yellowNode1, greenNode3, yellowNode3, 16, 9, null);
-        redNode1.south = blueNode1;
-        
-        redNode2 = new Node('Red2', 'red', greenNode3, null, null, null, 11, 13, null);
-        greenNode3.south = redNode2;
-        greenNode3.east = blueNode1;
-        
-        yellowNode1 = new Node('Yellow1', 'yellow', blueNode1, null, null, yellowNode2, 16, 27, null);
-        blueNode1.south = yellowNode1;
-        
-        yellowNode2 = new Node('Yellow2', 'yellow', greenNode4, null, yellowNode1, null, 27, 27, null);
-        yellowNode1.east = yellowNode2;
-        
-        greenNode4 = new Node('Green4', 'green', yellowNode3, yellowNode2, null, null, 27, 22, null);
-        yellowNode2.north = greenNode4;
-        
-        yellowNode3 = new Node('Yellow3', 'yellow', blueNode2, greenNode4, blueNode1, redNode3, 27, 8, null);
-        blueNode1.east = yellowNode3;
-        greenNode4.north = yellowNode3;
+        blueNode1 = new Node('Blue1', 'blue', null, redNode1, null, null, 9, 4, kenta);
 
-        redNode3 = new Node('Red3', 'red', null, null, yellowNode3, null, 29, 7, null);
-        yellowNode3.east = redNode3;
+        redNode1 = new Node('Red1', 'red', blueNode1, null, yellowNode1, greenNode1, 9, 7, null);
+        blueNode1.south = redNode1;
 
-        blueNode2 = new Node('Blue2', 'blue', null, yellowNode3, null, null, 27, 2, null);
-        yellowNode3.north = blueNode2;
+        greenNode1 = new Node('Green1', 'green', null, null, redNode1, greenNode2, 14, 7, null);
+        redNode1.east = greenNode1;
 
-        blueNode3 = new Node('Blue3', 'blue', null, null, redNode4, null, 13, 22, null);
+        greenNode2 = new Node('Green2', 'green', null, null, greenNode1, redNode2, 15, 7, null);
+        greenNode1.east = greenNode2;
 
-        redNode4 = new Node('Red4', 'red', null, null, greenNode5, blueNode3, 10, 23, null);
-        blueNode3.west = redNode4;
+        redNode2 = new Node('Red2', 'red', blueNode2, null, greenNode2, yellowNode2, 20, 7, null);
+        greenNode2.east = redNode2;
 
-        redNode5 = new Node('Red5', 'red', null, greenNode5, null, null, 3, 21, null); // This one is a bit tricky because of the node placements.
+        blueNode2 = new Node('Blue2', 'blue', null, redNode2, null, null, 20, 4, null);
+        redNode2.north = blueNode2;
 
-        greenNode5 = new Node('Green5', 'green', redNode5, null, null, redNode4, 3, 25, null);
-        redNode4.west = greenNode5;
-        redNode5.south = greenNode5;
+        yellowNode1 = new Node('Yellow1', 'yellow', null, redNode3, null, redNode1, 6, 7, null);
+        redNode1.west = yellowNode1;
 
-        yellowNode4 = new Node('Yellow4', 'yellow', null, greenNode1, null, null, 2, 4, null);
-        greenNode1.north = yellowNode4;
+        redNode3 = new Node('Red3', 'red', yellowNode1, yellowNode3, null, null, 6, 11, null);
+        yellowNode1.south = redNode3;
+
+        yellowNode3 = new Node('Yellow3', 'yellow', redNode3, redNode4, null, null, 6, 14, null);
+        redNode3.south = yellowNode3;
+
+        redNode4 = new Node('Red4', 'red', yellowNode3, null, null, yellowNode4, 6, 17, null);
+        yellowNode3.south = redNode4;
+
+        yellowNode2 = new Node('Yellow2', 'yellow', null, redNode5, redNode2, null, 23, 7, null);
+        redNode2.east = yellowNode2;
+
+        redNode5 = new Node('Red5', 'red', yellowNode2, yellowNode5, null, null, 23, 11, null);
+        yellowNode2.south = redNode5;
+
+        yellowNode5 = new Node('Yellow5', 'yellow', redNode5, redNode6, null, null, 23, 14, null);
+        redNode5.south = yellowNode5;
+
+        redNode6 = new Node('Red6', 'red', yellowNode5, null, yellowNode6, null, 23, 17, null);
+        yellowNode5.south = redNode6;
+
+        yellowNode4 = new Node('Yellow4', 'yellow', null, null, redNode4, redNode7, 9, 17, null);
+        redNode4.east = yellowNode4;
+
+        redNode7 = new Node('Red7', 'red', null, null, yellowNode4, yellowNode7, 13, 17, null);
+        yellowNode4.east = redNode7;
+
+        yellowNode7 = new Node('Yellow7', 'yellow', blueNode3, null, redNode7, yellowNode8, 14, 18, null);
+        redNode7.east = yellowNode7;
+
+        yellowNode6 = new Node('Yellow6', 'yellow', null, null, redNode8, redNode6, 20, 17, null);
+        redNode6.west = yellowNode6;
+
+        redNode8 = new Node('Red8', 'red', null, null, yellowNode8, yellowNode6, 16, 17, null);
+        yellowNode6.west = redNode8;
+
+        yellowNode8 = new Node('Yellow8', 'yellow', null, blueNode3, yellowNode7, redNode8, 16, 18, null);
+        yellowNode7.east = yellowNode8;
+        redNode8.west = yellowNode8;
+
+        blueNode3 = new Node('Blue3', 'blue', yellowNode8, yellowNode7, null, null, 15, 23, null);
+        yellowNode8.south = blueNode3;
+        yellowNode7.north = blueNode3;
+
+        greenNode3 = 0;
+        greenNode4 = 0;
+
+        blueNode4 = 0;
+        blueNode5 = 0;
+        blueNode6 = 0;
+        blueNode7 = 0;
+        blueNode8 = 0;
+        blueNode9 = 0;
+        blueNode10 = 0;
+        blueNode11 = 0;
+        blueNode12 = 0;
+        blueNode13 = 0;
+
+        redNode9 = 0;
     },
 
     update: function(){
