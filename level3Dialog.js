@@ -1,3 +1,5 @@
+// Code for level 3 dialog.
+
 var lineVar = 0;
 var textBox;
 var leftChar;
@@ -23,7 +25,7 @@ var hayatoY = 60;
 var kazuhitoX = 450;
 var kazuhitoY = 50;
 
-var level3Dialog = function(game) {}; // Scene 1, Kaito and Atsumi go on a walk in the park.
+var level3Dialog = function(game) {}; // Scene 3, Hayato joins Kaito's crew, and they confront Kazuhito, Hayato's father.
 level3Dialog.prototype = {
     preload: function() {
         game.load.image('medieval', 'assets/img/medieval.jpg');
