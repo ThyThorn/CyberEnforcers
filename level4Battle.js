@@ -297,30 +297,30 @@ level4Battle.prototype = {
         blueNodeSound = game.add.audio('blueNode');
         greenNodeSound = game.add.audio('greenNode');
         deathSound = game.add.audio('death');
-        confirmationSound = game.add.audio('confirmation');
+        confirmation = game.add.audio('confirmation');
         clickThruSound = game.add.audio('clickThru');
         negative = game.add.audio('negative');
 
         // Only four player units.
-        kaitoObject = new PhysUnit('Kaito', 20, 10, 6, 200, 'player', false, 14, 25, 'atlas', 'Kaito01', 'kaito');
+        kaitoObject = new PhysUnit('Kaito', 40, 10, 10, 5, 'player', false, 17, 6, 'atlas', 'Kaito01', 'kaito');
         game.add.existing(kaitoObject);
-        atsumiObject = new PhysUnit('Atsumi', 25, 180, 5, 200, 'player', false, 15, 25, 'atlas', 'Atsumi01', 'atsumi');
+        atsumiObject = new PhysUnit('Atsumi', 50, 8, 8, 6, 'player', false, 6, 17, 'atlas', 'Atsumi01', 'atsumi');
         game.add.existing(atsumiObject);
-        junpeiObject = new PhysUnit('Junpei', 15, 200, 3, 70, 'player', false, 15, 24, 'atlas', 'Junpei01', 'junpei');
+        junpeiObject = new PhysUnit('Junpei', 35, 12, 7, 5, 'player', false, 23, 17, 'atlas', 'Junpei01', 'junpei');
         game.add.existing(junpeiObject);
-        hayatoObject = new PhysUnit('Hayato', 25, 150, 5, 9, 'player', false, 14, 24, 'atlas', 'Hayato01', 'hayato');
+        hayatoObject = new PhysUnit('Hayato', 40, 8, 12, 4, 'player', false, 12, 6, 'atlas', 'Hayato01', 'hayato');
         game.add.existing(hayatoObject);
-
+                 
         // Only two enemies in the Physical World. Both should be somewhat tough to beat with only Physical World units.
-        kimuraObject = new PhysUnit('Kimura', 25, 150, 5, 9, 'enemy', true, 15, 6, 'atlas', 'Erika01', 'kimura');
+        kimuraObject = new PhysUnit('Kimura', 80, 25, 2, 6, 'enemy', true, 24, 7, 'atlas', 'Erika01', 'kimura');
         game.add.existing(kimuraObject);
-        zaizenObject = new PhysUnit('Zaizen', 25, 150, 5, 9, 'enemy', true, 14, 6, 'atlas', 'Zaizen01', 'zaizen');
+        zaizenObject = new PhysUnit('Zaizen', 100, 20, 5, 4, 'enemy', true, 6, 7, 'atlas', 'Zaizen01', 'zaizen');
         game.add.existing(zaizenObject);
 
-        kenta = new VirUnit('Kenta', 7, 'player', null, 9, 4, 'atlas', 'Kenta01', 'kenta');
+        kenta = new VirUnit('Kenta', 7, 'player', null,15, 23, 'atlas', 'Kenta01', 'kenta');
         game.add.existing(kenta);
 
-        blueNode1 = new Node('Blue1', 'blue', null, redNode1, null, null, 9, 4, kenta);
+        blueNode1 = new Node('Blue1', 'blue', null, redNode1, null, null, 9, 4, null);
 
         redNode1 = new Node('Red1', 'red', blueNode1, null, yellowNode1, greenNode1, 9, 7, null);
         blueNode1.south = redNode1;
@@ -380,7 +380,7 @@ level4Battle.prototype = {
         yellowNode7.east = yellowNode8;
         redNode8.west = yellowNode8;
 
-        blueNode3 = new Node('Blue3', 'blue', yellowNode8, yellowNode7, null, null, 15, 23, null);
+        blueNode3 = new Node('Blue3', 'blue', yellowNode8, yellowNode7, null, null, 15, 23, kenta);
         yellowNode8.south = blueNode3;
         yellowNode7.north = blueNode3;
 
