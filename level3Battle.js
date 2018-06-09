@@ -293,22 +293,25 @@ level3Battle.prototype = {
         clickThruSound = game.add.audio('clickThru');
 
         // Only four player units.
-        kaitoObject = new PhysUnit('Kaito', 20, 100, 6, 200, 'player', false, 8, 11, 'atlas', 'Kaito01', 'kaito');
+        kaitoObject = new PhysUnit('Kaito', 40, 10, 10, 5, 'player', false, 12, 5, 'atlas', 'Kaito01', 'kaito');
         game.add.existing(kaitoObject);
-        atsumiObject = new PhysUnit('Atsumi', 25, 180, 5, 200, 'player', false, 13, 10, 'atlas', 'Atsumi01', 'atsumi');
+        atsumiObject = new PhysUnit('Atsumi', 50, 8, 8, 6, 'player', false, 5, 3, 'atlas', 'Atsumi01', 'atsumi');
         game.add.existing(atsumiObject);
-        junpeiObject = new PhysUnit('Junpei', 15, 200, 3, 70, 'player', false, 14, 12, 'atlas', 'Junpei01', 'junpei');
+        junpeiObject = new PhysUnit('Junpei', 35, 12, 7, 5, 'player', false, 11, 3, 'atlas', 'Junpei01', 'junpei');
         game.add.existing(junpeiObject);
-        hayatoObject = new PhysUnit('Hayato', 25, 150, 5, 9, 'player', false, 12, 17, 'atlas', 'Hayato01', 'hayato');
+        hayatoObject = new PhysUnit('Hayato', 40, 8, 12, 4, 'player', false, 5, 5, 'atlas', 'Hayato01', 'hayato');
         game.add.existing(hayatoObject);
 
         // One 'boss' characters and four to five viruses as his minions.
-        kazuhitoObject = new PhysUnit('Kazuhito', 25, 150, 5, 9, 'enemy', true, 20, 23, 'atlas', 'Kazuhito01', 'kazuhito');
+        kazuhitoObject = new PhysUnit('Kazuhito', 60, 17, 3, 5, 'enemy', true, 20, 23, 'atlas', 'Kazuhito01', 'kazuhito');
         game.add.existing(kazuhitoObject);
-        virusObject1 = new PhysUnit('Virus', 25, 150, 5, 9, 'enemy', true, 20, 15, 'atlas', 'EnemyRed01');
+        virusObject1 = new PhysUnit('Virus', 20, 20, 3, 5, 'enemy', true, 20, 15, 'atlas', 'EnemyRed01');
         game.add.existing(virusObject1);
-        virusObject2 = new PhysUnit('Virus', 25, 150, 5, 9, 'enemy', true, 7, 24, 'atlas', 'EnemyGreen01');
+        virusObject2 = new PhysUnit('Virus', 20, 15, 2, 7, 'enemy', true, 23, 14, 'atlas', 'EnemyGreen01');
         game.add.existing(virusObject2);
+	virusObject3 = new PhysUnit('Virus', 20, 20, 3, 5, 'enemy', true, 3, 20, 'atlas', 'EnemyRed01');
+        game.add.existing(virusObject3);
+        virusObject4 = new PhysUnit('Virus', 20, 15, 2, 7, 'enemy', true, 7, 23, 'atlas', 'EnemyGreen01');
 
         kenta = new VirUnit('Kenta', 5, 'player', false, 2, 9, 'atlas', 'Kenta01', 'kenta');
         game.add.existing(kenta);
