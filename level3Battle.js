@@ -1,5 +1,6 @@
-var gameLevel;
+// Code for level 3 battle. Note that it is mostly the same as Level 1's code, the differences being in the preload and create functions.
 
+var gameLevel;
 var virLevel;
 
 var background;
@@ -243,6 +244,7 @@ level3Battle.prototype = {
         backgroundVir.inputEnabled = true;
         backgroundVir.events.onInputDown.add(VirUnit.prototype.chooseVirUnit, this);
 
+        // Add in the UI.
         game.add.image(32*16,0,'bar');
         game.add.image(32*16,31*16,'bar');
         game.add.image(0,0,'borderL');
@@ -275,6 +277,7 @@ level3Battle.prototype = {
         turnEndButton = game.add.button(shiftPhysFactor + mapWidth + 16, shiftPhysFactor, 'turnEndButton', endTurn, this);
         turnEndButton.onInputDown.add(endTurnDown, this);
 
+        // Add in the sounds.
         battleThemePlayer = game.add.audio('battleThemePlayer');
         battleThemePlayer.loop = true;
         battleThemePlayer.volume = 0.6;
@@ -312,6 +315,7 @@ level3Battle.prototype = {
         game.add.existing(virusObject3);
         virusObject4 = new PhysUnit('Virus', 20, 15, 2, 7, 'enemy', true, 7, 23, 'atlas', 'EnemyGreen01');
 
+        // Add in Kenta. This time, there are no Virtual World enemies.
         kenta = new VirUnit('Kenta', 5, 'player', false, 3, 2, 'atlas', 'Kenta01', 'kenta');
         game.add.existing(kenta);
 
@@ -407,6 +411,7 @@ level3Battle.prototype = {
         redNode9.east = redNode8;
         redNode9.south = blueNode13;
         
+        // Initialize unused nodes to 0, just to be safe.
         yellowNode1 = 0;
         yellowNode2 = 0;
         yellowNode3 = 0;
