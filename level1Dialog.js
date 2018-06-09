@@ -1,4 +1,4 @@
-// Frame taken from plemuzic of opengameart.org.
+// Code for level 1 dialog.
 
 var lineVar = 0;
 var textBox;
@@ -10,7 +10,7 @@ var thinking;
 var crisis;
 var normal;
 var scene = new Array();
-var kaitoX = 20;
+var kaitoX = 20; // Coordinates of each character sprite on the screen.
 var kaitoY = 80;
 var atsumiX = 450;
 var atsumiY = 40;
@@ -44,7 +44,7 @@ prolog.prototype = {
         line = new dialogLine("???: Nearly everything's now controlled online. Microwaves, refrigerators, cars...", '', '', 0, 0, 0, 0, 0, 0, scene, '', '', false, false);
         line = new dialogLine("???: Amazing... and wretched. Evil always is, and so it now dwells in\nthe Virtual World as well. And those horrid computer viruses are still at large.",
             '', '', 0, 0, 0, 0, 0, 0, scene, '', '', false, false);
-        line = new dialogLine("???: Something like that must be controlled.", '', '', 0, 0, 0, 0, 0, 0, scene, '', '', false, false);
+        line = new dialogLine("???: Even after all those years, that incident still lurks in my mind.\nMy great error requires great control to fix it.", '', '', 0, 0, 0, 0, 0, 0, scene, '', '', false, false);
         line = new dialogLine("???: All my preparations shall not be in vain. And the naive ones in the agency\nwon't even know about it.", '', '', 0, 0, 0, 0, 0, 0, scene, '', '', false, false);
         dialogSystem0();
     },
@@ -71,6 +71,7 @@ level1Dialog.prototype = {
         game.load.image('kenta', 'assets/img/kenta.png');
         game.load.image('atsumi', 'assets/img/atsumi.png');
         game.load.image('junpei', 'assets/img/junpei.png');
+        game.load.audio('normal', 'assets/audio/GUI Sound Effects_031.mp3');
         game.load.audio('introTheme', 'assets/audio/1. The Market.mp3');
         game.load.audio('thinking', 'assets/audio/S31-Let the Games Begin.mp3');
         game.load.audio('crisis', 'assets/audio/S31-Winning the Race.mp3');
@@ -84,6 +85,7 @@ level1Dialog.prototype = {
         var introTheme = game.add.audio('introTheme'); 
         introTheme.loop = true;
         introTheme.play();
+        normal = game.add.audio('normal');
         crisis = game.add.audio('crisis');
         crisis.loop = true;
 
