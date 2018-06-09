@@ -1,5 +1,6 @@
-var gameLevel;
+// Code for level 2 battle. Note that most of the code is the same as Level 1's, the differences being in the preload and create functions.
 
+var gameLevel;
 var virLevel;
 
 var background;
@@ -234,6 +235,7 @@ level2Battle.prototype = {
         backgroundVir.inputEnabled = true;
         backgroundVir.events.onInputDown.add(VirUnit.prototype.chooseVirUnit, this);
 
+        // Add in the UI.
         game.add.image(32*16,0,'bar');
         game.add.image(32*16,31*16,'bar');
         game.add.image(0,0,'borderL');
@@ -266,6 +268,7 @@ level2Battle.prototype = {
         turnEndButton = game.add.button(shiftPhysFactor + mapWidth + 16, shiftPhysFactor, 'turnEndButton', endTurn, this);
         turnEndButton.onInputDown.add(endTurnDown, this);
 
+        // Add in the sounds.
         battleThemePlayer = game.add.audio('battleThemePlayer');
         battleThemePlayer.loop = true;
         battleThemePlayer.volume = 0.6;
@@ -298,6 +301,7 @@ level2Battle.prototype = {
         virusObject2 = new PhysUnit('Virus', 20, 15, 2, 7, 'enemy', true, 10, 10, 'atlas', 'EnemyGreen01');
         game.add.existing(virusObject2);
 
+        // Add the Virtual World units.
         kenta = new VirUnit('Kenta', 5, 'player', false, 2, 14, 'atlas', 'Kenta01', 'kenta');
         game.add.existing(kenta);
 
@@ -307,6 +311,7 @@ level2Battle.prototype = {
         virEnemy2 = new VirUnit('Virus', 1, 'enemy', true, 26, 11, 'atlas', 'EnemyBlue01');
         game.add.existing(virEnemy2);
 
+        // Add the Virtual World nodes.
         blueNode1 = new Node('Blue1', 'blue', greenNode1, null, null, null, 2, 22, null);
         greenNode1 = new Node('Green1', 'green', yellowNode1, blueNode1, null, null, 2, 14, kenta);
         blueNode1.north = greenNode1;
@@ -407,7 +412,7 @@ level2Battle.prototype = {
 }
 
 function setInvisible() {
-    for(var i = 0; i < playerTeam.length; i++) {
+    for(var i = 0; i < playerTeam.length; i++) { // 
         playerTeam[i].pathTiles.visible = false;
         playerTeam[i].UIdefenseT.visible = false;
         playerTeam[i].UIattackT.visible = false;
