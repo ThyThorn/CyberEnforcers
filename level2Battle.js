@@ -412,7 +412,7 @@ level2Battle.prototype = {
 }
 
 function setInvisible() {
-    for(var i = 0; i < playerTeam.length; i++) { // 
+    for(var i = 0; i < playerTeam.length; i++) {
         playerTeam[i].pathTiles.visible = false;
         playerTeam[i].UIdefenseT.visible = false;
         playerTeam[i].UIattackT.visible = false;
