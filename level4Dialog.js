@@ -1,3 +1,5 @@
+// Code for level 4 dialog.
+
 var lineVar = 0;
 var textBox;
 var leftChar;
@@ -25,7 +27,7 @@ var kazuhitoY = 50;
 var zaizenX = 450;
 var zaizenY = 40;
 
-var level4Dialog = function(game) {}; // Scene 1, Kaito and Atsumi go on a walk in the park.
+var level4Dialog = function(game) {}; // Scene 4, Kaito and his friends confront the mastermind of the case.
 level4Dialog.prototype = {
     preload: function() {
         game.load.image('mansion', 'assets/img/mansion.jpg');
@@ -88,7 +90,7 @@ level4Dialog.prototype = {
             'kaito', 'kazuhito', kaitoX, kaitoY, kazuhitoX, kazuhitoY, 0.75, 0.8, scene, '', '', true, false);
         line = new dialogLine("Kaito: What were you talking about when you, well, freaked out from seeing Kenta?",
             'kaito', 'kazuhito', kaitoX, kaitoY, kazuhitoX, kazuhitoY, 0.75, 0.8, scene, '', '', true, false);
-        line = new dialogLine("Kaito: You spoke of a project twenty years ago. Is that related to the project\nyou sabotaged fifteen years ago.",
+        line = new dialogLine("Kaito: You spoke of a project twenty years ago. Is that related to the project\nyou sabotaged fifteen years ago?",
             'kaito', 'kazuhito', kaitoX, kaitoY, kazuhitoX, kazuhitoY, 0.75, 0.8, scene, '', '', true, false);
         line = new dialogLine("Kazuhito: Hahaha... You beat me fair and square. Fine, I'll answer you.",
             'kaito', 'kazuhito', kaitoX, kaitoY, kazuhitoX, kazuhitoY, 0.75, 0.8, scene, '', '', false, true);
@@ -238,13 +240,13 @@ level4Dialog.prototype = {
         line = new dialogLine("Kaito: It's good seeing you as well, sir, given that we want to ask you some questions.",
             'kaito', 'zaizen', kaitoX, kaitoY, zaizenX, zaizenY, 0.75, 0.8, scene, '', '', true, false);
 
-        line = new dialogLine("Zaizen: I have time for however many you'd like to ask. An old man like me has\nlittle much to occupy himself with nowadays.",
+        line = new dialogLine("Zaizen: I have time for however many you'd like to ask. An old man like me has\nlittle to occupy himself with nowadays.",
             'kaito', 'zaizen', kaitoX, kaitoY, zaizenX, zaizenY, 0.75, 0.8, scene, '', '', false, true);
         line = new dialogLine("Hayato: A-Ah... You're the one who worked with Father.",
             'hayato', 'zaizen', kaitoX, hayatoY, zaizenX, zaizenY, 0.75, 0.8, scene, '', '', true, false);
         line = new dialogLine("Zaizen: Hahaha... Kazuhito's son is here as well, hmm? I can see the nature of\nyour questions already.",
             'hayato', 'zaizen', kaitoX, hayatoY, zaizenX, zaizenY, 0.75, 0.8, scene, '', '', false, true);
-        line = new dialogLine("Kaito: Sir... Hayato tells me his father claims to have been framed by you for\nthe project's sabotage fifteen years ago.",
+        line = new dialogLine("Kaito: Sir... Hayato tells me his father claims to have been framed by you for\nProject Soldier's sabotage fifteen years ago.",
             'kaito', 'zaizen', kaitoX, kaitoY, zaizenX, zaizenY, 0.75, 0.8, scene, '', '', true, false);
         line = new dialogLine("Kaito: And the similarities between the virus in the project and the viruses\nthat attacked a few days ago are there.",
             'kaito', 'zaizen', kaitoX, kaitoY, zaizenX, zaizenY, 0.75, 0.8, scene, '', '', true, false);
@@ -264,7 +266,7 @@ level4Dialog.prototype = {
             'kaito', 'zaizen', kaitoX, kaitoY, zaizenX, zaizenY, 0.75, 0.8, scene, '', '', false, true);
         line = new dialogLine("Kenta: Director Zaizen? What's going on here?",
             'kenta', 'zaizen', kaitoX, kentaY, zaizenX, zaizenY, 1, 0.8, scene, '', '', true, false);
-        line = new dialogLine("Zaizen: Kenta... From the very moment you opened your eyes in the Virtual World,\nyou've been told \'I am an artificial intelligence.'",
+        line = new dialogLine("Zaizen: Kenta... From the very moment you opened your eyes in the Virtual World,\nyou've thought that you are an artificial intelligence.'",
             'kenta', 'zaizen', kaitoX, kentaY, zaizenX, zaizenY, 1, 0.8, scene, '', '', false, true);
         line = new dialogLine("Zaizen: You certainly are the most human of the AIs of the CERC, are you not?",
             'kenta', 'zaizen', kaitoX, kentaY, zaizenX, zaizenY, 1, 0.8, scene, '', '', false, true);
@@ -279,7 +281,7 @@ level4Dialog.prototype = {
             'kenta', 'zaizen', kaitoX, kentaY, zaizenX, zaizenY, 1, 0.8, scene, '', '', true, false);
         line = new dialogLine("Kenta: I remember being told that everything would take only a short while.\nEverything looked so clean and spotless.",
             'kenta', 'zaizen', kaitoX, kentaY, zaizenX, zaizenY, 1, 0.8, scene, '', '', true, false);
-        line = new dialogLine("Kenta: The men told me to sit on this chair while they put something on my body.",
+        line = new dialogLine("Kenta: The men told me to sit on a weird chair while they put something on me.",
             'kenta', 'zaizen', kaitoX, kentaY, zaizenX, zaizenY, 1, 0.8, scene, '', '', true, false);
 
         line = new dialogLine("Kenta: But... everything went even whiter, like I fell asleep.",
@@ -308,7 +310,7 @@ level4Dialog.prototype = {
             'atsumi', 'zaizen', kaitoX, atsumiY, zaizenX, zaizenY, 0.75, 0.8, scene, '', '', false, true);
         line = new dialogLine("???: And it was thanks to us that it worked perfectly.",
             'atsumi', 'zaizen', kaitoX, atsumiY, zaizenX, zaizenY, 0.75, 0.8, scene, '', '', false, false);
-        line = new dialogLine("Junpei: Miss Kimura! You're a conspirator as well?!",
+        line = new dialogLine("Junpei: Miss Erika Kimura! You're a conspirator as well?!",
             'junpei', 'kimura', kaitoX, junpeiY, kimuraX, kimuraY, 0.75, 0.8, scene, '', '', true, false);
         line = new dialogLine("Kimura: But of course. Most of the top brass support his plan for gaining\nmore power over our two worlds.",
             'junpei', 'kimura', kaitoX, junpeiY, kimuraX, kimuraY, 0.75, 0.8, scene, '', '', false, true);
@@ -352,7 +354,7 @@ level4Dialog.prototype = {
             'kaito', 'zaizen', kaitoX, kaitoY, zaizenX, zaizenY, 0.75, 0.8, scene, '', '', false, true);
         line = new dialogLine("Zaizen: I'll show you that even without the help of viruses, I still have\nthe upper hand!",
             'kaito', 'zaizen', kaitoX, kaitoY, zaizenX, zaizenY, 0.75, 0.8, scene, '', '', false, true);
-        
+
         dialogSystem4();
     },
 }
