@@ -21,31 +21,31 @@ function dialogLine(line,char1,char2,char1x, char1y, char2x, char2y, scale1, sca
 dialogLine.prototype.constructor = dialogLine;
 
 dialogLine.prototype.execute = function() {
-	if(this.line != '') {
+	if(this.line != '') { // If this is not a blank line, then add a text box.
 		textBox = game.add.sprite(0, game.world.height - 130, 'textBox');
         textBox.width = game.world.width;
         gameLine = game.add.text(23,game.world.height - 115, this.line, {font: '18.4pt Georgia', fill: '#000' }); 
 	}
-	if(leftChar != null) {
+	if(leftChar != null) { // Get rid of the previous character on the left first.
         leftChar.kill();
     }
-	leftChar = game.add.sprite(this.char1x, this.char1y, this.char1);
+	leftChar = game.add.sprite(this.char1x, this.char1y, this.char1); // Add in the new character on the left.
     leftChar.scale.setTo(this.scale1, this.scale1);
-    if(rightChar != null) {
+    if(rightChar != null) { // Then get rid of the right one.
         rightChar.kill();
     }
-    rightChar = game.add.sprite(this.char2x, this.char2y, this.char2);
+    rightChar = game.add.sprite(this.char2x, this.char2y, this.char2); // Add in the new character on the right.
     rightChar.scale.setTo(this.scale2, this.scale2);
     textBox.bringToTop();
     gameLine.bringToTop();
     lineVar += 1;
-    if(this.soundEffect == '') {
+    if(this.soundEffect == '') { // If no special sound effect is put in, it plays the normal sound instead.
         normal.play();
     }
-    if(this.specialEffect == 'flash') {
+    if(this.specialEffect == 'flash') { // If a flash is specified, the screen will briefly flash.
         game.camera.flash(0xffffff, 500);
     }
-    if(this.leftSpeaker == true && this.rightSpeaker == false) {
+    if(this.leftSpeaker == true && this.rightSpeaker == false) { // If you want, you can make a character's sprite be dimmed, to show that he isn't speaking.
     	rightChar.tint = 0x696969;
     }
     else if(this.rightSpeaker == true && this.leftSpeaker == false) {
