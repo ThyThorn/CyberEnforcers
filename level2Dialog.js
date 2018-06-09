@@ -1,3 +1,5 @@
+// Code for level 2 dialog.
+
 var lineVar = 0;
 var textBox;
 var leftChar;
@@ -21,7 +23,7 @@ var kimuraY = 30;
 var hayatoX = 450;
 var hayatoY = 60;
 
-var level2Dialog = function(game) {}; // Scene 1, Kaito and Atsumi go on a walk in the park.
+var level2Dialog = function(game) {}; // Scene 2, Kaito and his squad go to the Knights' Town and fight Hayato.
 level2Dialog.prototype = {
     preload: function() {
         game.load.image('urban', 'assets/img/urban.jpg');
