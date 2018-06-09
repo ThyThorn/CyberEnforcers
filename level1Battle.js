@@ -1,5 +1,6 @@
-var gameLevel;
+// Code for level 1.
 
+var gameLevel;
 var virLevel;
 
 var background;
@@ -231,6 +232,7 @@ level1Battle.prototype = {
         backgroundVir.inputEnabled = true;
         backgroundVir.events.onInputDown.add(VirUnit.prototype.chooseVirUnit, this);
 
+        // Add in the UI.
         game.add.image(32*16,0,'bar');
         game.add.image(32*16,31*16,'bar');
         game.add.image(0,0,'borderL');
@@ -263,6 +265,7 @@ level1Battle.prototype = {
         turnEndButton = game.add.button(shiftPhysFactor + mapWidth + 16, shiftPhysFactor, 'turnEndButton', endTurn, this);
         turnEndButton.onInputDown.add(endTurnDown, this);
 
+        // Add in the sounds.
         battleThemePlayer = game.add.audio('battleThemePlayer');
         battleThemePlayer.loop = true;
         battleThemePlayer.volume = 0.1;
@@ -290,11 +293,12 @@ level1Battle.prototype = {
         // Three viruses as enemies.
         virusObject = new PhysUnit('Virus', 20, 15, 5, 4, 'enemy', true, 19, 9, 'atlas', 'EnemyRed01');
         game.add.existing(virusObject);
-        virusObject1 = new PhysUnit('Virus', 20, 15, 5, 4, 'enemy', true, 19,22, 'atlas', 'EnemyRed01');
+        virusObject1 = new PhysUnit('Virus', 20, 15, 5, 4, 'enemy', true, 19, 22, 'atlas', 'EnemyRed01');
         game.add.existing(virusObject1);
         virusObject2 = new PhysUnit('Virus', 25, 15, 3, 9, 'enemy', true, 23, 16, 'atlas', 'EnemyGreen01');
         game.add.existing(virusObject2);
 
+        // Add the Virtual World units.
         kenta = new VirUnit('Kenta', 5, 'player', false, 2, 9, 'atlas', 'Kenta01', 'kenta');
         game.add.existing(kenta);
 
@@ -303,6 +307,7 @@ level1Battle.prototype = {
         virEnemy2 = new VirUnit('Virus', 1, 'enemy', true, 11, 13, 'atlas', 'EnemyBlue01');
         game.add.existing(virEnemy2);
 
+        // Add the Virtual World nodes.
         greenNode1 = new Node('Green1', 'green', yellowNode4, null, null, greenNode2, 2, 9, kenta); // Make sure to give the node the corresponding unit, if there is any!
         greenNode2 = new Node('Green2', 'green', null, null, greenNode1, greenNode3, 7, 9, null);
         greenNode1.east = greenNode2; // Note that since greenNode2 was undefined when I initialized greenNode1, I need to set its value to greenNode1.east again.
@@ -354,7 +359,7 @@ level1Battle.prototype = {
 
     update: function(){
         if(playerTeam.length == 0 && stopAI == false) {
-            stopAI = true;
+            stopAI = true; // Stop this from playing the function all the time once player team length reaches 0.
             game.sound.stopAll();
             background.inputEnabled = false;
             backgroundVir.inputEnabled = false;
@@ -373,7 +378,7 @@ level1Battle.prototype = {
             playerTeam.length = 0;
             virViruses.length = 0;
         }
-        else if(turnEndEnsure == false && turnNumber % 2 == 1 & stopAI == false) {
+        else if(turnEndEnsure == false && turnNumber % 2 == 1 & stopAI == false) { // This is always checking whether all player units have ended their turn.
             var updateCounter = 0;
             for(var i = 0; i < playerTeam.length; i++) {
                 if(playerTeam[i].turnEnd == true) {
@@ -381,15 +386,15 @@ level1Battle.prototype = {
                 }
             }
             if(updateCounter == playerTeam.length) {
-                updateCounter = 0;
-                turnEndEnsure = true;
+                updateCounter = 0; 
+                turnEndEnsure = true; // Stop this from playing this function all the time.
                 PhysUnit.prototype.turnEnd();
             }
         }
     },
 
     loseBattle: function() {
-        transposed = false;
+        transposed = false; 
         game.scale.setGameSize(960, 600);
         game.state.start('gameOver');
     },
@@ -402,14 +407,14 @@ level1Battle.prototype = {
 }
 
 function setInvisible() {
-    for(var i = 0; i < playerTeam.length; i++) {
+    for(var i = 0; i < playerTeam.length; i++) { // Set all UI information of players and enemies invisible.
         playerTeam[i].pathTiles.visible = false;
         playerTeam[i].UIdefenseT.visible = false;
         playerTeam[i].UIattackT.visible = false;
         playerTeam[i].UImovecountT.visible = false;
         playerTeam[i].UIhealthT.visible = false;
-        if(playerTeam[i].tint != 0x696969) {
-            playerTeam[i].tint = 0xffffff;
+        if(playerTeam[i].tint != 0x696969) { // Units with a black sprite, however, should not go back to their normal color, however.
+            playerTeam[i].tint = 0xffffff; // since it indicates that the unit has ended its turn.
         }
         if(playerTeam[i].portrait != null) {
             playerTeam[i].portrait.visible = false;
@@ -431,14 +436,14 @@ function setInvisible() {
     }
 }
 
-function disableButtons() {
+function disableButtons() { // Make sure that no button can be used.
     moveButton.input.enabled = false;
     attackButton.input.enabled = false;
     hackNodeButton.input.enabled = false;
     turnEndButton.input.enabled = false;
 }
 
-function enableButtons() {
+function enableButtons() { // Make sure that any button can be used.
     moveButton.input.enabled = true;
     moveButton.loadTexture('moveButton');
     attackButton.input.enabled = true;
@@ -449,7 +454,7 @@ function enableButtons() {
     turnEndButton.loadTexture('turnEndButton');
 }
 
-function moveUnit() {
+function moveUnit() { 
     setInvisible();
     movePressed = true;
     attackPressed = false;
