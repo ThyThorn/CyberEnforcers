@@ -166,7 +166,7 @@ VirUnit.prototype.chooseVirUnit = function() {
 }
 
 VirUnit.prototype.virAI = function(unit) {
-    if(stopAI == true) {
+    if(stopAI == true) { // If the battle has ended, escape immediately.
         return;
     }
     unit.tint = 0xFFDF00;
@@ -175,8 +175,8 @@ VirUnit.prototype.virAI = function(unit) {
     virTimer.start();
 }
 
-VirUnit.prototype.moveVir = function(unit) {
-    var chooser = game.rnd.integerInRange(1, 4);
+VirUnit.prototype.moveVir = function(unit) { // Move the Virtual World enemy.
+    var chooser = game.rnd.integerInRange(1, 4); // A random direction is picked, and the unit checks whether it can move in that direction.
     var oldX = unit.xPlace;
     var oldY = unit.yPlace;
     var newX = unit.xPlace;
@@ -186,7 +186,7 @@ VirUnit.prototype.moveVir = function(unit) {
             if(virLevel[unit.xPlace][unit.yPlace].north.unit == null) {
                 unit.movesDone += 1;
                 confirmation.play();
-                oldX = virLevel[unit.xPlace][unit.yPlace].xPlace;
+                oldX = virLevel[unit.xPlace][unit.yPlace].xPlace; // Moving the sprite and the unit.
                 oldY = virLevel[unit.xPlace][unit.yPlace].yPlace;
                 newX = virLevel[unit.xPlace][unit.yPlace].north.xPlace;
                 newY = virLevel[unit.xPlace][unit.yPlace].north.yPlace;
@@ -253,16 +253,16 @@ VirUnit.prototype.moveVir = function(unit) {
             }
         }
     }
-    if((oldX == newX) && (oldY == newY)) {
-        if(virCounter < 4) {
+    if((oldX == newX) && (oldY == newY)) { // If the unit is in the same place as before...
+        if(virCounter < 4) { // It can try again a few more times.
             virCounter += 1;
             virTimer.add(2000, VirUnit.prototype.moveVir, this, unit); 
         }
-        else {
+        else { // If it still hasn't moved, activate the node already.
             virTimer.add(1000, VirUnit.prototype.whichNode, this, unit);
         }
     }
-    else {
+    else { // If it has moved, activate the new node already.
         virTimer.add(1000, VirUnit.prototype.whichNode, this, unit);
     }
 }
@@ -279,10 +279,6 @@ VirUnit.prototype.whichNode = function(unit) {
     else if(virLevel[unit.xPlace][unit.yPlace].effect == 'red') {
         virLevel[unit.xPlace][unit.yPlace].whichKind();
     }
-    /*else if(virLevel[unit.xPlace][unit.yPlace].effect == 'yellow') {
-        for(var i = 0; i < playerTeam.length; i++) {
-        }
-    }*/
     if(stopAI == true) {
         return;
     }
@@ -301,7 +297,7 @@ VirUnit.prototype.virEnd = function() {
     kenta.tint = 0xffffff;
     virCounter = 0;
     aiIndex += 1;
-    if(aiIndex == virViruses.length) {
+    if(aiIndex == virViruses.length) { // Once all Virtual World enemies have gone, go back to the player's turn.
         for(var i = 0; i < playerTeam.length; i++) {
             playerTeam[i].turnEnd = false;
         }
