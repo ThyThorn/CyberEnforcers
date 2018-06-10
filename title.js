@@ -24,19 +24,6 @@ title.prototype = {
         titleMusic.loop = true; // Let title theme loop.
         titleMusic.play(); // Start playing the theme.
     },
-
-    update: function() {
-        if(game.input.keyboard.isDown(Phaser.Keyboard.UP)) { // This will be deleted later.
-            game.sound.stopAll(); // All sounds from title state should not be in the next state.
-            confirmation.play();
-            game.camera.fade(0x000000); // Make the screen fade to black.
-            game.camera.onFadeComplete.add(this.battle1, this); // Once the screen fades to black, do this function.
-        }
-    },
-
-    battle1: function() {
-        game.state.start("gameOver");
-    },
 }
 
 startGame = function() {
