@@ -1,5 +1,6 @@
-var gameLevel;
+// Code for level 4 battle. Note that this is mostly the same as Level 1's code, the differences being in the preload and create functions.
 
+var gameLevel;
 var virLevel;
 
 var background;
@@ -12,7 +13,6 @@ var virusObject;
 var playerTeam = new Array();
 var enemyTeam = new Array();
 var virViruses = new Array();
-var nodes = new Array(); // Not likely to be used, but it could be helpful later.
 var levelWidth;
 var levelHeight;
 var mapWidth;
@@ -253,6 +253,7 @@ level4Battle.prototype = {
         backgroundVir.inputEnabled = true;
         backgroundVir.events.onInputDown.add(VirUnit.prototype.chooseVirUnit, this);
 
+        // Add in the UI.
         game.add.image(32*16,0,'bar');
         game.add.image(32*16,31*16,'bar');
         game.add.image(0,0,'borderL');
@@ -285,6 +286,7 @@ level4Battle.prototype = {
         turnEndButton = game.add.button(shiftPhysFactor + mapWidth + 16, shiftPhysFactor, 'turnEndButton', endTurn, this);
         turnEndButton.onInputDown.add(endTurnDown, this);
 
+        // Add in the sounds.
         battleThemePlayer = game.add.audio('battleThemePlayer');
         battleThemePlayer.loop = true;
         battleThemePlayer.volume = 0.6;
@@ -317,9 +319,11 @@ level4Battle.prototype = {
         zaizenObject = new PhysUnit('Zaizen', 100, 20, 5, 4, 'enemy', true, 6, 7, 'atlas', 'Zaizen01', 'zaizen');
         game.add.existing(zaizenObject);
 
+        // Only Kenta in the Virtual World.
         kenta = new VirUnit('Kenta', 7, 'player', null,15, 23, 'atlas', 'Kenta01', 'kenta');
         game.add.existing(kenta);
 
+        // Add in the Virtual World nodes.
         blueNode1 = new Node('Blue1', 'blue', null, redNode1, null, null, 9, 4, null);
 
         redNode1 = new Node('Red1', 'red', blueNode1, null, yellowNode1, greenNode1, 9, 7, null);
@@ -384,6 +388,7 @@ level4Battle.prototype = {
         yellowNode8.south = blueNode3;
         yellowNode7.north = blueNode3;
 
+        // Initialize all unused nodes to 0, just to be safe.
         greenNode3 = 0;
         greenNode4 = 0;
 
