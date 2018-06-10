@@ -1,3 +1,5 @@
+// Code for the last scene of the game.
+
 var lineVar = 0;
 var textBox;
 var leftChar;
@@ -24,7 +26,7 @@ var kazuhitoY = 50;
 var zaizenX = 450;
 var zaizenY = 40;
 
-var ending = function(game) {}; // Scene 1, Kaito and Atsumi go on a walk in the park.
+var ending = function(game) {}; // Last scene, Kaito and the crew arrest the mastermind, and everything is peaceful now.
 ending.prototype = {
     preload: function() {
         game.load.image('black', 'assets/img/black.jpg');
@@ -81,7 +83,7 @@ ending.prototype = {
 
         line = new dialogLine("Atsumi: Thank you, Director, for causing no more trouble for us.",
             'atsumi', 'zaizen', kaitoX, atsumiY, zaizenX, zaizenY, 0.75, 0.8, scene, '', '', true, false);
-        line = new dialogLine("Zaizen: It's the least that I can do, Miss Ayukawa, to save what little\ndignity I still have.",
+        line = new dialogLine("Zaizen: It's the least that I can do, Miss Ayukawa, to save what little dignity\nI still have.",
             'atsumi', 'zaizen', kaitoX, atsumiY, zaizenX, zaizenY, 0.75, 0.8, scene, '', '', false, true);
         line = new dialogLine("Kenta: Director Zaizen...",
             'kenta', 'zaizen', kaitoX, kentaY, zaizenX, zaizenY, 1, 0.8, scene, '', '', true, false);
@@ -123,7 +125,7 @@ ending.prototype = {
         line = new dialogLine("Zaizen: I have tried many methods before deciding that control over both worlds\nwas the only solution.",
             'atsumi', 'zaizen', kaitoX, atsumiY, zaizenX, zaizenY, 0.75, 0.8, scene, '', '', false, true);
 
-        line = new dialogLine("Zaizen: But... there may be another way to which I am blind. Perhaps your eyes\nwill see it.",
+        line = new dialogLine("Zaizen: But... there may be another way. Perhaps your eyes can see what mine\nhave become blind to.",
             'atsumi', 'zaizen', kaitoX, atsumiY, zaizenX, zaizenY, 0.75, 0.8, scene, '', '', false, true);
         line = new dialogLine("Kaito: .........",
             'kaito', 'zaizen', kaitoX, kaitoY, zaizenX, zaizenY, 0.75, 0.8, scene, '', '', true, false);
@@ -202,13 +204,13 @@ ending.prototype = {
 
         line = new dialogLine("Hajime: It'll take a while for him and his men to find a way to put my mind back into\nmy body. I'll wait as long as it takes, but I hope it'll be soon. That way, we can still be\nfriends in our true world.",
             'kaito', 'kenta', kaitoX, kaitoY, kentaX, kentaY, 0.75, 1, scene, '', '', false, true);
-        line = new dialogLine("Junpei: Hmm... If truth be told, it'll feel weird once they manage to put you\nback into your body.",
-            'junpei', 'kenta', kaitoX, junpeiY, kentaX, kentaY, 0.75, 1, scene, '', '', true, false);
-        line = new dialogLine("Junpei: I'll have no virtual boy to argue with anymore.",
+        line = new dialogLine("Junpei: Hmm... If truth be told, it'll feel weird once they manage to put you\nback into your body. I'll have no virtual boy to argue with anymore.",
             'junpei', 'kenta', kaitoX, junpeiY, kentaX, kentaY, 0.75, 1, scene, '', '', true, false);
         line = new dialogLine("Hajime: Yeah, even though I'm excited to go back to your world, I admit, there\nare some parts of being in the Virtual World that I'll miss.",
             'junpei', 'kenta', kaitoX, junpeiY, kentaX, kentaY, 0.75, 1, scene, '', '', false, true);
         line = new dialogLine("Hajime: I did like messing around in machines and causing chaos to happen!",
+            'junpei', 'kenta', kaitoX, junpeiY, kentaX, kentaY, 0.75, 1, scene, '', '', false, true);
+        line = new dialogLine("Hajime: But I want to return to our world. Kisaki managed to track down my family,\nand Mother and Father were beyond shocked and glad when we saw each other\nfor the first time in twenty years!",
             'junpei', 'kenta', kaitoX, junpeiY, kentaX, kentaY, 0.75, 1, scene, '', '', false, true);
 
         line = new dialogLine("Hajime: Don't worry, though. I'll have plenty of stories about your incidents\nto tell to my classmates once I go to school again.",
@@ -251,7 +253,7 @@ ending.prototype = {
 }
 
 dialogSystemEnding = function() {
-    if(lineVar == scene.length - 1) { // Check whether the array of dialog lines has reached its end.
+    if(lineVar == scene.length - 1) { // Make the end screen.
         background = game.add.sprite(0, 0, 'black');
         background.inputEnabled = false;
         scene[lineVar].execute();
