@@ -65,7 +65,7 @@ PhysUnit.prototype.pathFinder = function() {
                 }
                 greenTile = this.pathTiles.create((this.xPlace - this.leftMax) * 16 + shiftPhysFactor, this.yPlace * 16 + shiftPhysFactor, 'greenTile'); // Tile to be used to show that a unit can go to the square.
             }
-            this.leftMax -= 1;
+            this.leftMax -= 1; // Suppose that leftMax were 1, but a unit were immediately standing in that square. Then there would be one extra, so we must subtract 1.
             for(this.upMax = 1; this.upMax <= moveDiff; this.upMax++){ // Now look at the northern path. Pathfinding works exactly the same way.
                 if(this.yPlace - this.upMax < 0) {
                     break;
@@ -109,28 +109,28 @@ var doCombat = false; // Combat can be done only if this is true.
 var attackedUnit;
 
 PhysUnit.prototype.checkEnemy = function() {
-    if((xSelected >= 0 && xSelected < levelWidth) && (ySelected >= 0 && ySelected < levelHeight)) {
-        if((gameLevel[xSelected][ySelected] instanceof PhysUnit) == true) {
-            if(gameLevel[xSelected][ySelected].team != this.team){
-                if(xSelected == (this.xPlace - 1) && ySelected == this.yPlace) {
+    if((xSelected >= 0 && xSelected < levelWidth) && (ySelected >= 0 && ySelected < levelHeight)) { // Make sure that the tile clicked is in the background's boundries.
+        if((gameLevel[xSelected][ySelected] instanceof PhysUnit) == true) { // Check whether it's a unit.
+            if(gameLevel[xSelected][ySelected].team != this.team){ // Make sure that it's not on the same team as the attacking unit.
+                if(xSelected == (this.xPlace - 1) && ySelected == this.yPlace) { // Check whether the unit is on the immediate left of the attacking unit.
                     attackedUnit = gameLevel[xSelected][ySelected];
                     doCombat = true;
                     attackedUnit.tint = 0xff0000;
                     this.enemyLeft = true;
                 }
-                else if(xSelected == (this.xPlace + 1) && ySelected == this.yPlace) {
+                else if(xSelected == (this.xPlace + 1) && ySelected == this.yPlace) { // Or on the immediate right.
                     attackedUnit = gameLevel[xSelected][ySelected];
                     doCombat = true;
                     attackedUnit.tint = 0xff0000;
                     this.enemyRight = true;
                 }
-                else if(xSelected == this.xPlace && ySelected == (this.yPlace - 1)) {
+                else if(xSelected == this.xPlace && ySelected == (this.yPlace - 1)) { // Or above.
                     attackedUnit = gameLevel[xSelected][ySelected];
                     doCombat = true;
                     attackedUnit.tint = 0xff0000;
                     this.enemyUp = true;
                 }
-                else if(xSelected == this.xPlace && ySelected == (this.yPlace + 1)) {
+                else if(xSelected == this.xPlace && ySelected == (this.yPlace + 1)) { // Or below.
                     attackedUnit = gameLevel[xSelected][ySelected];
                     doCombat = true;
                     attackedUnit.tint = 0xff0000;
@@ -139,7 +139,7 @@ PhysUnit.prototype.checkEnemy = function() {
             }
         }
     }
-    if(doCombat == true) {
+    if(doCombat == true) { // This can be executed only if the attacked unit is next to the attacking one.
         attackSound.play();
         attackTimer = game.time.create(false);
         attackTimer.add(1000, PhysUnit.prototype.battle, this);
@@ -166,7 +166,7 @@ PhysUnit.prototype.battle = function() {
         attackTimer.add(1000, PhysUnit.prototype.removeFromTeam, this, winner, attackedUnit);
     }
     else { 
-        this.attackedEnemy = true;
+        this.attackedEnemy = true; // Reset everything.
         this.enemyLeft = false;
         this.enemyRight = false;
         this.enemyUp = false;
@@ -250,7 +250,7 @@ PhysUnit.prototype.chooseUnit = function() {
         if(gameLevel[chosenX][chosenY] instanceof PhysUnit) { // Check whether it is a unit first.
             setInvisible(); // If there were something on screen before, it's gone now.
             gameLevel[chosenX][chosenY].pathFinder(); // Find the possible paths. This is done only for the player's benefit.
-            gameLevel[chosenX][chosenY].portrait.visible = true;
+            gameLevel[chosenX][chosenY].portrait.visible = true; // Show the UI information of the unit clicked on.
             gameLevel[chosenX][chosenY].UIdefenseT.visible = true;
             gameLevel[chosenX][chosenY].UIattackT.visible = true;
             gameLevel[chosenX][chosenY].UImovecountT.visible = true;
@@ -282,7 +282,7 @@ PhysUnit.prototype.chooseUnit = function() {
                             enableButtons();
                             return;
                         }
-                        gameLevel[chosenX][chosenY].tint = 0xFFDF00;
+                        gameLevel[chosenX][chosenY].tint = 0xFFDF00; // Show the UI information of the unit clicked on.
                         gameLevel[chosenX][chosenY].portrait.visible = true;
                         gameLevel[chosenX][chosenY].UIdefenseT.visible = true;
                         gameLevel[chosenX][chosenY].UIattackT.visible = true;
@@ -397,6 +397,14 @@ PhysUnit.prototype.changeSprite = function(change) { // Change the sprite.
     change.downMax = 0;
     chosenSquare = false;
     movePressed = false;
+    for(var i = 0; i < playerTeam.length; i++) { // Make sure that pathfinding for all units should be done again.
+        playerTeam[i].pathsFound = false;
+        playerTeam[i].pathTiles.removeAll();
+    }
+    for(var i = 0; i < enemyTeam.length; i++) {
+        enemyTeam[i].pathsFound = false;
+        enemyTeam[i].pathTiles.removeAll();
+    }
 }
 
 PhysUnit.prototype.turnEnd = function() { // Function determining what happens if the player unit ends its turn.
@@ -434,11 +442,11 @@ PhysUnit.prototype.turnEnd = function() { // Function determining what happens i
 }
 
 PhysUnit.prototype.physEnemyAI = function(unit) { // Start the Physical World enemy AI.
-    if(stopAI == true) {
+    if(stopAI == true) { // If the battle has ended, escape immediately.
         return;
     }
-    unit.tint = 0xFFDF00;
-    unit.portrait.visible = true;
+    unit.tint = 0xFFDF00; 
+    unit.portrait.visible = true; // Show UI information of the enemy.
     unit.UIdefenseT.visible = true;
     unit.UIattackT.visible = true;
     unit.UImovecountT.visible = true;
@@ -697,7 +705,7 @@ PhysUnit.prototype.endAITurn = function() {
         if(virViruses.length > 0) {
             VirUnit.prototype.virAI(virViruses[aiIndex]);
         }
-        else {
+        else { // If there are no enemies in the Virtual World, go back to the player's turn.
             for(var i = 0; i < playerTeam.length; i++) {
                 playerTeam[i].turnEnd = false;
             }
