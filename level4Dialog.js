@@ -312,7 +312,7 @@ level4Dialog.prototype = {
             'atsumi', 'zaizen', kaitoX, atsumiY, zaizenX, zaizenY, 0.75, 0.8, scene, '', '', false, false);
         line = new dialogLine("Junpei: Miss Erika Kimura! You're a conspirator as well?!",
             'junpei', 'kimura', kaitoX, junpeiY, kimuraX, kimuraY, 0.75, 0.8, scene, '', '', true, false);
-        line = new dialogLine("Kimura: But of course. Most of the top brass support his plan for gaining\nmore power over our two worlds.",
+        line = new dialogLine("Kimura: But of course. Most of CERC's top brass support his plan for gaining\nmore power over our two worlds.",
             'junpei', 'kimura', kaitoX, junpeiY, kimuraX, kimuraY, 0.75, 0.8, scene, '', '', false, true);
         line = new dialogLine("Kimura: I assure you, however, that if you join us in our plan, you'll be\nrewarded generously for it.",
             'junpei', 'kimura', kaitoX, junpeiY, kimuraX, kimuraY, 0.75, 0.8, scene, '', '', false, true);
