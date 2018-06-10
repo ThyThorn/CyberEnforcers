@@ -16,8 +16,8 @@ Node.prototype.constructor = Node;
 
 Node.prototype.whichKind = function() { // Only Kenta will ever use this, since enemies cannot activate nodes.
 	background.inputEnabled = false;
-	if(this.unit.movesDone >= this.unit.moveCount && this.unit.unitName == 'Kenta') {
-		background.inputEnabled = true;
+	if(this.unit.movesDone >= this.unit.moveCount && this.unit.unitName == 'Kenta') { // If Kenta has already exceeded his move count...
+		background.inputEnabled = true; // Fixes an odd bug in which the background for the Physical World cannot be interacted with anymore.
 		negative.play();
 		kenta.tint = 0xffffff;
         kenta.portrait.visible = false;
@@ -25,7 +25,7 @@ Node.prototype.whichKind = function() { // Only Kenta will ever use this, since 
         enableButtons();
 		return;
 	}
-	if(this.effect == 'green') {
+	if(this.effect == 'green') { // If the node is a green one...
 		this.checkAOE();
 		kenta.tint = 0xffffff;
         kenta.portrait.visible = false;
@@ -35,7 +35,7 @@ Node.prototype.whichKind = function() { // Only Kenta will ever use this, since 
 		timer.add(2000, Node.prototype.destroy, this);
 		timer.start();
 	}
-	else if(this.effect == 'red') {
+	else if(this.effect == 'red') { // If the node is a red one...
 		this.checkAOE();
 		kenta.tint = 0xffffff;
         kenta.portrait.visible = false;
@@ -45,7 +45,7 @@ Node.prototype.whichKind = function() { // Only Kenta will ever use this, since 
 		timer.add(2000, Node.prototype.destroy, this);
 		timer.start();
 	}
-	else if(this.effect == 'blue') {
+	else if(this.effect == 'blue') { // If the node is a blue one...
 		kenta.tint = 0xFFDF00;
 		blueNodeVar = true; // This is used for choosing the virtual unit (which is always Kenta for the player).
 	}
@@ -53,7 +53,7 @@ Node.prototype.whichKind = function() { // Only Kenta will ever use this, since 
 
 Node.prototype.checkAOE = function() { // Find the boundaries to the AOE.
 	for(northBound = 1; northBound <= yAOE; northBound++) { 
-		if(this.yPlace - northBound < 0) {
+		if(this.yPlace - northBound < 0) { // Make sure that the search should not go off the screen.
 			break;
 		}
 	}
@@ -91,7 +91,7 @@ Node.prototype.greenNode = function() { // Make the AOE and activate its effect.
 		for(var j = this.xPlace - westBound; j <= this.xPlace; j++) {
 			if(gameLevel[j][i] != 1) {
 				blueTile = this.AOETiles.create(j * 16 + shiftPhysFactor, i * 16 + shiftPhysFactor, 'greenTile');
-				if(gameLevel[j][i] instanceof PhysUnit) { // Heal any unit in the AOE.
+				if(gameLevel[j][i] instanceof PhysUnit) { // Heal any unit in the AOE as long as it is on the same team as the user's.
 					if(gameLevel[j][i].team == 'player' && turnNumber % 2 == 1) {
 						gameLevel[j][i].health += 5;
 					}
@@ -143,7 +143,7 @@ Node.prototype.greenNode = function() { // Make the AOE and activate its effect.
 			}
 		}
 	}
-	this.unit.movesDone += 2;
+	this.unit.movesDone += 2; // Make sure that the unit's move counter should be increased, though this matters only for Kenta.
 },
 
 Node.prototype.redNode = function() { // Same thing as above, but the effect is different.
