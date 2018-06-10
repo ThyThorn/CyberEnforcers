@@ -314,6 +314,7 @@ level3Battle.prototype = {
         virusObject3 = new PhysUnit('Virus', 20, 20, 3, 5, 'enemy', true, 3, 20, 'atlas', 'EnemyRed01');
         game.add.existing(virusObject3);
         virusObject4 = new PhysUnit('Virus', 20, 15, 2, 7, 'enemy', true, 7, 23, 'atlas', 'EnemyGreen01');
+        game.add.existing(virusObject4);
 
         // Add in Kenta. This time, there are no Virtual World enemies.
         kenta = new VirUnit('Kenta', 5, 'player', false, 3, 2, 'atlas', 'Kenta01', 'kenta');
