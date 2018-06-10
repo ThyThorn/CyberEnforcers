@@ -142,7 +142,7 @@ level1Dialog.prototype = {
             'kaito', 'kenta', kaitoX, kaitoY, kentaX, kentaY, 0.75, 1, scene, '', '', true, false);
         line = new dialogLine("Kaito: (The CERC gives every squad commander his own personal AI\nto help him with his duties.)",
             'kaito', 'kenta', kaitoX, kaitoY, kentaX, kentaY, 0.75, 1, scene, '', '', true, false);
-        line = new dialogLine("Kaito: (Kenta's pretty useful, but I question why the creator made\nsome parts of him like that.",
+        line = new dialogLine("Kaito: (Kenta's pretty useful, but I question why the creator made\nsome parts of him like that.)",
             'kaito', 'kenta', kaitoX, kaitoY, kentaX, kentaY, 0.75, 1, scene, '', '', true, false);
         line = new dialogLine("Kaito: (And technically, he's not even here. We're just looking at a projection of him.)",
             'kaito', 'kenta', kaitoX, kaitoY, kentaX, kentaY, 0.75, 1, scene, '', '', true, false);
