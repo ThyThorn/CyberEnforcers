@@ -253,10 +253,12 @@ ending.prototype = {
 }
 
 dialogSystemEnding = function() {
-    if(lineVar == scene.length - 1) { // Make the end screen.
-        background = game.add.sprite(0, 0, 'black');
+    if(lineVar == scene.length) { // Make the end screen.
+        lineVar = 0;
         background.inputEnabled = false;
-        scene[lineVar].execute();
+        game.sound.stopAll();
+        game.camera.fade(0xffffff);
+        game.camera.onFadeComplete.add(enterCredits, this);
     }
     else {
         if(lineVar == 13) {
@@ -272,6 +274,14 @@ dialogSystemEnding = function() {
         if(lineVar == 36) {
             peace.play();
         }
+        if(lineVar == scene.length - 1) { // Make the end screen.
+            background = game.add.sprite(0, 0, 'black');
+        }
         scene[lineVar].execute(); // Check the dialog line constructor for the function.
     }
+}
+
+enterCredits = function() {
+    scene.length = 0;
+    game.state.start("credits");
 }
