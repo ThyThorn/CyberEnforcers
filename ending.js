@@ -138,7 +138,7 @@ ending.prototype = {
 
         line = new dialogLine("A few weeks later...",
             '', '', 0, 0, 0, 0, 0, 0, scene, '', 'flash', false, false);
-        line = new dialogLine("Kaito: (Ever since Zaizen's, Kimura's, and the other corrupt admins' arrests,\nDennoshi has become much more peaceful.)",
+        line = new dialogLine("Kaito: (Since Zaizen's, Kimura's, and the other corrupt CERC admins' arrests,\nDennoshi has become much more peaceful.)",
             'kaito', '', kaitoX, kaitoY, 0, 0, 0.75, 1, scene, '', '', true, false);
         line = new dialogLine("Kaito: (Kazuhito Kisaki was let go, given that his arrest was part of Zaizen's plot.)",
             'kaito', '', kaitoX, kaitoY, 0, 0, 0.75, 1, scene, '', '', true, false);
