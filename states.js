@@ -1,3 +1,5 @@
+// Page where states are added.
+
 var game = new Phaser.Game(960, 600, Phaser.AUTO, '');
 game.state.add("title", title);
 game.state.add("credits", credits);
